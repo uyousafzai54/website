@@ -48,9 +48,9 @@
     },
     "issues": {
       "enabled": true
-    },
-    "assets": {
-       "directory": "./public"
     }
+  },
+  "assets": {
+     "directory": "./public"
   }
 }

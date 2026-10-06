@@ -56,6 +56,10 @@ pre,
   font-display: swap;
 }
 
+body {
+  font-family: "Berkeley Mono", monospace;
+}
+
     h4 {
       margin-top: 2rem;
       margin-bottom: 0.75rem;
