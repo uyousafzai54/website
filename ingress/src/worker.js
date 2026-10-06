@@ -124,8 +124,34 @@ body {
       font-family: "Berkeley Mono", monospace;
     }
 
-    .coursework h4 {
+    .coursework summary {
+      cursor: pointer;
+      list-style: none;
       margin-top: 2rem;
+      padding: 0.45rem 0.7rem;
+      border-left: 4px solid #4f7cac;
+      background: #f3f6fb;
+      font-size: 1.05rem;
+      font-weight: 800;
+      letter-spacing: 0.02em;
+      font-family: "Berkeley Mono", monospace;
+    }
+
+    .coursework summary::-webkit-details-marker {
+      display: none;
+    }
+
+    .coursework summary::before {
+      content: "▸ ";
+      color: #4f7cac;
+    }
+
+    .coursework[open] summary::before {
+      content: "▾ ";
+    }
+
+    .coursework h4 {
+      margin-top: 1.5rem;
       margin-bottom: 1rem;
       padding: 0.45rem 0.7rem;
       border-left: 4px solid #4f7cac;
@@ -434,7 +460,9 @@ body {
           <p><strong>Bachelor of Software Engineering</strong></p>
         </header>
 
-        <div class="coursework">
+        <details class="coursework">
+          <summary>Notable Coursework &amp; Grades</summary>
+
           <h4>Notable Graduate Coursework</h4>
 
           <ul>
@@ -546,7 +574,7 @@ body {
               <span class="grade">80%</span>
             </li>
           </ul>
-        </div>
+        </details>
       </article>
     </section>
   </main>
