@@ -556,11 +556,18 @@ body {
       var probes = ${JSON.stringify({ v4: probeV4, v6: probeV6 }).replace(/</g, "\\u003c")};
       var out = function (id, text) { document.getElementById(id).textContent = text; };
       var V4 = /^(25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]?\\d)(\\.(25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]?\\d)){3}$/;
-      var V6 = /^[0-9a-f:]{2,39}$/i;
+      var HEX = /^[0-9a-f]{1,4}$/i;
+
+      function isV6(ip) {
+        var halves = ip.split("::");
+        if (halves.length > 2 || ip.indexOf(":::") !== -1) return false;
+        var groups = halves.join(":").split(":").filter(function (g) { return g !== ""; });
+        if (!groups.every(function (g) { return HEX.test(g); })) return false;
+        return halves.length === 2 ? groups.length <= 7 : groups.length === 8;
+      }
 
       function isIp(ip, family) {
-        if (family === "ipv4") return V4.test(ip);
-        return V6.test(ip) && ip.indexOf(":") !== -1 && ip.indexOf(":::") === -1 && ip.split("::").length <= 2;
+        return family === "ipv4" ? V4.test(ip) : isV6(ip);
       }
 
       function probe(url, family) {
