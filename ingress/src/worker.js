@@ -1,9 +1,9 @@
 const PROBE_V4_URL = "https://ipv4.icanhazip.com";
-const PROBE_V6_URL = "https://v6.umaryousafzai.net/ip";
+const PROBE_V6_URL = "https://ipv6.icanhazip.com";
 
 function isProbeRequest(request) {
   const url = new URL(request.url);
-  return url.pathname === "/ip" || /^v[46]\./.test(url.hostname);
+  return url.pathname === "/ip";
 }
 
 function probeResponse(request) {
@@ -553,8 +553,15 @@ body {
 
   <script>
     (function () {
-      var probes = { v4: ${JSON.stringify(probeV4)}, v6: ${JSON.stringify(probeV6)} };
+      var probes = ${JSON.stringify({ v4: probeV4, v6: probeV6 }).replace(/</g, "\\u003c")};
       var out = function (id, text) { document.getElementById(id).textContent = text; };
+      var V4 = /^(25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]?\\d)(\\.(25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]?\\d)){3}$/;
+      var V6 = /^[0-9a-f:]{2,39}$/i;
+
+      function isIp(ip, family) {
+        if (family === "ipv4") return V4.test(ip);
+        return V6.test(ip) && ip.indexOf(":") !== -1 && ip.indexOf(":::") === -1 && ip.split("::").length <= 2;
+      }
 
       function probe(url, family) {
         var ctl = new AbortController();
@@ -562,21 +569,18 @@ body {
         return fetch(url, { cache: "no-store", signal: ctl.signal })
           .then(function (res) { return res.ok ? res.text() : ""; })
           .then(function (text) {
-            text = text.trim();
-            var ip = text;
-            try { ip = JSON.parse(text).ip || ""; } catch (e) {}
-            var isV6 = ip.indexOf(":") !== -1;
-            if (!ip || isV6 !== (family === "ipv6")) return null;
-            return ip;
+            var ip = text.trim();
+            try { ip = String(JSON.parse(ip).ip || ""); } catch (e) {}
+            return isIp(ip, family) ? ip : null;
           })
           .catch(function () { return null; })
           .finally(function () { clearTimeout(timer); });
       }
 
-      Promise.all([probe(probes.v4, "ipv4"), probe(probes.v6, "ipv6")]).then(function (r) {
+      var p4 = probe(probes.v4, "ipv4").then(function (ip) { out("probe-v4", ip || "unreachable"); return ip; });
+      var p6 = probe(probes.v6, "ipv6").then(function (ip) { out("probe-v6", ip || "unreachable"); return ip; });
+      Promise.all([p4, p6]).then(function (r) {
         var v4 = r[0], v6 = r[1];
-        out("probe-v4", v4 || "unreachable");
-        out("probe-v6", v6 || "unreachable");
         out("probe-stack", v4 && v6 ? "dual-stack" : v4 ? "ipv4 only" : v6 ? "ipv6 only" : "unknown");
       });
     })();
