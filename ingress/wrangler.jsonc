@@ -40,6 +40,12 @@
     "PROBE_V4_URL": "https://ipv4.icanhazip.com",
     "PROBE_V6_URL": "https://v6.umaryousafzai.net/ip"
   },
+  "previews": {
+    "vars": {
+      "PROBE_V4_URL": "https://ipv4.icanhazip.com",
+      "PROBE_V6_URL": "https://v6.umaryousafzai.net/ip"
+    }
+  },
   "placement": {
     "mode": "smart"
   },
