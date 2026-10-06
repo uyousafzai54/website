@@ -1,5 +1,32 @@
+const PROBE_V4_URL = "https://ipv4.icanhazip.com";
+const PROBE_V6_URL = "https://v6.umaryousafzai.net/ip";
+
+function isProbeRequest(request) {
+  const url = new URL(request.url);
+  return url.pathname === "/ip" || /^v[46]\./.test(url.hostname);
+}
+
+function probeResponse(request) {
+  const ip = request.headers.get("CF-Connecting-IP") || "";
+  const headers = {
+    "Content-Type": "application/json; charset=UTF-8",
+    "Access-Control-Allow-Origin": "*",
+    "Access-Control-Allow-Methods": "GET, OPTIONS",
+    "cache-control": "no-store, max-age=0",
+    "cloudflare-cdn-cache-control": "no-store",
+  };
+  if (request.method === "OPTIONS") return new Response(null, { status: 204, headers });
+  const family = ip.includes(":") ? "ipv6" : ip ? "ipv4" : "unknown";
+  return new Response(JSON.stringify({ ip, family }), { headers });
+}
+
 export default {
   async fetch(request, env, ctx) {
+    if (isProbeRequest(request)) return probeResponse(request);
+
+    const probeV4 = env.PROBE_V4_URL || PROBE_V4_URL;
+    const probeV6 = env.PROBE_V6_URL || PROBE_V6_URL;
+
     const cf = request.cf || {};
     const edge = cf.colo || "unknown";
     const rtt = cf.clientQuicRtt ?? cf.clientTcpRtt ?? "?";
@@ -15,9 +42,6 @@ export default {
     const country = cf.country || "unknown";
     const timezone = cf.timezone || "unknown";
 
-  cf.clientQuicRtt ?? cf.clientTcpRtt ??
-
-  "?";
     const html = `
 <!DOCTYPE html>
 <html lang="en">
@@ -267,6 +291,10 @@ body {
   overflow-x: auto;
 }
 
+.probe-hint {
+  color: rgba(255,255,255,0.3);
+}
+
 .cursor {
   margin-left: 4px;
   opacity: 0.8;
@@ -309,6 +337,9 @@ body {
   <pre class="network-output">$ connection
 
     ip        ${ip}
+    ipv4      <span id="probe-v4">probing...</span>
+    ipv6      <span id="probe-v6">probing...</span>
+    stack     <span id="probe-stack">probing...</span> <span class="probe-hint"># reachability, not end-to-end routing</span>
     location  ${city}${region ? ", " + region : ""}, ${country}
     timezone  ${timezone}
     network   ${network}
@@ -519,6 +550,37 @@ body {
       </article>
     </section>
   </main>
+
+  <script>
+    (function () {
+      var probes = { v4: ${JSON.stringify(probeV4)}, v6: ${JSON.stringify(probeV6)} };
+      var out = function (id, text) { document.getElementById(id).textContent = text; };
+
+      function probe(url, family) {
+        var ctl = new AbortController();
+        var timer = setTimeout(function () { ctl.abort(); }, 5000);
+        return fetch(url, { cache: "no-store", signal: ctl.signal })
+          .then(function (res) { return res.ok ? res.text() : ""; })
+          .then(function (text) {
+            text = text.trim();
+            var ip = text;
+            try { ip = JSON.parse(text).ip || ""; } catch (e) {}
+            var isV6 = ip.indexOf(":") !== -1;
+            if (!ip || isV6 !== (family === "ipv6")) return null;
+            return ip;
+          })
+          .catch(function () { return null; })
+          .finally(function () { clearTimeout(timer); });
+      }
+
+      Promise.all([probe(probes.v4, "ipv4"), probe(probes.v6, "ipv6")]).then(function (r) {
+        var v4 = r[0], v6 = r[1];
+        out("probe-v4", v4 || "unreachable");
+        out("probe-v6", v6 || "unreachable");
+        out("probe-stack", v4 && v6 ? "dual-stack" : v4 ? "ipv4 only" : v6 ? "ipv6 only" : "unknown");
+      });
+    })();
+  </script>
 </body>
 </html>
 `;
