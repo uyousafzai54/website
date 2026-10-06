@@ -26,19 +26,11 @@
       "custom_domain": true,
       "enabled": true,
       "previews_enabled": false
-    },
-    {
-      "pattern": "v4.umaryousafzai.net/*",
-      "zone_name": "umaryousafzai.net"
-    },
-    {
-      "pattern": "v6.umaryousafzai.net/*",
-      "zone_name": "umaryousafzai.net"
     }
   ],
   "vars": {
     "PROBE_V4_URL": "https://ipv4.icanhazip.com",
-    "PROBE_V6_URL": "https://v6.umaryousafzai.net/ip"
+    "PROBE_V6_URL": "https://ipv6.icanhazip.com"
   },
   "previews": {},
   "placement": {
