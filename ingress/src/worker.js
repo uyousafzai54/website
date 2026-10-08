@@ -406,9 +406,9 @@ body {
       <p>
         I'm interested in the intersection of
         <strong>systems, networking, security, and privacy</strong>.
-        In particular, I'm drawn to problems where strong cryptographic or privacy
+        In particular, I like problems where strong cryptographic or privacy
         guarantees have to coexist with the performance and operational constraints
-        of real-world systems. My academic learnings has included secure multi-party
+        of real world systems. My academic learnings has included secure multi-party
         computation, private computation, high performance networking, multicore systems, and
         concurrent systems.
       </p>
@@ -438,6 +438,12 @@ body {
       </a>
     </li>
 
+    <li>
+      <a href="https://files.uyousafz.com/Carta_gRPC_error_handling.pdf" target="_blank">
+        how to lower your ddog bill (woof woof)?
+      </a>
+    </li>
+
   </ul>
 </section>
 
@@ -446,22 +452,16 @@ body {
 
       <article class="education-entry">
         <header>
-          <h3>University of Waterloo</h3>
+          <h3>University of Waterloo, Computer Science. </h3>
 
           <p>
             <strong>Grade:</strong>
             85% cumulative GPA over 5 years of study.
           </p>
-
-          <p>Jan. 2023 – Dec. 2025</p>
-          <p><strong>Bachelor of Computer Science</strong></p>
-
-          <p>Sept. 2020 – Dec. 2022</p>
-          <p><strong>Bachelor of Software Engineering</strong></p>
         </header>
 
         <details class="coursework">
-          <summary>Notable Coursework &amp; Grades</summary>
+          <summary>Notable Coursework.</summary>
 
           <h4>Notable Graduate Coursework</h4>
 
