@@ -48,13 +48,101 @@ export default {
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="color-scheme" content="light dark" />
+  <script>
+    (function () {
+      try {
+        var t = localStorage.getItem("theme");
+        if (t === "light" || t === "dark") document.documentElement.setAttribute("data-theme", t);
+      } catch (e) {}
+    })();
+  </script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
   <title>Umar</title>
 
   <style>
+    :root {
+      color-scheme: light;
+      --bg: #ffffff;
+      --fg: #111;
+      --text: #555;
+      --text-strong: #333;
+      --text-body: #444;
+      --muted: #777;
+      --link: #111;
+      --accent: #4f7cac;
+      --bar-bg: #f3f6fb;
+      --rule: #ccc;
+      --rule-soft: #ddd;
+      --highlight-bg: #ffe66d;
+      --highlight-fg: #111;
+      --term-bg: #0b0c0e;
+      --term-fg: rgba(255,255,255,0.72);
+      --term-border: rgba(255,255,255,0.1);
+      --term-bar: rgba(255,255,255,0.025);
+      --term-bar-border: rgba(255,255,255,0.07);
+      --term-dot: rgba(255,255,255,0.18);
+      --term-title: rgba(255,255,255,0.35);
+      --term-hint: rgba(255,255,255,0.3);
+      --term-shadow: 0 12px 30px rgba(0,0,0,0.18), inset 0 1px 0 rgba(255,255,255,0.04);
+    }
+
+    /* Dark palette. The terminal inverts to a light panel so it still contrasts the page. */
+    :root[data-theme="dark"] {
+      color-scheme: dark;
+      --bg: #0f1115;
+      --fg: #e8eaed;
+      --text: #b3b8c2;
+      --text-strong: #cfd3da;
+      --text-body: #c2c7d0;
+      --muted: #8a909b;
+      --link: #f2f4f7;
+      --accent: #7fa7d6;
+      --bar-bg: #171c24;
+      --rule: #2a2f38;
+      --rule-soft: #262b33;
+      --term-bg: #f4f5f7;
+      --term-fg: rgba(0,0,0,0.78);
+      --term-border: rgba(0,0,0,0.12);
+      --term-bar: rgba(0,0,0,0.035);
+      --term-bar-border: rgba(0,0,0,0.08);
+      --term-dot: rgba(0,0,0,0.22);
+      --term-title: rgba(0,0,0,0.45);
+      --term-hint: rgba(0,0,0,0.42);
+      --term-shadow: 0 12px 30px rgba(0,0,0,0.55), inset 0 1px 0 rgba(255,255,255,0.7);
+    }
+
+    @media (prefers-color-scheme: dark) {
+      :root:not([data-theme="light"]) {
+        color-scheme: dark;
+        --bg: #0f1115;
+        --fg: #e8eaed;
+        --text: #b3b8c2;
+        --text-strong: #cfd3da;
+        --text-body: #c2c7d0;
+        --muted: #8a909b;
+        --link: #f2f4f7;
+        --accent: #7fa7d6;
+        --bar-bg: #171c24;
+        --rule: #2a2f38;
+        --rule-soft: #262b33;
+        --term-bg: #f4f5f7;
+        --term-fg: rgba(0,0,0,0.78);
+        --term-border: rgba(0,0,0,0.12);
+        --term-bar: rgba(0,0,0,0.035);
+        --term-bar-border: rgba(0,0,0,0.08);
+        --term-dot: rgba(0,0,0,0.22);
+        --term-title: rgba(0,0,0,0.45);
+        --term-hint: rgba(0,0,0,0.42);
+        --term-shadow: 0 12px 30px rgba(0,0,0,0.55), inset 0 1px 0 rgba(255,255,255,0.7);
+      }
+    }
+
     body {
+  background: var(--bg);
+  color: var(--fg);
   font-family: "IBM Plex Sans", sans-serif;
   font-size: 16px;
   line-height: 1.65;
@@ -91,11 +179,11 @@ body {
 
     p {
       font-size: 1.2rem;
-      color: #555;
+      color: var(--text);
     }
 
     a {
-      color: #111;
+      color: var(--link);
       font-weight: 600;
     }
 
@@ -120,7 +208,7 @@ body {
       margin-left: auto;
       white-space: nowrap;
       font-weight: 700;
-      color: #4f7cac;
+      color: var(--accent);
       font-family: "Berkeley Mono", monospace;
     }
 
@@ -129,8 +217,8 @@ body {
       list-style: none;
       margin-top: 2rem;
       padding: 0.45rem 0.7rem;
-      border-left: 4px solid #4f7cac;
-      background: #f3f6fb;
+      border-left: 4px solid var(--accent);
+      background: var(--bar-bg);
       font-size: 1.05rem;
       font-weight: 800;
       letter-spacing: 0.02em;
@@ -143,7 +231,7 @@ body {
 
     .coursework summary::before {
       content: "▸ ";
-      color: #4f7cac;
+      color: var(--accent);
     }
 
     .coursework[open] summary::before {
@@ -154,8 +242,8 @@ body {
       margin-top: 1.5rem;
       margin-bottom: 1rem;
       padding: 0.45rem 0.7rem;
-      border-left: 4px solid #4f7cac;
-      background: #f3f6fb;
+      border-left: 4px solid var(--accent);
+      background: var(--bar-bg);
       font-size: 1.05rem;
       font-weight: 800;
       letter-spacing: 0.02em;
@@ -177,8 +265,8 @@ body {
     font-size: 1.8rem;
     font-weight: 800;
     letter-spacing: -0.03em;
-    background: #ffe66d;
-    color: #111;
+    background: var(--highlight-bg);
+    color: var(--highlight-fg);
     font-family: "Berkeley Mono", monospace;
   }
 
@@ -186,26 +274,26 @@ body {
     margin: 0;
     font-size: 1.15rem;
     line-height: 1.75;
-    color: #333;
+    color: var(--text-strong);
   }
 
   .side-project {
   margin: 3rem 0;
   padding: 1.25rem 0;
-  border-top: 1px solid #ccc;
-  border-bottom: 1px solid #ccc;
+  border-top: 1px solid var(--rule);
+  border-bottom: 1px solid var(--rule);
 }
 
 .side-project {
   margin: 3rem 0;
   padding: 1.25rem 0;
-  border-top: 1px solid #ddd;
+  border-top: 1px solid var(--rule-soft);
 }
 
 .side-project small {
   display: block;
   margin-bottom: 0.35rem;
-  color: #777;
+  color: var(--muted);
   font-size: 0.9rem;
   font-style: italic;
 }
@@ -219,7 +307,7 @@ body {
   margin: 0;
   font-size: 1rem;
   line-height: 1.65;
-  color: #444;
+  color: var(--text-body);
 }
 
 .readings-section {
@@ -267,11 +355,11 @@ body {
 .network-terminal {
   width: 100%;
   max-width: 480px;
-  background: #0b0c0e;
-  border: 1px solid rgba(255,255,255,0.1);
+  background: var(--term-bg);
+  border: 1px solid var(--term-border);
   border-radius: 10px;
   overflow: hidden;
-  box-shadow: 0 12px 30px rgba(0,0,0,0.18), inset 0 1px 0 rgba(255,255,255,0.04);
+  box-shadow: var(--term-shadow);
 }
 
 .terminal-bar {
@@ -280,8 +368,8 @@ body {
   align-items: center;
   position: relative;
   padding: 0 12px;
-  background: rgba(255,255,255,0.025);
-  border-bottom: 1px solid rgba(255,255,255,0.07);
+  background: var(--term-bar);
+  border-bottom: 1px solid var(--term-bar-border);
 }
 
 .terminal-dots {
@@ -293,7 +381,7 @@ body {
   width: 8px;
   height: 8px;
   border-radius: 50%;
-  background: rgba(255,255,255,0.18);
+  background: var(--term-dot);
 }
 
 .terminal-title {
@@ -303,7 +391,7 @@ body {
   font-family: "Berkeley Mono", monospace;
   font-size: 10px;
   letter-spacing: 0.04em;
-  color: rgba(255,255,255,0.35);
+  color: var(--term-title);
 }
 
 .network-output {
@@ -312,13 +400,38 @@ body {
   font-family: "SFMono-Regular","SF Mono",Menlo,Consolas,monospace;
   font-size: 12px;
   line-height: 1.65;
-  color: rgba(255,255,255,0.72);
+  color: var(--term-fg);
   white-space: pre-wrap;
   overflow-x: auto;
 }
 
 .probe-hint {
-  color: rgba(255,255,255,0.3);
+  color: var(--term-hint);
+}
+
+.theme-toggle {
+  position: fixed;
+  top: 1rem;
+  right: 1rem;
+  z-index: 10;
+  padding: 0.3rem 0.65rem;
+  font-family: "Berkeley Mono", monospace;
+  font-size: 12px;
+  letter-spacing: 0.02em;
+  color: var(--fg);
+  background: var(--bar-bg);
+  border: 1px solid var(--rule);
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.theme-toggle:hover {
+  border-color: var(--accent);
+}
+
+.theme-toggle:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
 }
 
 .cursor {
@@ -338,6 +451,7 @@ body {
 </head>
 
 <body>
+  <button class="theme-toggle" id="theme-toggle" type="button" aria-label="Toggle dark mode">theme</button>
   <main>
     <h1>Hi, I'm Umar 👋</h1>
 
@@ -406,9 +520,9 @@ body {
       <p>
         I'm interested in the intersection of
         <strong>systems, networking, security, and privacy</strong>.
-        In particular, I'm drawn to problems where strong cryptographic or privacy
+        In particular, I like problems where strong cryptographic or privacy
         guarantees have to coexist with the performance and operational constraints
-        of real-world systems. My academic learnings has included secure multi-party
+        of real world systems. My academic learnings has included secure multi-party
         computation, private computation, high performance networking, multicore systems, and
         concurrent systems.
       </p>
@@ -438,6 +552,12 @@ body {
       </a>
     </li>
 
+    <li>
+      <a href="https://files.uyousafz.com/Carta_gRPC_error_handling.pdf" target="_blank">
+        how to lower your ddog bill (woof woof)?
+      </a>
+    </li>
+
   </ul>
 </section>
 
@@ -446,22 +566,16 @@ body {
 
       <article class="education-entry">
         <header>
-          <h3>University of Waterloo</h3>
+          <h3>University of Waterloo, Computer Science. </h3>
 
           <p>
             <strong>Grade:</strong>
             85% cumulative GPA over 5 years of study.
           </p>
-
-          <p>Jan. 2023 – Dec. 2025</p>
-          <p><strong>Bachelor of Computer Science</strong></p>
-
-          <p>Sept. 2020 – Dec. 2022</p>
-          <p><strong>Bachelor of Software Engineering</strong></p>
         </header>
 
         <details class="coursework">
-          <summary>Notable Coursework &amp; Grades</summary>
+          <summary>Notable Coursework.</summary>
 
           <h4>Notable Graduate Coursework</h4>
 
@@ -580,6 +694,38 @@ body {
   </main>
 
   <script>
+    (function () {
+      var KEY = "theme";
+      var root = document.documentElement;
+      var btn = document.getElementById("theme-toggle");
+      var mq = window.matchMedia("(prefers-color-scheme: dark)");
+
+      function stored() {
+        try { return localStorage.getItem(KEY); } catch (e) { return null; }
+      }
+
+      function current() {
+        var s = stored();
+        return s === "light" || s === "dark" ? s : (mq.matches ? "dark" : "light");
+      }
+
+      function render() {
+        var t = current();
+        btn.textContent = "theme: " + t;
+        btn.setAttribute("aria-pressed", t === "dark" ? "true" : "false");
+      }
+
+      btn.addEventListener("click", function () {
+        var next = current() === "dark" ? "light" : "dark";
+        root.setAttribute("data-theme", next);
+        try { localStorage.setItem(KEY, next); } catch (e) {}
+        render();
+      });
+
+      if (mq.addEventListener) mq.addEventListener("change", render);
+      render();
+    })();
+
     (function () {
       var probes = ${JSON.stringify({ v4: probeV4, v6: probeV6 }).replace(/</g, "\\u003c")};
       var out = function (id, text) { document.getElementById(id).textContent = text; };
