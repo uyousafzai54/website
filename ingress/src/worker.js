@@ -518,12 +518,10 @@ body {
     <section class="research-card">
     <h2>Research Interests</h2>
       <p>
-        I'm interested in the intersection of
-        <strong>systems, networking, security, and privacy</strong>.
-        In particular, I like problems where strong cryptographic or privacy
-        guarantees have to coexist with the performance and operational constraints
-        of real world systems. My academic learnings has included secure multi-party
-        computation, private computation, high performance networking, multicore systems, and
+        I'm interested in <strong>computer systems, networking, security, and privacy</strong>.
+        I believe privacy is a fundamental human right and I enjoy problems where strong cryptographic and privacy
+        guarantees have to coexist with systems performance. My academic learnings has included secure multi-party
+        computation, private computation over encrypted data, high performance networking, multicore systems, and
         concurrent systems.
       </p>
   </section>
@@ -532,7 +530,7 @@ body {
   <h3>What I'm hacking on</h3>
     <p>
       I'm experimenting with a lightweight and isolated TCP/IP stack implementation for the <a href="https://sel4.systems">seL4</a> kernel on AArch64 (and later Apple Silicon hardware) to take advantage of my home's 10 Gbps fiber. 
-      Still early; still learning; currently working through the architecture and first prototype.
+      I am currently learning <a href="https://github.com/au-ts/sddf">sDDF</a>; and working through the architecture and first prototype.
     </p>
   </section>
 
