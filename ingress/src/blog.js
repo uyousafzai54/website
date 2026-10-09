@@ -5,10 +5,10 @@ import {
   THEME_TOGGLE_HTML,
   THEME_TOGGLE_JS,
 } from "./theme.js";
+import { SITE_ORIGIN, AUTHOR, DESCRIPTION } from "./site.js";
 
 const BLOG_PATH = "/blog";
-const AUTHOR = "Umar Yousafzai";
-const SITE_TITLE = "Umar Yousafzai";
+const SITE_TITLE = AUTHOR;
 
 // Newest first. `date` is YYYY-MM-DD. `html` is the post body; it lives inside a
 // template literal, so avoid backticks and "${" in post content. A post with
@@ -313,7 +313,7 @@ function authorBlock({ date } = {}) {
     </header>`;
 }
 
-function page({ title, bodyClass, content }) {
+function page({ title, path, bodyClass, content }) {
   return `<!DOCTYPE html>
 <html lang="en">
 <head>
@@ -325,6 +325,13 @@ ${THEME_BOOT_SCRIPT}
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
   <link rel="alternate" type="application/atom+xml" title="${escapeHtml(SITE_TITLE)}" href="${BLOG_PATH}/feed.xml">
+  <link rel="canonical" href="${SITE_ORIGIN}${path}" />
+  <meta name="description" content="${escapeHtml(DESCRIPTION)}" />
+  <meta property="og:type" content="${bodyClass === "post" ? "article" : "website"}" />
+  <meta property="og:site_name" content="${escapeHtml(SITE_TITLE)}" />
+  <meta property="og:title" content="${escapeHtml(title)}" />
+  <meta property="og:url" content="${SITE_ORIGIN}${path}" />
+  <meta name="twitter:card" content="summary" />
   <title>${escapeHtml(title)}</title>
 
   <style>
@@ -369,6 +376,7 @@ function renderIndex() {
 
   return page({
     title: `Blog :: ${SITE_TITLE}`,
+    path: BLOG_PATH,
     bodyClass: "homepage",
     content: `${authorBlock()}
 
@@ -394,6 +402,7 @@ function renderPost(post) {
 
   return page({
     title: `${displayTitle(post)} :: ${SITE_TITLE}`,
+    path: postUrl(post),
     bodyClass: "post",
     content: `${authorBlock({ date: post.date })}
 
@@ -411,6 +420,7 @@ ${adjacent}
 function renderNotFound() {
   return page({
     title: `Not found :: ${SITE_TITLE}`,
+    path: BLOG_PATH,
     bodyClass: "homepage",
     content: `${authorBlock()}
 
@@ -420,7 +430,8 @@ function renderNotFound() {
   });
 }
 
-function renderFeed(origin) {
+function renderFeed() {
+  const origin = SITE_ORIGIN;
   const published = POSTS.filter((p) => !p.draft);
   const updated = published.length ? `${published[0].date}T00:00:00Z` : new Date().toISOString();
   const entries = published.map(
@@ -454,6 +465,31 @@ function renderFeed(origin) {
   );
 }
 
+// Sitemap for the whole site: homepage, blog index, and published posts.
+export function renderSitemap() {
+  const urls = [
+    { loc: "/", lastmod: POSTS[0]?.date },
+    { loc: BLOG_PATH, lastmod: POSTS[0]?.date },
+    ...POSTS.filter((p) => !p.draft).map((p) => ({ loc: postUrl(p), lastmod: p.date })),
+  ]
+    .map(
+      ({ loc, lastmod }) => `
+  <url>
+    <loc>${SITE_ORIGIN}${loc}</loc>${lastmod ? `
+    <lastmod>${lastmod}</lastmod>` : ""}
+  </url>`
+    )
+    .join("");
+
+  return new Response(
+    `<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">${urls}
+</urlset>
+`,
+    { headers: { "Content-Type": "application/xml; charset=UTF-8", "cache-control": "public, max-age=3600" } }
+  );
+}
+
 // Returns a Response for /blog paths, or null if the request isn't for the blog.
 export function handleBlog(request) {
   const url = new URL(request.url);
@@ -466,7 +502,7 @@ export function handleBlog(request) {
 
   const rest = path.slice(BLOG_PATH.length + 1);
   if (rest === "") return htmlResponse(renderIndex());
-  if (rest === "feed.xml") return renderFeed(url.origin);
+  if (rest === "feed.xml") return renderFeed();
 
   const post = POSTS.find((p) => p.slug === rest);
   if (!post) return htmlResponse(renderNotFound(), 404);

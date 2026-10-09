@@ -5,7 +5,25 @@ import {
   THEME_TOGGLE_HTML,
   THEME_TOGGLE_JS,
 } from "./theme.js";
-import { handleBlog } from "./blog.js";
+import { handleBlog, renderSitemap } from "./blog.js";
+import { SITE_ORIGIN, AUTHOR, DESCRIPTION } from "./site.js";
+
+const ROBOTS_TXT = `User-agent: *
+Allow: /
+
+Sitemap: ${SITE_ORIGIN}/sitemap.xml
+`;
+
+const PERSON_JSON_LD = JSON.stringify({
+  "@context": "https://schema.org",
+  "@type": "Person",
+  name: AUTHOR,
+  url: `${SITE_ORIGIN}/`,
+  jobTitle: "Software Engineer",
+  worksFor: { "@type": "Organization", name: "Ramp", url: "https://ramp.com" },
+  alumniOf: { "@type": "CollegeOrUniversity", name: "University of Waterloo" },
+  sameAs: ["https://github.com/uyousafzai54"],
+});
 
 const PROBE_V4_URL = "https://ipv4.icanhazip.com";
 const PROBE_V6_URL = "https://ipv6.icanhazip.com";
@@ -36,6 +54,14 @@ export default {
     const blog = handleBlog(request);
     if (blog) return blog;
 
+    const { pathname } = new URL(request.url);
+    if (pathname === "/sitemap.xml") return renderSitemap();
+    if (pathname === "/robots.txt") {
+      return new Response(ROBOTS_TXT, {
+        headers: { "Content-Type": "text/plain; charset=UTF-8", "cache-control": "public, max-age=3600" },
+      });
+    }
+
     const probeV4 = env.PROBE_V4_URL || PROBE_V4_URL;
     const probeV6 = env.PROBE_V6_URL || PROBE_V6_URL;
 
@@ -65,7 +91,16 @@ ${THEME_BOOT_SCRIPT}
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
-  <title>Umar</title>
+  <title>${AUTHOR}</title>
+  <meta name="description" content="${DESCRIPTION}" />
+  <link rel="canonical" href="${SITE_ORIGIN}/" />
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="${AUTHOR}" />
+  <meta property="og:title" content="${AUTHOR}" />
+  <meta property="og:description" content="${DESCRIPTION}" />
+  <meta property="og:url" content="${SITE_ORIGIN}/" />
+  <meta name="twitter:card" content="summary" />
+  <script type="application/ld+json">${PERSON_JSON_LD}</script>
 
   <style>
 ${THEME_PALETTE_CSS}
