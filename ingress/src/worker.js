@@ -6,7 +6,7 @@ import {
   THEME_TOGGLE_JS,
 } from "./theme.js";
 import { handleBlog, renderSitemap } from "./blog.js";
-import { SITE_ORIGIN, AUTHOR, DESCRIPTION } from "./site.js";
+import { SITE_ORIGIN, AUTHOR, TAGLINE, DESCRIPTION, TOPICS } from "./site.js";
 
 const ROBOTS_TXT = `User-agent: *
 Allow: /
@@ -19,9 +19,11 @@ const PERSON_JSON_LD = JSON.stringify({
   "@type": "Person",
   name: AUTHOR,
   url: `${SITE_ORIGIN}/`,
+  description: DESCRIPTION,
   jobTitle: "Software Engineer",
   worksFor: { "@type": "Organization", name: "Ramp", url: "https://ramp.com" },
   alumniOf: { "@type": "CollegeOrUniversity", name: "University of Waterloo" },
+  knowsAbout: TOPICS,
   sameAs: ["https://github.com/uyousafzai54"],
 });
 
@@ -91,12 +93,12 @@ ${THEME_BOOT_SCRIPT}
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
-  <title>${AUTHOR}</title>
+  <title>${AUTHOR} — ${TAGLINE}</title>
   <meta name="description" content="${DESCRIPTION}" />
   <link rel="canonical" href="${SITE_ORIGIN}/" />
   <meta property="og:type" content="website" />
   <meta property="og:site_name" content="${AUTHOR}" />
-  <meta property="og:title" content="${AUTHOR}" />
+  <meta property="og:title" content="${AUTHOR} — ${TAGLINE}" />
   <meta property="og:description" content="${DESCRIPTION}" />
   <meta property="og:url" content="${SITE_ORIGIN}/" />
   <meta name="twitter:card" content="summary" />
@@ -402,7 +404,7 @@ ${THEME_TOGGLE_CSS}
     </p>
 
     <p>
-      I'm currently a software engineer at
+      I'm <strong>Umar Yousafzai</strong>, a software engineer at
       <a href="https://ramp.com">Ramp</a>
       working on compute, CI/CD, networking &amp; observability.
     </p>
