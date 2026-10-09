@@ -5,6 +5,7 @@ import {
   THEME_TOGGLE_HTML,
   THEME_TOGGLE_JS,
 } from "./theme.js";
+import { handleBlog } from "./blog.js";
 
 const PROBE_V4_URL = "https://ipv4.icanhazip.com";
 const PROBE_V6_URL = "https://ipv6.icanhazip.com";
@@ -31,6 +32,9 @@ function probeResponse(request) {
 export default {
   async fetch(request, env, ctx) {
     if (isProbeRequest(request)) return probeResponse(request);
+
+    const blog = handleBlog(request);
+    if (blog) return blog;
 
     const probeV4 = env.PROBE_V4_URL || PROBE_V4_URL;
     const probeV6 = env.PROBE_V6_URL || PROBE_V6_URL;
@@ -366,6 +370,10 @@ ${THEME_TOGGLE_CSS}
       I'm currently a software engineer at
       <a href="https://ramp.com">Ramp</a>
       working on compute, CI/CD, networking &amp; observability.
+    </p>
+
+    <p>
+      I also write occasionally on my <a href="/blog">blog</a>.
     </p>
 
    <div class="network-terminal">

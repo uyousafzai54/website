@@ -1,0 +1,474 @@
+import {
+  THEME_BOOT_SCRIPT,
+  THEME_PALETTE_CSS,
+  THEME_TOGGLE_CSS,
+  THEME_TOGGLE_HTML,
+  THEME_TOGGLE_JS,
+} from "./theme.js";
+
+const BLOG_PATH = "/blog";
+const AUTHOR = "Umar Yousafzai";
+const SITE_TITLE = "Umar Yousafzai";
+
+// Newest first. `date` is YYYY-MM-DD. `html` is the post body; it lives inside a
+// template literal, so avoid backticks and "${" in post content. A post with
+// `draft: true` is listed as "(currently writing)" and left out of the feed.
+export const POSTS = [
+  {
+    slug: "on-predicting-the-future",
+    title: "On predicting the future",
+    date: "2026-10-09",
+    draft: true,
+    html: "",
+  },
+  {
+    slug: "hello-world",
+    title: "Hello, World",
+    date: "2026-10-09",
+    html: `
+<p>
+  Hello, world. This is the first post here, mostly to make sure everything
+  renders.
+</p>
+
+<p>
+  I plan to write about the things I spend my time on: compute and CI/CD
+  infrastructure, networking, observability, and the TCP/IP stack I'm hacking
+  on for <a href="https://sel4.systems">seL4</a> in my spare time. Expect
+  debugging stories, notes-to-self, and the occasional opinion.
+</p>
+
+<p>
+  Like the rest of this site, the blog is served by a
+  <a href="https://workers.cloudflare.com">Cloudflare Worker</a>. Each post is
+  a bit of HTML in the Worker's source; there's no build step, no database, and
+  no JavaScript beyond the theme toggle. If you'd like to follow along, there's
+  an <a href="/blog/feed.xml">Atom feed</a>.
+</p>
+
+<pre><code>#include &lt;stdio.h&gt;
+
+int main(void) {
+  printf("hello, world\\n");
+  return 0;
+}</code></pre>
+
+<p>
+  Credit where it's due: the blog itself (routes, layout, feed) was built by
+  <a href="https://devin.ai">Devin</a>, which has quietly become the way most
+  changes land on this site. I write the words; it writes the Worker.
+</p>
+
+<p>More soon.</p>
+`,
+  },
+];
+
+const BLOG_CSS = `
+    html {
+      -webkit-text-size-adjust: 100%;
+    }
+
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--fg);
+      font-family: "IBM Plex Sans", "Helvetica Neue", Arial, sans-serif;
+      font-size: 20px;
+      line-height: 1.5;
+    }
+
+    @font-face {
+      font-family: "Berkeley Mono";
+      src: url("/fonts/BerkeleyMono-Regular.woff2") format("woff2");
+      font-weight: 400;
+      font-style: normal;
+      font-display: swap;
+    }
+
+    h1, h2, h3, h4,
+    .author__site-title,
+    .postlist__date,
+    .author__post-date,
+    .adjacent-posts__relative,
+    pre, code {
+      font-family: "Berkeley Mono", "IBM Plex Mono", Menlo, monospace;
+    }
+
+    #main {
+      max-width: 750px;
+      width: 100%;
+      margin: 0 auto 30px;
+      padding: 0 10px;
+      box-sizing: border-box;
+    }
+
+    .homepage #main {
+      max-width: 520px;
+    }
+
+    a {
+      color: var(--accent);
+      text-decoration: none;
+    }
+
+    a:hover {
+      border-bottom: 1px solid currentColor;
+    }
+
+    p {
+      margin: 0 0 30px;
+    }
+
+    .author {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      margin: 48px auto 30px;
+      text-align: center;
+      line-height: 1.25;
+    }
+
+    .author__site-title {
+      font-size: 30px;
+      font-weight: 700;
+      color: inherit;
+    }
+
+    .author__site-title:hover {
+      border-bottom: none;
+      color: var(--accent);
+    }
+
+    .author__elsewhere {
+      margin-top: 6px;
+      font-size: 16px;
+      color: var(--muted);
+    }
+
+    .author__elsewhere a {
+      color: inherit;
+    }
+
+    .author__elsewhere a + a::before {
+      content: "·";
+      margin: 0 8px;
+      color: var(--muted);
+    }
+
+    .author__post-date {
+      margin-top: 6px;
+      font-size: 16px;
+      color: var(--muted);
+    }
+
+    ul.postlist {
+      margin: 0 0 30px;
+      padding: 0;
+      list-style: none;
+    }
+
+    .postlist li + li {
+      margin-top: 15px;
+    }
+
+    .postlist__date {
+      display: block;
+      font-size: 16px;
+      line-height: 1.25;
+      color: var(--muted);
+    }
+
+    article > * {
+      margin: 0 auto 30px;
+    }
+
+    h1, h2, h3, h4 {
+      margin: 0 0 10px;
+      line-height: 1.5;
+      font-weight: 700;
+    }
+
+    h1.title {
+      font-size: 34px;
+      text-align: center;
+      margin-bottom: 24px;
+      letter-spacing: -0.02em;
+    }
+
+    h2 {
+      font-size: 26px;
+      color: var(--text-strong);
+    }
+
+    h3 {
+      font-size: 22px;
+      color: var(--muted);
+    }
+
+    p + h2, p + h3 {
+      margin-top: 45px;
+    }
+
+    p > code {
+      font-size: 85%;
+      padding: 0.1em 0.35em;
+      background: var(--bar-bg);
+      border-radius: 3px;
+    }
+
+    pre {
+      font-size: 70%;
+      line-height: 1.6;
+      padding: 14px 18px;
+      overflow-x: auto;
+      background: var(--bar-bg);
+      border-left: 4px solid var(--accent);
+    }
+
+    blockquote {
+      margin: 0 0 30px;
+      padding: 0 3em 0 2em;
+      font-style: italic;
+      color: var(--text);
+    }
+
+    ol, ul {
+      padding-left: 1.75em;
+    }
+
+    li + li {
+      margin-top: 15px;
+    }
+
+    img {
+      display: block;
+      max-width: 100%;
+      height: auto;
+      margin: 0 auto;
+    }
+
+    hr {
+      border: 0;
+      border-bottom: 1px solid var(--rule);
+      width: 80%;
+      margin: 0 auto 30px;
+    }
+
+    .adjacent-posts {
+      display: flex;
+      justify-content: space-between;
+      gap: 30px;
+      margin-bottom: 30px;
+    }
+
+    .adjacent-posts__relative {
+      display: block;
+      text-transform: uppercase;
+      font-size: 14px;
+      line-height: 1;
+      margin-bottom: 6px;
+      color: var(--muted);
+    }
+
+    .adjacent-posts__next {
+      margin-left: auto;
+      text-align: right;
+    }
+`;
+
+function escapeHtml(s) {
+  return String(s)
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;");
+}
+
+function formatDate(iso) {
+  return new Date(iso + "T00:00:00Z").toLocaleDateString("en-US", {
+    year: "numeric",
+    month: "long",
+    day: "numeric",
+    timeZone: "UTC",
+  });
+}
+
+function displayTitle(post) {
+  return post.draft ? `${post.title} (currently writing)` : post.title;
+}
+
+function postUrl(post) {
+  return `${BLOG_PATH}/${post.slug}`;
+}
+
+function authorBlock({ date } = {}) {
+  return `
+    <header class="author">
+      <a href="${BLOG_PATH}" class="author__site-title">${escapeHtml(SITE_TITLE)}</a>
+      <div class="author__elsewhere">
+        <a href="/">home</a><a href="https://github.com/uyousafzai54">github</a><a href="${BLOG_PATH}/feed.xml">feed</a>
+      </div>
+      ${date ? `<span class="author__post-date">${escapeHtml(formatDate(date))}</span>` : ""}
+    </header>`;
+}
+
+function page({ title, bodyClass, content }) {
+  return `<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="color-scheme" content="light dark" />
+${THEME_BOOT_SCRIPT}
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="alternate" type="application/atom+xml" title="${escapeHtml(SITE_TITLE)}" href="${BLOG_PATH}/feed.xml">
+  <title>${escapeHtml(title)}</title>
+
+  <style>
+${THEME_PALETTE_CSS}
+${BLOG_CSS}
+${THEME_TOGGLE_CSS}
+  </style>
+</head>
+
+<body class="${bodyClass}">
+  ${THEME_TOGGLE_HTML}
+  <div id="main">
+${content}
+  </div>
+
+  <script>
+${THEME_TOGGLE_JS}
+  </script>
+</body>
+</html>
+`;
+}
+
+function htmlResponse(html, status = 200) {
+  return new Response(html, {
+    status,
+    headers: {
+      "Content-Type": "text/html; charset=UTF-8",
+      "cache-control": "public, max-age=60",
+    },
+  });
+}
+
+function renderIndex() {
+  const items = POSTS.map(
+    (p) => `
+      <li>
+        <a href="${postUrl(p)}">${escapeHtml(displayTitle(p))}</a>
+        <span class="postlist__date">${escapeHtml(formatDate(p.date))}</span>
+      </li>`
+  ).join("");
+
+  return page({
+    title: `Blog :: ${SITE_TITLE}`,
+    bodyClass: "homepage",
+    content: `${authorBlock()}
+
+    <p>Hi there! I'm Umar. Here are some things I've written:</p>
+
+    <ul class="postlist">${items}
+    </ul>`,
+  });
+}
+
+function renderPost(post) {
+  const i = POSTS.indexOf(post);
+  const newer = POSTS[i - 1];
+  const older = POSTS[i + 1];
+  const adjacent =
+    newer || older
+      ? `
+    <nav class="adjacent-posts">
+      ${older ? `<a class="adjacent-posts__prev" href="${postUrl(older)}"><span class="adjacent-posts__relative">Older</span>${escapeHtml(displayTitle(older))}</a>` : ""}
+      ${newer ? `<a class="adjacent-posts__next" href="${postUrl(newer)}"><span class="adjacent-posts__relative">Newer</span>${escapeHtml(displayTitle(newer))}</a>` : ""}
+    </nav>`
+      : "";
+
+  return page({
+    title: `${displayTitle(post)} :: ${SITE_TITLE}`,
+    bodyClass: "post",
+    content: `${authorBlock({ date: post.date })}
+
+    <article>
+      <h1 class="title">${escapeHtml(displayTitle(post))}</h1>
+${post.html}
+    </article>
+
+    <hr />
+${adjacent}
+    <p><a href="${BLOG_PATH}">← all posts</a></p>`,
+  });
+}
+
+function renderNotFound() {
+  return page({
+    title: `Not found :: ${SITE_TITLE}`,
+    bodyClass: "homepage",
+    content: `${authorBlock()}
+
+    <p>There's no post here.</p>
+
+    <p><a href="${BLOG_PATH}">← all posts</a></p>`,
+  });
+}
+
+function renderFeed(origin) {
+  const published = POSTS.filter((p) => !p.draft);
+  const updated = published.length ? `${published[0].date}T00:00:00Z` : new Date().toISOString();
+  const entries = published.map(
+    (p) => `
+  <entry>
+    <title>${escapeHtml(p.title)}</title>
+    <link href="${origin}${postUrl(p)}" />
+    <id>${origin}${postUrl(p)}</id>
+    <updated>${p.date}T00:00:00Z</updated>
+    <content type="html">${escapeHtml(p.html)}</content>
+  </entry>`
+  ).join("");
+
+  return new Response(
+    `<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <title>${escapeHtml(SITE_TITLE)}</title>
+  <link href="${origin}${BLOG_PATH}" />
+  <link href="${origin}${BLOG_PATH}/feed.xml" rel="self" />
+  <id>${origin}${BLOG_PATH}</id>
+  <updated>${updated}</updated>
+  <author><name>${escapeHtml(AUTHOR)}</name></author>${entries}
+</feed>
+`,
+    {
+      headers: {
+        "Content-Type": "application/atom+xml; charset=UTF-8",
+        "cache-control": "public, max-age=300",
+      },
+    }
+  );
+}
+
+// Returns a Response for /blog paths, or null if the request isn't for the blog.
+export function handleBlog(request) {
+  const url = new URL(request.url);
+  const path = url.pathname;
+  if (path !== BLOG_PATH && !path.startsWith(BLOG_PATH + "/")) return null;
+
+  if (path.length > BLOG_PATH.length + 1 && path.endsWith("/")) {
+    return Response.redirect(`${url.origin}${path.slice(0, -1)}`, 301);
+  }
+
+  const rest = path.slice(BLOG_PATH.length + 1);
+  if (rest === "") return htmlResponse(renderIndex());
+  if (rest === "feed.xml") return renderFeed(url.origin);
+
+  const post = POSTS.find((p) => p.slug === rest);
+  if (!post) return htmlResponse(renderNotFound(), 404);
+  return htmlResponse(renderPost(post));
+}
