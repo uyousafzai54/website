@@ -87,13 +87,7 @@ export const THEME_PALETTE_CSS = `    :root {
       }
     }`;
 
-export const THEME_TOGGLE_CSS = `@media (max-width: 600px) {
-  .theme-toggle {
-    position: absolute;
-  }
-}
-
-.theme-toggle {
+export const THEME_TOGGLE_CSS = `.theme-toggle {
   position: fixed;
   top: 1rem;
   right: 1rem;
@@ -116,6 +110,11 @@ export const THEME_TOGGLE_CSS = `@media (max-width: 600px) {
 .theme-toggle:focus-visible {
   outline: 2px solid var(--accent);
   outline-offset: 2px;
+}
+@media (max-width: 600px) {
+  .theme-toggle {
+    position: absolute;
+  }
 }`;
 
 export const THEME_TOGGLE_HTML = `<button class="theme-toggle" id="theme-toggle" type="button" aria-label="Toggle dark mode">theme</button>`;
