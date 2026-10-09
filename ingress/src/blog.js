@@ -21,31 +21,19 @@ export const POSTS = [
     title: "On predicting the future",
     date: "2026-10-09",
     draft: true,
-    html: "",
+    html: "<p>private cloud compute.</p>",
   },
   {
     slug: "hello-world",
     title: "Hello, World",
     date: "2026-10-09",
     html: `
-<p>
-  Hello, world. This is the first post here, mostly to make sure everything
-  renders.
-</p>
+<p>Hello, world. First post, mostly to check that everything renders.</p>
 
 <p>
-  I plan to write about the things I spend my time on: compute and CI/CD
-  infrastructure, networking, observability, and the TCP/IP stack I'm hacking
-  on for <a href="https://sel4.systems">seL4</a> in my spare time. Expect
-  debugging stories, notes-to-self, and the occasional opinion.
-</p>
-
-<p>
-  Like the rest of this site, the blog is served by a
-  <a href="https://workers.cloudflare.com">Cloudflare Worker</a>. Each post is
-  a bit of HTML in the Worker's source; there's no build step, no database, and
-  no JavaScript beyond the theme toggle. If you'd like to follow along, there's
-  an <a href="/blog/feed.xml">Atom feed</a>.
+  I'll write here about infra, networking, observability, and the TCP/IP stack
+  I'm building for <a href="https://sel4.systems">seL4</a>. There's an
+  <a href="/blog/feed.xml">Atom feed</a>.
 </p>
 
 <pre><code>#include &lt;stdio.h&gt;
@@ -56,12 +44,9 @@ int main(void) {
 }</code></pre>
 
 <p>
-  Credit where it's due: the blog itself (routes, layout, feed) was built by
-  <a href="https://devin.ai">Devin</a>, which has quietly become the way most
-  changes land on this site. I write the words; it writes the Worker.
+  The blog itself was built by <a href="https://devin.ai">Devin</a>. I write the
+  words; it writes the Worker.
 </p>
-
-<p>More soon.</p>
 `,
   },
 ];
