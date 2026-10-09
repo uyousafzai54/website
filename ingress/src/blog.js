@@ -21,7 +21,7 @@ export const POSTS = [
     title: "On predicting the future",
     date: "2026-10-09",
     draft: true,
-    html: "",
+    html: "<p>private cloud compute.</p>",
   },
   {
     slug: "hello-world",
