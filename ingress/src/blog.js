@@ -12,7 +12,9 @@ const SITE_TITLE = AUTHOR;
 
 // Newest first. `date` is YYYY-MM-DD. `html` is the post body; it lives inside a
 // template literal, so avoid backticks and "${" in post content. A post with
-// `draft: true` is listed as "(currently writing)" and left out of the feed.
+// `draft: true` is listed as "(currently writing)" and left out of the feed and
+// sitemap. Set `updated` (YYYY-MM-DD) when editing a published post so feed
+// readers and crawlers see the change.
 export const POSTS = [
   {
     slug: "on-predicting-the-future",
@@ -298,6 +300,14 @@ function displayTitle(post) {
   return post.draft ? `${post.title} (currently writing)` : post.title;
 }
 
+function lastModified(post) {
+  return post.updated || post.date;
+}
+
+function newestModified(posts) {
+  return posts.map(lastModified).sort().pop();
+}
+
 function postUrl(post) {
   return `${BLOG_PATH}/${post.slug}`;
 }
@@ -433,14 +443,15 @@ function renderNotFound() {
 function renderFeed() {
   const origin = SITE_ORIGIN;
   const published = POSTS.filter((p) => !p.draft);
-  const updated = published.length ? `${published[0].date}T00:00:00Z` : new Date().toISOString();
+  const updated = published.length ? `${newestModified(published)}T00:00:00Z` : new Date().toISOString();
   const entries = published.map(
     (p) => `
   <entry>
     <title>${escapeHtml(p.title)}</title>
     <link href="${origin}${postUrl(p)}" />
     <id>${origin}${postUrl(p)}</id>
-    <updated>${p.date}T00:00:00Z</updated>
+    <published>${p.date}T00:00:00Z</published>
+    <updated>${lastModified(p)}T00:00:00Z</updated>
     <content type="html">${escapeHtml(p.html)}</content>
   </entry>`
   ).join("");
@@ -467,10 +478,11 @@ function renderFeed() {
 
 // Sitemap for the whole site: homepage, blog index, and published posts.
 export function renderSitemap() {
+  const published = POSTS.filter((p) => !p.draft);
   const urls = [
-    { loc: "/", lastmod: POSTS[0]?.date },
-    { loc: BLOG_PATH, lastmod: POSTS[0]?.date },
-    ...POSTS.filter((p) => !p.draft).map((p) => ({ loc: postUrl(p), lastmod: p.date })),
+    { loc: "/" },
+    { loc: BLOG_PATH, lastmod: newestModified(published) },
+    ...published.map((p) => ({ loc: postUrl(p), lastmod: lastModified(p) })),
   ]
     .map(
       ({ loc, lastmod }) => `
@@ -497,7 +509,7 @@ export function handleBlog(request) {
   if (path !== BLOG_PATH && !path.startsWith(BLOG_PATH + "/")) return null;
 
   if (path.length > BLOG_PATH.length + 1 && path.endsWith("/")) {
-    return Response.redirect(`${url.origin}${path.slice(0, -1)}`, 301);
+    return Response.redirect(`${url.origin}${path.slice(0, -1)}${url.search}`, 301);
   }
 
   const rest = path.slice(BLOG_PATH.length + 1);

@@ -421,6 +421,8 @@ ${THEME_TOGGLE_CSS}
       I'm currently a software engineer at
       <a href="https://ramp.com">Ramp</a>
       working on compute, CI/CD, networking &amp; observability.
+      I previously interned at Stripe, Apple, Level Home, Carta and the
+      Royal Canadian Air Force, all in infra engineering roles.
     </p>
 
     <p>

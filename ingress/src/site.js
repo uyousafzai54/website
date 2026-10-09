@@ -5,6 +5,7 @@ export const AUTHOR = "Umar Yousafzai";
 export const TAGLINE = "Software Engineer at Ramp · Networking & Observability";
 export const DESCRIPTION =
   "Umar Yousafzai is a software engineer at Ramp working on compute, CI/CD, networking and observability. " +
+  "Previously interned at Stripe, Apple, Level Home, Carta and the Royal Canadian Air Force in infra engineering roles. " +
   "Side project: a TCP/IP stack for seL4 on AArch64 and Apple Silicon. University of Waterloo Computer Science.";
 export const TOPICS = [
   "Networking",
