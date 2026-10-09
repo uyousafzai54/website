@@ -1,3 +1,32 @@
+import {
+  THEME_BOOT_SCRIPT,
+  THEME_PALETTE_CSS,
+  THEME_TOGGLE_CSS,
+  THEME_TOGGLE_HTML,
+  THEME_TOGGLE_JS,
+} from "./theme.js";
+import { handleBlog, renderSitemap } from "./blog.js";
+import { SITE_ORIGIN, AUTHOR, TAGLINE, DESCRIPTION, TOPICS } from "./site.js";
+
+const ROBOTS_TXT = `User-agent: *
+Allow: /
+
+Sitemap: ${SITE_ORIGIN}/sitemap.xml
+`;
+
+const PERSON_JSON_LD = JSON.stringify({
+  "@context": "https://schema.org",
+  "@type": "Person",
+  name: AUTHOR,
+  url: `${SITE_ORIGIN}/`,
+  description: DESCRIPTION,
+  jobTitle: "Software Engineer",
+  worksFor: { "@type": "Organization", name: "Ramp", url: "https://ramp.com" },
+  alumniOf: { "@type": "CollegeOrUniversity", name: "University of Waterloo" },
+  knowsAbout: TOPICS,
+  sameAs: ["https://github.com/uyousafzai54"],
+});
+
 const PROBE_V4_URL = "https://ipv4.icanhazip.com";
 const PROBE_V6_URL = "https://ipv6.icanhazip.com";
 
@@ -24,6 +53,17 @@ export default {
   async fetch(request, env, ctx) {
     if (isProbeRequest(request)) return probeResponse(request);
 
+    const blog = handleBlog(request);
+    if (blog) return blog;
+
+    const { pathname } = new URL(request.url);
+    if (pathname === "/sitemap.xml") return renderSitemap();
+    if (pathname === "/robots.txt") {
+      return new Response(ROBOTS_TXT, {
+        headers: { "Content-Type": "text/plain; charset=UTF-8", "cache-control": "public, max-age=3600" },
+      });
+    }
+
     const probeV4 = env.PROBE_V4_URL || PROBE_V4_URL;
     const probeV6 = env.PROBE_V6_URL || PROBE_V6_URL;
 
@@ -49,96 +89,23 @@ export default {
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta name="color-scheme" content="light dark" />
-  <script>
-    (function () {
-      try {
-        var t = localStorage.getItem("theme");
-        if (t === "light" || t === "dark") document.documentElement.setAttribute("data-theme", t);
-      } catch (e) {}
-    })();
-  </script>
+${THEME_BOOT_SCRIPT}
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
-  <title>Umar</title>
+  <title>${AUTHOR} — ${TAGLINE}</title>
+  <meta name="description" content="${DESCRIPTION}" />
+  <link rel="canonical" href="${SITE_ORIGIN}/" />
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="${AUTHOR}" />
+  <meta property="og:title" content="${AUTHOR} — ${TAGLINE}" />
+  <meta property="og:description" content="${DESCRIPTION}" />
+  <meta property="og:url" content="${SITE_ORIGIN}/" />
+  <meta name="twitter:card" content="summary" />
+  <script type="application/ld+json">${PERSON_JSON_LD}</script>
 
   <style>
-    :root {
-      color-scheme: light;
-      --bg: #ffffff;
-      --fg: #111;
-      --text: #555;
-      --text-strong: #333;
-      --text-body: #444;
-      --muted: #777;
-      --link: #111;
-      --accent: #4f7cac;
-      --bar-bg: #f3f6fb;
-      --rule: #ccc;
-      --rule-soft: #ddd;
-      --highlight-bg: #ffe66d;
-      --highlight-fg: #111;
-      --term-bg: #0b0c0e;
-      --term-fg: rgba(255,255,255,0.72);
-      --term-border: rgba(255,255,255,0.1);
-      --term-bar: rgba(255,255,255,0.025);
-      --term-bar-border: rgba(255,255,255,0.07);
-      --term-dot: rgba(255,255,255,0.18);
-      --term-title: rgba(255,255,255,0.35);
-      --term-hint: rgba(255,255,255,0.3);
-      --term-shadow: 0 12px 30px rgba(0,0,0,0.18), inset 0 1px 0 rgba(255,255,255,0.04);
-    }
-
-    /* Dark palette. The terminal inverts to a light panel so it still contrasts the page. */
-    :root[data-theme="dark"] {
-      color-scheme: dark;
-      --bg: #0f1115;
-      --fg: #e8eaed;
-      --text: #b3b8c2;
-      --text-strong: #cfd3da;
-      --text-body: #c2c7d0;
-      --muted: #8a909b;
-      --link: #f2f4f7;
-      --accent: #7fa7d6;
-      --bar-bg: #171c24;
-      --rule: #2a2f38;
-      --rule-soft: #262b33;
-      --term-bg: #f4f5f7;
-      --term-fg: rgba(0,0,0,0.78);
-      --term-border: rgba(0,0,0,0.12);
-      --term-bar: rgba(0,0,0,0.035);
-      --term-bar-border: rgba(0,0,0,0.08);
-      --term-dot: rgba(0,0,0,0.22);
-      --term-title: rgba(0,0,0,0.45);
-      --term-hint: rgba(0,0,0,0.42);
-      --term-shadow: 0 12px 30px rgba(0,0,0,0.55), inset 0 1px 0 rgba(255,255,255,0.7);
-    }
-
-    @media (prefers-color-scheme: dark) {
-      :root:not([data-theme="light"]) {
-        color-scheme: dark;
-        --bg: #0f1115;
-        --fg: #e8eaed;
-        --text: #b3b8c2;
-        --text-strong: #cfd3da;
-        --text-body: #c2c7d0;
-        --muted: #8a909b;
-        --link: #f2f4f7;
-        --accent: #7fa7d6;
-        --bar-bg: #171c24;
-        --rule: #2a2f38;
-        --rule-soft: #262b33;
-        --term-bg: #f4f5f7;
-        --term-fg: rgba(0,0,0,0.78);
-        --term-border: rgba(0,0,0,0.12);
-        --term-bar: rgba(0,0,0,0.035);
-        --term-bar-border: rgba(0,0,0,0.08);
-        --term-dot: rgba(0,0,0,0.22);
-        --term-title: rgba(0,0,0,0.45);
-        --term-hint: rgba(0,0,0,0.42);
-        --term-shadow: 0 12px 30px rgba(0,0,0,0.55), inset 0 1px 0 rgba(255,255,255,0.7);
-      }
-    }
+${THEME_PALETTE_CSS}
 
     body {
   background: var(--bg);
@@ -409,29 +376,20 @@ body {
   color: var(--term-hint);
 }
 
-.theme-toggle {
-  position: fixed;
-  top: 1rem;
-  right: 1rem;
-  z-index: 10;
-  padding: 0.3rem 0.65rem;
+${THEME_TOGGLE_CSS}
+
+.site-footer {
+  margin: 4rem 0 2rem;
+  padding-top: 1rem;
+  border-top: 1px solid var(--rule-soft);
   font-family: "Berkeley Mono", monospace;
   font-size: 12px;
-  letter-spacing: 0.02em;
-  color: var(--fg);
-  background: var(--bar-bg);
-  border: 1px solid var(--rule);
-  border-radius: 6px;
-  cursor: pointer;
+  color: var(--muted);
 }
 
-.theme-toggle:hover {
-  border-color: var(--accent);
-}
-
-.theme-toggle:focus-visible {
-  outline: 2px solid var(--accent);
-  outline-offset: 2px;
+.site-footer a {
+  color: inherit;
+  font-weight: 400;
 }
 
 .cursor {
@@ -451,7 +409,7 @@ body {
 </head>
 
 <body>
-  <button class="theme-toggle" id="theme-toggle" type="button" aria-label="Toggle dark mode">theme</button>
+  ${THEME_TOGGLE_HTML}
   <main>
     <h1>Hi, I'm Umar 👋</h1>
 
@@ -463,6 +421,12 @@ body {
       I'm currently a software engineer at
       <a href="https://ramp.com">Ramp</a>
       working on compute, CI/CD, networking &amp; observability.
+      I previously interned at Stripe, Apple, Level Home, Carta and the
+      Royal Canadian Air Force, all in infra engineering roles.
+    </p>
+
+    <p>
+      I also write occasionally on my <a href="/blog">blog</a>.
     </p>
 
    <div class="network-terminal">
@@ -518,12 +482,10 @@ body {
     <section class="research-card">
     <h2>Research Interests</h2>
       <p>
-        I'm interested in the intersection of
-        <strong>systems, networking, security, and privacy</strong>.
-        In particular, I like problems where strong cryptographic or privacy
-        guarantees have to coexist with the performance and operational constraints
-        of real world systems. My academic learnings has included secure multi-party
-        computation, private computation, high performance networking, multicore systems, and
+        I'm interested in <strong>computer systems, networking, security, and privacy</strong>.
+        I believe privacy is a fundamental human right and I enjoy problems where strong cryptographic and privacy
+        guarantees have to coexist with systems performance. My academic learnings has included secure multi-party
+        computation, private computation over encrypted data, high performance networking, multicore systems, and
         concurrent systems.
       </p>
   </section>
@@ -532,7 +494,7 @@ body {
   <h3>What I'm hacking on</h3>
     <p>
       I'm experimenting with a lightweight and isolated TCP/IP stack implementation for the <a href="https://sel4.systems">seL4</a> kernel on AArch64 (and later Apple Silicon hardware) to take advantage of my home's 10 Gbps fiber. 
-      Still early; still learning; currently working through the architecture and first prototype.
+      I am currently learning <a href="https://github.com/au-ts/sddf">sDDF</a>; and working through the architecture and first prototype.
     </p>
   </section>
 
@@ -691,40 +653,16 @@ body {
         </details>
       </article>
     </section>
+
+    <footer class="site-footer">
+      <span>${AUTHOR}</span> ·
+      <a href="https://github.com/uyousafzai54">github</a> ·
+      <a href="/blog">blog</a>
+    </footer>
   </main>
 
   <script>
-    (function () {
-      var KEY = "theme";
-      var root = document.documentElement;
-      var btn = document.getElementById("theme-toggle");
-      var mq = window.matchMedia("(prefers-color-scheme: dark)");
-
-      function stored() {
-        try { return localStorage.getItem(KEY); } catch (e) { return null; }
-      }
-
-      function current() {
-        var s = stored();
-        return s === "light" || s === "dark" ? s : (mq.matches ? "dark" : "light");
-      }
-
-      function render() {
-        var t = current();
-        btn.textContent = "theme: " + t;
-        btn.setAttribute("aria-pressed", t === "dark" ? "true" : "false");
-      }
-
-      btn.addEventListener("click", function () {
-        var next = current() === "dark" ? "light" : "dark";
-        root.setAttribute("data-theme", next);
-        try { localStorage.setItem(KEY, next); } catch (e) {}
-        render();
-      });
-
-      if (mq.addEventListener) mq.addEventListener("change", render);
-      render();
-    })();
+${THEME_TOGGLE_JS}
 
     (function () {
       var probes = ${JSON.stringify({ v4: probeV4, v6: probeV6 }).replace(/</g, "\\u003c")};
