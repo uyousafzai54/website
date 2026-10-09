@@ -378,6 +378,20 @@ body {
 
 ${THEME_TOGGLE_CSS}
 
+.site-footer {
+  margin: 4rem 0 2rem;
+  padding-top: 1rem;
+  border-top: 1px solid var(--rule-soft);
+  font-family: "Berkeley Mono", monospace;
+  font-size: 12px;
+  color: var(--muted);
+}
+
+.site-footer a {
+  color: inherit;
+  font-weight: 400;
+}
+
 .cursor {
   margin-left: 4px;
   opacity: 0.8;
@@ -404,7 +418,7 @@ ${THEME_TOGGLE_CSS}
     </p>
 
     <p>
-      I'm <strong>Umar Yousafzai</strong>, a software engineer at
+      I'm currently a software engineer at
       <a href="https://ramp.com">Ramp</a>
       working on compute, CI/CD, networking &amp; observability.
     </p>
@@ -637,6 +651,12 @@ ${THEME_TOGGLE_CSS}
         </details>
       </article>
     </section>
+
+    <footer class="site-footer">
+      <span>${AUTHOR}</span> ·
+      <a href="https://github.com/uyousafzai54">github</a> ·
+      <a href="/blog">blog</a>
+    </footer>
   </main>
 
   <script>
