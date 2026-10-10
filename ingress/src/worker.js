@@ -463,7 +463,7 @@ ${THEME_TOGGLE_CSS}
     <ul>
       <li>
         Managing <strong>all</strong> monorepo "service" deploys to production
-        in 8 minutes or less via AWS ECS Fargate.
+        in 8 minutes or less via AWS ECS Fargate. Increased the daily number of prd releases by one (1) order of magnitude.
       </li>
 
       <li>
