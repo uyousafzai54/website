@@ -15,8 +15,8 @@ const SITE_TITLE = AUTHOR;
 // are old slugs that 301 to it. `date` is YYYY-MM-DD. `category` is the RFC
 // category shown in the memo header (Informational, Experimental, ...); a post
 // with `draft: true` is rendered as a work in progress ("currently writing")
-// and left out of the feed and sitemap. `abstract` is plain text; `html` is the
-// body and should use numbered <h2>s ("1. Introduction"). It lives inside a
+// and left out of the feed and sitemap. `html` is the body and should use
+// numbered <h2>s ("1. Introduction"). It lives inside a
 // template literal, so avoid backticks and "${" in post content. Set `updated`
 // (YYYY-MM-DD) when editing a published post. Atom entry ids are derived from
 // `aliases[0]` when present so renaming a URL does not re-deliver the post.
@@ -28,8 +28,7 @@ export const POSTS = [
     title: "On predicting the future",
     date: "2026-10-09",
     draft: true,
-    abstract: "private cloud compute.",
-    html: "",
+    html: "<p>private cloud compute.</p>",
   },
   {
     number: 1,
@@ -38,10 +37,6 @@ export const POSTS = [
     date: "2026-10-09",
     updated: "2026-10-10",
     category: "Informational",
-    abstract:
-      "This memo establishes a series of numbered documents at umaryousafzai.net/blog and " +
-      "verifies that the publishing pipeline renders text, links, and code. It defines the " +
-      "scope of the series and the conventions subsequent documents follow.",
     html: `
 <h2>1. Introduction</h2>
 
@@ -331,10 +326,6 @@ const BLOG_CSS = `
       margin-top: 36px;
     }
 
-    .rfc-memo p {
-      color: var(--text);
-    }
-
     .rfc-address {
       font-family: "Berkeley Mono", monospace;
       font-size: 14px;
@@ -379,20 +370,6 @@ function formatMonthYear(iso) {
     month: "long",
     timeZone: "UTC",
   });
-}
-
-function statusOfMemo(post) {
-  if (post.draft) {
-    return `This document is a work in progress. It may be updated, replaced, or
-  abandoned at any time, and it is inappropriate to cite it as anything other
-  than "currently writing".`;
-  }
-  const purpose = categoryOf(post) === "Informational" ? "for informational purposes" : `as an ${categoryOf(post)} document`;
-  return `This document is not an Internet Standards Track specification; it is
-  published ${purpose}. It is a product of the author alone and
-  represents no consensus but his own. Once published, documents in this series
-  are not rewritten; corrections are issued as new documents. Feedback is welcome
-  via <a href="https://github.com/uyousafzai54">GitHub</a>.`;
 }
 
 function memoHeader(post) {
@@ -544,12 +521,6 @@ function renderPost(post) {
 
     <article>${memoHeader(post)}
       <h1 class="title">${escapeHtml(post.title)}</h1>
-      <div class="rfc-memo">
-        <h2>Abstract</h2>
-        <p>${escapeHtml(post.abstract || "")}</p>
-        <h2>Status of This Memo</h2>
-        <p>${statusOfMemo(post)}</p>
-      </div>
 ${post.html}${authorAddress()}
     </article>
 
@@ -584,7 +555,6 @@ function renderFeed() {
     <id>${entryId(p)}</id>
     <published>${p.date}T00:00:00Z</published>
     <updated>${lastModified(p)}T00:00:00Z</updated>
-    <summary>${escapeHtml(p.abstract || "")}</summary>
     <content type="html">${escapeHtml(p.html)}</content>
   </entry>`
   ).join("");
