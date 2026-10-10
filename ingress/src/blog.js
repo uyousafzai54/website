@@ -45,9 +45,7 @@ export const POSTS = [
 <h2>2. Scope</h2>
 
 <p>
-  Documents in this blog cover infrastructure, networking, observability, and computer systems.
-  Each is numbered sequentially and, once published, is not rewritten; corrections
-  are issued as new documents. An <a href="/blog/feed.xml">Atom feed</a> lists
+  Documents in this blog cover infrastructure, networking, observability, and computer systems. An <a href="/blog/feed.xml">Atom feed</a> lists
   published documents.
 </p>
 
