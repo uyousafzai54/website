@@ -8,7 +8,7 @@ import { join } from 'node:path';
 
 const LIVE = process.env.LIVE_ORIGIN || 'https://umaryousafzai.net';
 const LOCAL = process.env.LOCAL_ORIGIN || 'http://127.0.0.1:8787';
-const PATHS = ['/', '/blog', '/blog/rfc1', '/blog/rfc2', '/blog/feed.xml', '/sitemap.xml', '/robots.txt'];
+const PATHS = ['/', '/blog', '/blog/rfc1', '/blog/rfc2', '/blog/feed.xml', '/gpg', '/gpg.asc', '/sitemap.xml', '/robots.txt'];
 
 const args = process.argv.slice(2);
 const opt = (name, dflt) => {
