@@ -5,10 +5,13 @@ import {
   THEME_TOGGLE_HTML,
   THEME_TOGGLE_JS,
 } from "./theme.js";
-import { SITE_ORIGIN, AUTHOR, DESCRIPTION } from "./site.js";
+import { SITE_ORIGIN, AUTHOR } from "./site.js";
 
 const BLOG_PATH = "/blog";
 const SITE_TITLE = AUTHOR;
+const BLOG_DESCRIPTION =
+  "Umar Yousafzai's blog: numbered RFC-style notes on infrastructure, networking, " +
+  "observability, and a TCP/IP stack for seL4.";
 
 // Posts are numbered like IETF RFCs: `number` gives the canonical URL
 // (/blog/rfc<number>) and the "RFC <number>: <title>" display title; `aliases`
@@ -372,7 +375,7 @@ function formatMonthYear(iso) {
 function memoHeader(post) {
   const rows = [
     ["umaryousafzai.net", "U. Yousafzai"],
-    [`Request for Comments: ${post.number}`, "Ramp"],
+    [`Request for Comments: ${post.number}`, "University of Waterloo"],
     [`Category: ${categoryOf(post)}`, formatMonthYear(post.date)],
   ];
   if (post.updated) rows.push([`Updated: ${post.updated}`, ""]);
@@ -389,7 +392,8 @@ function authorAddress() {
       <h2>Author's Address</h2>
       <address class="rfc-address">
         Umar Yousafzai<br />
-        uyousafz [at] icloud.com, uyousafz [at] poke.com <br />
+        University of Waterloo<br />
+        Email: uyousafz [at] uwaterloo.ca<br />
         URI: <a href="${SITE_ORIGIN}/">${SITE_ORIGIN.replace("https://", "")}</a><br />
         GitHub: <a href="https://github.com/uyousafzai54">uyousafzai54</a>
       </address>`;
@@ -436,7 +440,7 @@ ${THEME_BOOT_SCRIPT}
   <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
   <link rel="alternate" type="application/atom+xml" title="${escapeHtml(SITE_TITLE)}" href="${BLOG_PATH}/feed.xml">
   <link rel="canonical" href="${SITE_ORIGIN}${path}" />
-  <meta name="description" content="${escapeHtml(DESCRIPTION)}" />
+  <meta name="description" content="${escapeHtml(BLOG_DESCRIPTION)}" />
   <meta property="og:type" content="${bodyClass === "post" ? "article" : "website"}" />
   <meta property="og:site_name" content="${escapeHtml(SITE_TITLE)}" />
   <meta property="og:title" content="${escapeHtml(title)}" />
