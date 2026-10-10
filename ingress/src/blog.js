@@ -332,9 +332,31 @@ const BLOG_CSS = `
       line-height: 1.7;
       margin: 0 0 30px 1.5em;
     }
+
+    table.keyfacts {
+      border-collapse: collapse;
+      margin: 0 0 24px;
+      font-size: 16px;
+    }
+
+    table.keyfacts th {
+      text-align: left;
+      font-weight: 500;
+      color: var(--muted);
+      padding: 4px 1.5em 4px 0;
+      white-space: nowrap;
+      vertical-align: top;
+    }
+
+    table.keyfacts td {
+      padding: 4px 0;
+      font-family: "Berkeley Mono", monospace;
+      font-size: 14px;
+      word-break: break-word;
+    }
 `;
 
-function escapeHtml(s) {
+export function escapeHtml(s) {
   return String(s)
     .replace(/&/g, "&amp;")
     .replace(/</g, "&lt;")
@@ -395,7 +417,8 @@ function authorAddress() {
         University of Waterloo<br />
         uyousafz [at] icloud.com, uyousafz [at] poke.com, uyousafz [at] uwaterloo.ca<br />
         URI: <a href="${SITE_ORIGIN}/">${SITE_ORIGIN.replace("https://", "")}</a><br />
-        GitHub: <a href="https://github.com/uyousafzai54">uyousafzai54</a>
+        GitHub: <a href="https://github.com/uyousafzai54">uyousafzai54</a><br />
+        PGP: <a href="/gpg">A702 6E4B F9DC 4C64 BA78 5875 AC37 4434 5793 BB94</a>
       </address>`;
 }
 
@@ -416,18 +439,18 @@ function entryId(post) {
   return `${SITE_ORIGIN}${BLOG_PATH}/${slug}`;
 }
 
-function authorBlock({ date } = {}) {
+export function authorBlock({ date } = {}) {
   return `
     <header class="author">
       <a href="${BLOG_PATH}" class="author__site-title">${escapeHtml(SITE_TITLE)}</a>
       <div class="author__elsewhere">
-        <a href="/">home</a><a href="https://github.com/uyousafzai54">github</a><a href="${BLOG_PATH}/feed.xml">feed</a>
+        <a href="/">home</a><a href="https://github.com/uyousafzai54">github</a><a href="${BLOG_PATH}/feed.xml">feed</a><a href="/gpg">gpg</a>
       </div>
       ${date ? `<span class="author__post-date">${escapeHtml(formatDate(date))}</span>` : ""}
     </header>`;
 }
 
-function page({ title, path, bodyClass, content }) {
+export function page({ title, path, bodyClass, content }) {
   return `<!DOCTYPE html>
 <html lang="en">
 <head>
@@ -469,7 +492,7 @@ ${THEME_TOGGLE_JS}
 `;
 }
 
-function htmlResponse(html, status = 200) {
+export function htmlResponse(html, status = 200) {
   return new Response(html, {
     status,
     headers: {
@@ -585,6 +608,7 @@ export function renderSitemap() {
   const published = POSTS.filter((p) => !p.draft);
   const urls = [
     { loc: "/" },
+    { loc: "/gpg" },
     { loc: BLOG_PATH, lastmod: newestModified(published) },
     ...published.map((p) => ({ loc: postUrl(p), lastmod: lastModified(p) })),
   ]
