@@ -1,0 +1,44 @@
+# Fails when umaryousafzai.net no longer renders what main renders — i.e. the
+# Worker was edited in the Cloudflare dashboard (or a deploy did not happen).
+# Port dashboard edits into ingress/src before the next deploy overwrites them.
+name: drift-check
+
+on:
+  schedule:
+    - cron: "17 13 * * *"
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  live-matches-main:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ingress
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+          cache-dependency-path: ingress/package-lock.json
+      - run: npm ci
+      - name: Serve this checkout
+        env:
+          WRANGLER_SEND_METRICS: "false"
+        run: |
+          npx wrangler dev --port 8787 > wrangler-dev.log 2>&1 &
+          for i in $(seq 1 60); do
+            curl -sf -o /dev/null http://127.0.0.1:8787/ && exit 0
+            sleep 1
+          done
+          cat wrangler-dev.log; exit 1
+      - name: Compare live site with checkout
+        # On push, Workers Builds is deploying main concurrently; give it time.
+        run: |
+          if [ "${{ github.event_name }}" = "push" ]; then
+            node scripts/check-drift.mjs --attempts 10 --delay 60
+          else
+            node scripts/check-drift.mjs
+          fi
