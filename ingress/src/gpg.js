@@ -58,7 +58,9 @@ function renderGpgPage() {
 }
 
 export function handleGpg(request) {
-	const { pathname } = new URL(request.url);
+	const url = new URL(request.url);
+	const { pathname } = url;
+	if (pathname === `${GPG_PATH}/`) return Response.redirect(`${url.origin}${GPG_PATH}${url.search}`, 301);
 	if (pathname === `${GPG_PATH}.asc`) {
 		return new Response(PUBLIC_KEY, {
 			headers: {
