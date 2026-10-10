@@ -444,7 +444,7 @@ export function authorBlock({ date } = {}) {
     <header class="author">
       <a href="${BLOG_PATH}" class="author__site-title">${escapeHtml(SITE_TITLE)}</a>
       <div class="author__elsewhere">
-        <a href="/">home</a><a href="https://github.com/uyousafzai54">github</a><a href="${BLOG_PATH}/feed.xml">feed</a>
+        <a href="/">home</a><a href="https://github.com/uyousafzai54">github</a><a href="${BLOG_PATH}/feed.xml">feed</a><a href="/gpg">gpg</a>
       </div>
       ${date ? `<span class="author__post-date">${escapeHtml(formatDate(date))}</span>` : ""}
     </header>`;
