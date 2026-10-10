@@ -46,12 +46,6 @@ function renderGpgPage() {
 		content: `${authorBlock()}
     <article>
       <h1 class="title">gpg</h1>
-
-      <p>
-        Anything signed by me verifies against this key. Both commands below should
-        print the same fingerprint; if they don't, trust neither.
-      </p>
-
       <table class="keyfacts">
         ${facts}
       </table>
