@@ -18,7 +18,9 @@ const SITE_TITLE = AUTHOR;
 // and left out of the feed and sitemap. `abstract` is plain text; `html` is the
 // body and should use numbered <h2>s ("1. Introduction"). It lives inside a
 // template literal, so avoid backticks and "${" in post content. Set `updated`
-// (YYYY-MM-DD) when editing a published post. Newest first.
+// (YYYY-MM-DD) when editing a published post. Atom entry ids are derived from
+// `aliases[0]` when present so renaming a URL does not re-deliver the post.
+// Newest first.
 export const POSTS = [
   {
     number: 2,
@@ -34,6 +36,7 @@ export const POSTS = [
     aliases: ["hello-world"],
     title: "Hello, World",
     date: "2026-10-09",
+    updated: "2026-10-10",
     category: "Informational",
     abstract:
       "This memo establishes a series of numbered documents at umaryousafzai.net/blog and " +
@@ -384,8 +387,9 @@ function statusOfMemo(post) {
   abandoned at any time, and it is inappropriate to cite it as anything other
   than "currently writing".`;
   }
+  const purpose = categoryOf(post) === "Informational" ? "for informational purposes" : `as an ${categoryOf(post)} document`;
   return `This document is not an Internet Standards Track specification; it is
-  published for informational purposes. It is a product of the author alone and
+  published ${purpose}. It is a product of the author alone and
   represents no consensus but his own. Once published, documents in this series
   are not rewritten; corrections are issued as new documents. Feedback is welcome
   via <a href="https://github.com/uyousafzai54">GitHub</a>.`;
@@ -427,6 +431,11 @@ function newestModified(posts) {
 
 function postUrl(post) {
   return `${BLOG_PATH}/rfc${post.number}`;
+}
+
+function entryId(post) {
+  const slug = (post.aliases && post.aliases[0]) || `rfc${post.number}`;
+  return `${SITE_ORIGIN}${BLOG_PATH}/${slug}`;
 }
 
 function authorBlock({ date } = {}) {
@@ -572,7 +581,7 @@ function renderFeed() {
   <entry>
     <title>${escapeHtml(`${rfcLabel(p)}: ${p.title}`)}</title>
     <link href="${origin}${postUrl(p)}" />
-    <id>${origin}${postUrl(p)}</id>
+    <id>${entryId(p)}</id>
     <published>${p.date}T00:00:00Z</published>
     <updated>${lastModified(p)}T00:00:00Z</updated>
     <summary>${escapeHtml(p.abstract || "")}</summary>
