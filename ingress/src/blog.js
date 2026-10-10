@@ -393,7 +393,7 @@ function authorAddress() {
       <address class="rfc-address">
         Umar Yousafzai<br />
         University of Waterloo<br />
-        Email: uyousafz [at] uwaterloo.ca<br />
+        uyousafz [at] icloud.com, uyousafz [at] poke.com, uyousafz [at] uwaterloo.ca<br />
         URI: <a href="${SITE_ORIGIN}/">${SITE_ORIGIN.replace("https://", "")}</a><br />
         GitHub: <a href="https://github.com/uyousafzai54">uyousafzai54</a>
       </address>`;
