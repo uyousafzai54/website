@@ -36,7 +36,7 @@ export const POSTS = [
   {
     number: 1,
     aliases: ["hello-world"],
-    title: "Hello, World",
+    title: "on saying hello",
     date: "2026-10-09",
     updated: "2026-10-10",
     category: "Informational",
