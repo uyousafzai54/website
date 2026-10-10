@@ -6,6 +6,7 @@ import {
   THEME_TOGGLE_JS,
 } from "./theme.js";
 import { handleBlog, renderSitemap } from "./blog.js";
+import { handleGpg } from "./gpg.js";
 import { SITE_ORIGIN, AUTHOR, TAGLINE, DESCRIPTION, TOPICS } from "./site.js";
 
 const ROBOTS_TXT = `User-agent: *
@@ -55,6 +56,8 @@ export default {
 
     const blog = handleBlog(request);
     if (blog) return blog;
+    const gpg = handleGpg(request);
+    if (gpg) return gpg;
 
     const { pathname } = new URL(request.url);
     if (pathname === "/sitemap.xml") return renderSitemap();
@@ -657,7 +660,8 @@ ${THEME_TOGGLE_CSS}
     <footer class="site-footer">
       <span>${AUTHOR}</span> ·
       <a href="https://github.com/uyousafzai54">github</a> ·
-      <a href="/blog">blog</a>
+      <a href="/blog">blog</a> ·
+      <a href="/gpg">gpg</a>
     </footer>
   </main>
 

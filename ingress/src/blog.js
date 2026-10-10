@@ -5,10 +5,13 @@ import {
   THEME_TOGGLE_HTML,
   THEME_TOGGLE_JS,
 } from "./theme.js";
-import { SITE_ORIGIN, AUTHOR, DESCRIPTION } from "./site.js";
+import { SITE_ORIGIN, AUTHOR } from "./site.js";
 
 const BLOG_PATH = "/blog";
 const SITE_TITLE = AUTHOR;
+const BLOG_DESCRIPTION =
+  "Umar Yousafzai's blog: numbered RFC-style notes on infrastructure, networking, " +
+  "observability, and a TCP/IP stack for seL4.";
 
 // Posts are numbered like IETF RFCs: `number` gives the canonical URL
 // (/blog/rfc<number>) and the "RFC <number>: <title>" display title; `aliases`
@@ -16,7 +19,7 @@ const SITE_TITLE = AUTHOR;
 // category shown in the memo header (Informational, Experimental, ...); a post
 // with `draft: true` is rendered as a work in progress ("currently writing")
 // and left out of the feed and sitemap. `html` is the body and should use
-// numbered <h2>s ("1. Introduction"). It lives inside a
+// numbered <h2>s ("1. Introduction"). Titles are all lowercase. It lives inside a
 // template literal, so avoid backticks and "${" in post content. Set `updated`
 // (YYYY-MM-DD) when editing a published post. Atom entry ids are derived from
 // `aliases[0]` when present so renaming a URL does not re-deliver the post.
@@ -25,7 +28,7 @@ export const POSTS = [
   {
     number: 2,
     aliases: ["on-predicting-the-future"],
-    title: "On predicting the future",
+    title: "on predicting the future",
     date: "2026-10-09",
     draft: true,
     html: "<p>private cloud compute.</p>",
@@ -33,7 +36,7 @@ export const POSTS = [
   {
     number: 1,
     aliases: ["hello-world"],
-    title: "Hello, World",
+    title: "on saying hello",
     date: "2026-10-09",
     updated: "2026-10-10",
     category: "Informational",
@@ -45,10 +48,7 @@ export const POSTS = [
 <h2>2. Scope</h2>
 
 <p>
-  Documents in this series cover infrastructure, networking, observability, and
-  the TCP/IP stack the author is building for <a href="https://sel4.systems">seL4</a>.
-  Each is numbered sequentially and, once published, is not rewritten; corrections
-  are issued as new documents. An <a href="/blog/feed.xml">Atom feed</a> lists
+  Documents in this blog cover infrastructure, networking, observability, and computer systems. An <a href="/blog/feed.xml">Atom feed</a> lists
   published documents.
 </p>
 
@@ -65,7 +65,7 @@ int main(void) {
 
 <p>
   The blog itself was built by <a href="https://devin.ai">Devin</a>. All words
-  and opinions are mine however.
+  and opinions are mine, however.
 </p>
 `,
   },
@@ -332,9 +332,31 @@ const BLOG_CSS = `
       line-height: 1.7;
       margin: 0 0 30px 1.5em;
     }
+
+    table.keyfacts {
+      border-collapse: collapse;
+      margin: 0 0 24px;
+      font-size: 16px;
+    }
+
+    table.keyfacts th {
+      text-align: left;
+      font-weight: 500;
+      color: var(--muted);
+      padding: 4px 1.5em 4px 0;
+      white-space: nowrap;
+      vertical-align: top;
+    }
+
+    table.keyfacts td {
+      padding: 4px 0;
+      font-family: "Berkeley Mono", monospace;
+      font-size: 14px;
+      word-break: break-word;
+    }
 `;
 
-function escapeHtml(s) {
+export function escapeHtml(s) {
   return String(s)
     .replace(/&/g, "&amp;")
     .replace(/</g, "&lt;")
@@ -375,7 +397,7 @@ function formatMonthYear(iso) {
 function memoHeader(post) {
   const rows = [
     ["umaryousafzai.net", "U. Yousafzai"],
-    [`Request for Comments: ${post.number}`, "Ramp"],
+    [`Request for Comments: ${post.number}`, "University of Waterloo"],
     [`Category: ${categoryOf(post)}`, formatMonthYear(post.date)],
   ];
   if (post.updated) rows.push([`Updated: ${post.updated}`, ""]);
@@ -392,9 +414,11 @@ function authorAddress() {
       <h2>Author's Address</h2>
       <address class="rfc-address">
         Umar Yousafzai<br />
-        Ramp<br />
+        University of Waterloo<br />
+        uyousafz [at] icloud.com, uyousafz [at] poke.com, uyousafz [at] uwaterloo.ca<br />
         URI: <a href="${SITE_ORIGIN}/">${SITE_ORIGIN.replace("https://", "")}</a><br />
-        GitHub: <a href="https://github.com/uyousafzai54">uyousafzai54</a>
+        GitHub: <a href="https://github.com/uyousafzai54">uyousafzai54</a><br />
+        PGP: <a href="/gpg">A702 6E4B F9DC 4C64 BA78 5875 AC37 4434 5793 BB94</a>
       </address>`;
 }
 
@@ -415,18 +439,18 @@ function entryId(post) {
   return `${SITE_ORIGIN}${BLOG_PATH}/${slug}`;
 }
 
-function authorBlock({ date } = {}) {
+export function authorBlock({ date } = {}) {
   return `
     <header class="author">
       <a href="${BLOG_PATH}" class="author__site-title">${escapeHtml(SITE_TITLE)}</a>
       <div class="author__elsewhere">
-        <a href="/">home</a><a href="https://github.com/uyousafzai54">github</a><a href="${BLOG_PATH}/feed.xml">feed</a>
+        <a href="/">home</a><a href="https://github.com/uyousafzai54">github</a><a href="${BLOG_PATH}/feed.xml">feed</a><a href="/gpg">gpg</a>
       </div>
       ${date ? `<span class="author__post-date">${escapeHtml(formatDate(date))}</span>` : ""}
     </header>`;
 }
 
-function page({ title, path, bodyClass, content }) {
+export function page({ title, path, bodyClass, content }) {
   return `<!DOCTYPE html>
 <html lang="en">
 <head>
@@ -439,7 +463,7 @@ ${THEME_BOOT_SCRIPT}
   <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
   <link rel="alternate" type="application/atom+xml" title="${escapeHtml(SITE_TITLE)}" href="${BLOG_PATH}/feed.xml">
   <link rel="canonical" href="${SITE_ORIGIN}${path}" />
-  <meta name="description" content="${escapeHtml(DESCRIPTION)}" />
+  <meta name="description" content="${escapeHtml(BLOG_DESCRIPTION)}" />
   <meta property="og:type" content="${bodyClass === "post" ? "article" : "website"}" />
   <meta property="og:site_name" content="${escapeHtml(SITE_TITLE)}" />
   <meta property="og:title" content="${escapeHtml(title)}" />
@@ -468,7 +492,7 @@ ${THEME_TOGGLE_JS}
 `;
 }
 
-function htmlResponse(html, status = 200) {
+export function htmlResponse(html, status = 200) {
   return new Response(html, {
     status,
     headers: {
@@ -584,6 +608,7 @@ export function renderSitemap() {
   const published = POSTS.filter((p) => !p.draft);
   const urls = [
     { loc: "/" },
+    { loc: "/gpg" },
     { loc: BLOG_PATH, lastmod: newestModified(published) },
     ...published.map((p) => ({ loc: postUrl(p), lastmod: lastModified(p) })),
   ]
