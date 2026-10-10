@@ -44,8 +44,8 @@ int main(void) {
 }</code></pre>
 
 <p>
-  The blog itself was built by <a href="https://devin.ai">Devin</a>. I write the
-  words; it writes the Worker.
+  The blog itself was built by <a href="https://devin.ai">Devin</a>. All words
+  and opinions are mine however.
 </p>
 `,
   },
