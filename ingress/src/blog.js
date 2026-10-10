@@ -45,8 +45,7 @@ export const POSTS = [
 <h2>2. Scope</h2>
 
 <p>
-  Documents in this series cover infrastructure, networking, observability, and
-  the TCP/IP stack the author is building for <a href="https://sel4.systems">seL4</a>.
+  Documents in this blog cover infrastructure, networking, observability, and computer systems.
   Each is numbered sequentially and, once published, is not rewritten; corrections
   are issued as new documents. An <a href="/blog/feed.xml">Atom feed</a> lists
   published documents.
@@ -65,7 +64,7 @@ int main(void) {
 
 <p>
   The blog itself was built by <a href="https://devin.ai">Devin</a>. All words
-  and opinions are mine however.
+  and opinions are mine, however.
 </p>
 `,
   },
