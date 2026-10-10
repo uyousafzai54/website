@@ -19,7 +19,7 @@ const BLOG_DESCRIPTION =
 // category shown in the memo header (Informational, Experimental, ...); a post
 // with `draft: true` is rendered as a work in progress ("currently writing")
 // and left out of the feed and sitemap. `html` is the body and should use
-// numbered <h2>s ("1. Introduction"). It lives inside a
+// numbered <h2>s ("1. Introduction"). Titles are all lowercase. It lives inside a
 // template literal, so avoid backticks and "${" in post content. Set `updated`
 // (YYYY-MM-DD) when editing a published post. Atom entry ids are derived from
 // `aliases[0]` when present so renaming a URL does not re-deliver the post.
@@ -28,7 +28,7 @@ export const POSTS = [
   {
     number: 2,
     aliases: ["on-predicting-the-future"],
-    title: "On predicting the future",
+    title: "on predicting the future",
     date: "2026-10-09",
     draft: true,
     html: "<p>private cloud compute.</p>",
