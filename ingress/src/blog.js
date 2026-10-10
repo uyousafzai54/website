@@ -10,31 +10,51 @@ import { SITE_ORIGIN, AUTHOR, DESCRIPTION } from "./site.js";
 const BLOG_PATH = "/blog";
 const SITE_TITLE = AUTHOR;
 
-// Newest first. `date` is YYYY-MM-DD. `html` is the post body; it lives inside a
-// template literal, so avoid backticks and "${" in post content. A post with
-// `draft: true` is listed as "(currently writing)" and left out of the feed and
-// sitemap. Set `updated` (YYYY-MM-DD) when editing a published post so feed
-// readers and crawlers see the change.
+// Posts are numbered like IETF RFCs: `number` gives the canonical URL
+// (/blog/rfc<number>) and the "RFC <number>: <title>" display title; `aliases`
+// are old slugs that 301 to it. `date` is YYYY-MM-DD. `category` is the RFC
+// category shown in the memo header (Informational, Experimental, ...); a post
+// with `draft: true` is rendered as a work in progress ("currently writing")
+// and left out of the feed and sitemap. `abstract` is plain text; `html` is the
+// body and should use numbered <h2>s ("1. Introduction"). It lives inside a
+// template literal, so avoid backticks and "${" in post content. Set `updated`
+// (YYYY-MM-DD) when editing a published post. Newest first.
 export const POSTS = [
   {
-    slug: "on-predicting-the-future",
+    number: 2,
+    aliases: ["on-predicting-the-future"],
     title: "On predicting the future",
     date: "2026-10-09",
     draft: true,
-    html: "<p>private cloud compute.</p>",
+    abstract: "private cloud compute.",
+    html: "",
   },
   {
-    slug: "hello-world",
+    number: 1,
+    aliases: ["hello-world"],
     title: "Hello, World",
     date: "2026-10-09",
+    category: "Informational",
+    abstract:
+      "This memo establishes a series of numbered documents at umaryousafzai.net/blog and " +
+      "verifies that the publishing pipeline renders text, links, and code. It defines the " +
+      "scope of the series and the conventions subsequent documents follow.",
     html: `
-<p>Hello, world. First post, mostly to check that everything renders.</p>
+<h2>1. Introduction</h2>
+
+<p>Hello, world. This is the first document in the series, mostly to check that everything renders.</p>
+
+<h2>2. Scope</h2>
 
 <p>
-  I'll write here about infra, networking, observability, and the TCP/IP stack
-  I'm building for <a href="https://sel4.systems">seL4</a>. There's an
-  <a href="/blog/feed.xml">Atom feed</a>.
+  Documents in this series cover infrastructure, networking, observability, and
+  the TCP/IP stack the author is building for <a href="https://sel4.systems">seL4</a>.
+  Each is numbered sequentially and, once published, is not rewritten; corrections
+  are issued as new documents. An <a href="/blog/feed.xml">Atom feed</a> lists
+  published documents.
 </p>
+
+<h2>3. Reference Implementation</h2>
 
 <pre><code>#include &lt;stdio.h&gt;
 
@@ -42,6 +62,8 @@ int main(void) {
   printf("hello, world\\n");
   return 0;
 }</code></pre>
+
+<h2>4. Acknowledgements</h2>
 
 <p>
   The blog itself was built by <a href="https://devin.ai">Devin</a>. All words
@@ -262,6 +284,60 @@ const BLOG_CSS = `
       margin-left: auto;
       text-align: right;
     }
+
+    .postlist__num {
+      font-family: "Berkeley Mono", monospace;
+      font-size: 15px;
+      color: var(--muted);
+      margin-right: 0.6em;
+    }
+
+    .rfc-header {
+      font-family: "Berkeley Mono", monospace;
+      font-size: 13px;
+      line-height: 1.6;
+      color: var(--muted);
+      margin: 0 0 36px;
+      padding-bottom: 12px;
+      border-bottom: 1px solid var(--rule-soft);
+    }
+
+    .rfc-header__row {
+      display: flex;
+      justify-content: space-between;
+      gap: 1em;
+    }
+
+    .rfc-header__row span:last-child {
+      text-align: right;
+    }
+
+    @media (max-width: 480px) {
+      .rfc-header__row {
+        flex-direction: column;
+        gap: 0;
+      }
+      .rfc-header__row span:last-child {
+        text-align: left;
+        padding-left: 1.5em;
+      }
+    }
+
+    article h2 {
+      font-size: 22px;
+      margin-top: 36px;
+    }
+
+    .rfc-memo p {
+      color: var(--text);
+    }
+
+    .rfc-address {
+      font-family: "Berkeley Mono", monospace;
+      font-size: 14px;
+      line-height: 1.7;
+      margin: 0 0 30px 1.5em;
+    }
 `;
 
 function escapeHtml(s) {
@@ -281,8 +357,64 @@ function formatDate(iso) {
   });
 }
 
+function rfcLabel(post) {
+  return `RFC ${post.number}`;
+}
+
 function displayTitle(post) {
-  return post.draft ? `${post.title} (currently writing)` : post.title;
+  const t = `${rfcLabel(post)}: ${post.title}`;
+  return post.draft ? `${t} (currently writing)` : t;
+}
+
+function categoryOf(post) {
+  return post.draft ? "Internet-Draft" : post.category || "Informational";
+}
+
+function formatMonthYear(iso) {
+  return new Date(iso + "T00:00:00Z").toLocaleDateString("en-US", {
+    year: "numeric",
+    month: "long",
+    timeZone: "UTC",
+  });
+}
+
+function statusOfMemo(post) {
+  if (post.draft) {
+    return `This document is a work in progress. It may be updated, replaced, or
+  abandoned at any time, and it is inappropriate to cite it as anything other
+  than "currently writing".`;
+  }
+  return `This document is not an Internet Standards Track specification; it is
+  published for informational purposes. It is a product of the author alone and
+  represents no consensus but his own. Once published, documents in this series
+  are not rewritten; corrections are issued as new documents. Feedback is welcome
+  via <a href="https://github.com/uyousafzai54">GitHub</a>.`;
+}
+
+function memoHeader(post) {
+  const rows = [
+    ["umaryousafzai.net", "U. Yousafzai"],
+    [`Request for Comments: ${post.number}`, "Ramp"],
+    [`Category: ${categoryOf(post)}`, formatMonthYear(post.date)],
+  ];
+  if (post.updated) rows.push([`Updated: ${post.updated}`, ""]);
+  return `
+      <div class="rfc-header">${rows
+        .map(([l, r]) => `
+        <div class="rfc-header__row"><span>${escapeHtml(l)}</span><span>${escapeHtml(r)}</span></div>`)
+        .join("")}
+      </div>`;
+}
+
+function authorAddress() {
+  return `
+      <h2>Author's Address</h2>
+      <address class="rfc-address">
+        Umar Yousafzai<br />
+        Ramp<br />
+        URI: <a href="${SITE_ORIGIN}/">${SITE_ORIGIN.replace("https://", "")}</a><br />
+        GitHub: <a href="https://github.com/uyousafzai54">uyousafzai54</a>
+      </address>`;
 }
 
 function lastModified(post) {
@@ -294,7 +426,7 @@ function newestModified(posts) {
 }
 
 function postUrl(post) {
-  return `${BLOG_PATH}/${post.slug}`;
+  return `${BLOG_PATH}/rfc${post.number}`;
 }
 
 function authorBlock({ date } = {}) {
@@ -364,8 +496,8 @@ function renderIndex() {
   const items = POSTS.map(
     (p) => `
       <li>
-        <a href="${postUrl(p)}">${escapeHtml(displayTitle(p))}</a>
-        <span class="postlist__date">${escapeHtml(formatDate(p.date))}</span>
+        <span class="postlist__num">${escapeHtml(rfcLabel(p))}</span><a href="${postUrl(p)}">${escapeHtml(p.title)}</a>
+        <span class="postlist__date">${escapeHtml(formatDate(p.date))} · ${escapeHtml(p.draft ? "Internet-Draft (currently writing)" : categoryOf(p))}</span>
       </li>`
   ).join("");
 
@@ -375,7 +507,7 @@ function renderIndex() {
     bodyClass: "homepage",
     content: `${authorBlock()}
 
-    <p>Hi there! I'm Umar. Here are some things I've written:</p>
+    <p>Hi there! I'm Umar. Documents here are numbered like RFCs, newest first:</p>
 
     <ul class="postlist">${items}
     </ul>`,
@@ -401,9 +533,15 @@ function renderPost(post) {
     bodyClass: "post",
     content: `${authorBlock({ date: post.date })}
 
-    <article>
-      <h1 class="title">${escapeHtml(displayTitle(post))}</h1>
-${post.html}
+    <article>${memoHeader(post)}
+      <h1 class="title">${escapeHtml(post.title)}</h1>
+      <div class="rfc-memo">
+        <h2>Abstract</h2>
+        <p>${escapeHtml(post.abstract || "")}</p>
+        <h2>Status of This Memo</h2>
+        <p>${statusOfMemo(post)}</p>
+      </div>
+${post.html}${authorAddress()}
     </article>
 
     <hr />
@@ -432,11 +570,12 @@ function renderFeed() {
   const entries = published.map(
     (p) => `
   <entry>
-    <title>${escapeHtml(p.title)}</title>
+    <title>${escapeHtml(`${rfcLabel(p)}: ${p.title}`)}</title>
     <link href="${origin}${postUrl(p)}" />
     <id>${origin}${postUrl(p)}</id>
     <published>${p.date}T00:00:00Z</published>
     <updated>${lastModified(p)}T00:00:00Z</updated>
+    <summary>${escapeHtml(p.abstract || "")}</summary>
     <content type="html">${escapeHtml(p.html)}</content>
   </entry>`
   ).join("");
@@ -501,7 +640,12 @@ export function handleBlog(request) {
   if (rest === "") return htmlResponse(renderIndex());
   if (rest === "feed.xml") return renderFeed();
 
-  const post = POSTS.find((p) => p.slug === rest);
-  if (!post) return htmlResponse(renderNotFound(), 404);
-  return htmlResponse(renderPost(post));
+  const m = /^rfc(\d+)$/.exec(rest);
+  const post = m ? POSTS.find((p) => p.number === Number(m[1])) : null;
+  if (post) return htmlResponse(renderPost(post));
+
+  const aliased = POSTS.find((p) => (p.aliases || []).includes(rest));
+  if (aliased) return Response.redirect(`${url.origin}${postUrl(aliased)}${url.search}`, 301);
+
+  return htmlResponse(renderNotFound(), 404);
 }
