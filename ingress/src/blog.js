@@ -390,7 +390,6 @@ function authorAddress() {
       <address class="rfc-address">
         Umar Yousafzai<br />
         uyousafz [at] icloud.com, uyousafz [at] poke.com <br />
-        Ramp<br />
         URI: <a href="${SITE_ORIGIN}/">${SITE_ORIGIN.replace("https://", "")}</a><br />
         GitHub: <a href="https://github.com/uyousafzai54">uyousafzai54</a>
       </address>`;
