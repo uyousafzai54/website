@@ -59,6 +59,11 @@ This is sort of true? While Address Space Layout Randomization is common these d
 
 This is further combined with [Memory Integrity Enforcement](https://security.apple.com/blog/memory-integrity-enforcement/). MIE in summary, is a hardware and software system to ensure the integrity of memory accesses and prevent complex memory chain attacks. 
 
+> All of this results in us employing zero trust/no trust at the root level from which every process spawns while also ensuring that memory is fully clean/correct. I believe this is one method of achieving perfect kernel startup security guarantee when employing zero trust/no trust default rule.
+
+I think this is still _mostly_ true. 
+
+
 
 
 
