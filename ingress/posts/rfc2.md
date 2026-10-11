@@ -12,7 +12,7 @@ I can now. And funnily enough, unbeknownst to me, I caught a glimpse of the full
 
 [Secure Boot \[further writing in progress...\].](https://github.com/uyousafzai54/sel4-service-mesh/blob/main/End-to-End-Service-Mesh-Secure-Boot.md)
 
-The RFC document above is a collection of ideas I wrote down one week after my internship where I was interested in the ideas of secure provisioning and remote hardware attestation. In this blog, let's go line by line and see how my ideas have help up to the test of time. 
+The RFC document above is a collection of ideas I wrote down one week after my internship where I was interested in the ideas of secure provisioning and remote hardware attestation. In this blog, let's go line by line and see how my ideas have held up to the test of time. 
 
 > End to End Service Mesh: Secure Boot (Need Cool Name)
 
