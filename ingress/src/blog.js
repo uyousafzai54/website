@@ -157,10 +157,9 @@ const BLOG_CSS = `
       color: inherit;
     }
 
-    .author__elsewhere a + a::before {
-      content: "·";
+    /* separator lives outside the <a> so the hover border only spans the word */
+    .author__sep {
       margin: 0 8px;
-      color: var(--muted);
     }
 
     .author__post-date {
@@ -444,7 +443,7 @@ export function authorBlock({ date } = {}) {
     <header class="author">
       <a href="${BLOG_PATH}" class="author__site-title">${escapeHtml(SITE_TITLE)}</a>
       <div class="author__elsewhere">
-        <a href="/">home</a><a href="https://github.com/uyousafzai54">github</a><a href="${BLOG_PATH}/feed.xml">feed</a><a href="/gpg">gpg</a>
+        <a href="/">home</a><span class="author__sep">·</span><a href="https://github.com/uyousafzai54">github</a><span class="author__sep">·</span><a href="${BLOG_PATH}/feed.xml">feed</a><span class="author__sep">·</span><a href="/gpg">gpg</a>
       </div>
       ${date ? `<span class="author__post-date">${escapeHtml(formatDate(date))}</span>` : ""}
     </header>`;
