@@ -273,11 +273,17 @@ body {
   font-size: 1.3rem;
 }
 
-.side-project p {
+.side-project p,
+.side-project ul {
   margin: 0;
   font-size: 1rem;
   line-height: 1.65;
   color: var(--text-body);
+}
+
+.side-project ul {
+  margin-top: 0.5rem;
+  padding-left: 1.5rem;
 }
 
 .readings-section {
@@ -498,12 +504,12 @@ ${THEME_TOGGLE_CSS}
     <p>
       I'm experimenting with a lightweight and isolated TCP/IP stack implementation for the <a href="https://sel4.systems">seL4</a> kernel on AArch64 (and later Apple Silicon hardware) to take advantage of my home's 10 Gbps fiber. 
       I am currently learning <a href="https://github.com/au-ts/sddf">sDDF</a>; and working through the architecture and first prototype. Other ideas include:
-     <ul>
-        <li> creating and running my own ASN </li>
-        <li> creating a personal US - Canada VPN for Youtube </li>
-        <li> building the fastest running at home server rack in my coat closet </li>
-      </ul>
     </p>
+    <ul>
+      <li>creating and running my own ASN</li>
+      <li>creating a personal US - Canada VPN for Youtube</li>
+      <li>building the fastest running at home server rack in my coat closet</li>
+    </ul>
   </section>
 
   <section class="readings-section">
