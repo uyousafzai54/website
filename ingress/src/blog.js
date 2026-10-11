@@ -31,7 +31,7 @@ export const POSTS = [
     title: "on predicting the future",
     date: "2026-10-09",
     draft: true,
-    html: "<p>private cloud compute.</p>",
+    html: "<p>Two years ago, I had just left my internship at Apple. They were gracious enough to let my curious mind ask and look around. It felt as if I had seen the future; No; I had seen parts of a future. Yet I couldn't immediately understand or put together what this future was. <br> I can now. <br> private cloud compute.</p>",
   },
   {
     number: 1,
