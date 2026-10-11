@@ -28,5 +28,5 @@ I'm not sure what this means.
 
 > And then a microkernel watches every singular call made by the main kernel that is supposed to spawn importan services.
 
-Ah. I believe I was talking about a Secure Enclave-esque similar mechanism here. And then a microkernel watches every singular call made by the main kernel that is supposed to spawn importan services.
+Ah. I believe I was talking about a Secure Enclave-esque similar mechanism here. 
 
