@@ -31,7 +31,7 @@ export const POSTS = [
     title: "on sandboxes, encrypted memories and predicting the future",
     date: "2026-10-09",
     draft: true,
-    html: "<p>Two years ago, I had just left my internship at Apple. They were gracious enough to let my curious mind ask and look around. It felt as if I had seen the future; No; I had seen parts of a future. Yet I couldn't immediately understand or put together what these pieces were. <br> <br> I can now. <br> <br> <a href=\"https://github.com/uyousafzai54/sel4-service-mesh/blob/main/End-to-End-Service-Mesh-Secure-Boot.md\">Secure Boot.</a></p>",
+    html: "<p>Two years ago, I had just left my winter internship at Apple in Seattle (s/o 333 Dexter Ave. N.). They were gracious enough to let my curious mind ask and look around, from iMessage to CoreOS to ASE. It felt as if I had seen the future; No, not quite; I had seen <i>pieces</i> of a future. Yet I couldn't immediately understand or put together what these pieces were. <br> <br> I can now. <br> <br> <a href=\"https://github.com/uyousafzai54/sel4-service-mesh/blob/main/End-to-End-Service-Mesh-Secure-Boot.md\">Secure Boot.</a></p>",
   },
   {
     number: 1,
