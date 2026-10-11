@@ -26,7 +26,7 @@ I got the terminology mixed backwards. We want a bootloader to determine if it i
 
 I'm not sure what this means.
 
-> And then a microkernel watches every singular call made by the main kernel that is supposed to spawn importan services.
+> And then a microkernel watches every singular call made by the main kernel that is supposed to spawn important services.
 
-Ah. I believe I was talking about a Secure Enclave-esque similar mechanism here. 
+Ah. I believe I was talking about a [Secure Enclave-esque](https://support.apple.com/en-ca/guide/security/sec59b0b31ff/web) similar mechanism here. Secure Enclave, running sepOS is a mechanism on Apple Silicon devices where a custom designed hardware (co-processor) which is either a BMC, a bootloader, or both. 
 
