@@ -6,13 +6,13 @@ draft: true
 aliases: on-predicting-the-future
 ---
 
-Two years ago, I had just left my winter internship at Apple in Seattle (s/o 333 Dexter Ave. N.). Apple was gracious enough to let my curious mind ask and look around, from iMessage to CoreOS to ASE. It felt as if I had seen the future; no, not quite; I had seen *pieces* of a future. Yet I couldn't immediately understand or put together what these pieces were.
+Two <i>and a half</i> years ago, I had just left my winter internship at Apple in Seattle (s/o 333 Dexter Ave. N.). Apple was gracious enough to let my curious mind ask and look around, from iMessage to CoreOS to ASE. It felt as if I had seen the future; no, not quite; I had seen *pieces* of a future. Yet I couldn't immediately understand or put together what these pieces were.
 
-I can now. And funnily enough, unbeknownst to me, I caught a glimpse of the full machine; I just didn't realize it at the time.
+I can now. And funnily enough, unbeknownst to me, I had caught a glimpse of the full machine; I just didn't realize it at the time.
 
 [Secure Boot \[further writing in progress...\].](https://github.com/uyousafzai54/sel4-service-mesh/blob/main/End-to-End-Service-Mesh-Secure-Boot.md)
 
-The RFC document above is a collection of ideas I wrote down one week after my internship where I was interested in the ideas of secure provisioning and remote hardware attestation. In this blog, let's go line by line and see how my ideas have held up to the test of time.
+The RFC document above is a collection of ideas I wrote down one week after my internship ended where I was interested in the ideas of secure provisioning and remote hardware attestation. In this blog, let's go line by line and see how my ideas have held up to the test of time.
 
 > End to End Service Mesh: Secure Boot (Need Cool Name)
 
@@ -75,9 +75,11 @@ seL4 assures the security of the running microkernel, but importantly it assumes
 > Why? We are trying to create a complete end to end service mesh archiecture from the ground up.
 > We knew that gRPC and monitoring were vital pieces required in each "node".
 > So we could have a secure gRPC channel as a loader, a secure Open Telemetry (OTel) exporter loader and a third optional secure service args loaders.
-> None of these should be trusted by default including the provided bare gRPC channel, so we decided to try this experiment.
+> None of these should be truste d by default including the provided bare gRPC channel, so we decided to try this experiment.
 
-Finally. What I actually wanted to create was a system for remote attestation when a group of these "secure" computers were working together in a mesh. But why mention gRPC and Open Telemetry (OTel)? Especially when getting a basic but performant networking stack working on seL4 is an incredible amount of work. 
+Finally. What I actually wanted to create was a system for remote attestation when a group of these "secure" computers were working together in a mesh. But why mention gRPC and Open Telemetry (OTel)? Especially when getting a basic but performant networking stack working on seL4 is an incredible amount of work. And what is OTel?
+
+
 
 
 
