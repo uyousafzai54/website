@@ -50,4 +50,10 @@ Yep. Still makes sense to me.
 
 Okay, there's a lot to unpack in this sentence, and some of it is incorrect. Using cryptographic methods to verify memory correctness is a valid idea. In fact, this is what Apple's Secure Enclave [does](https://support.apple.com/en-ca/guide/security/sec59b0b31ff/web#:~:text=Memory%20Protection%20Engine). The later part of the sentence is incorrect and reveals my systems and cryptography knowledge shortcomings, <i> at the time </i>. Error-correcting code (ECC) memory is used for correctness, not security. What you actually need to accomplish this memory encryption alongside a <i>Cipher Method Authentication Code </i> tag, aka a hash. 
 
+An exercise for the reader above is the following: Is it better to encrypt-then-MAC or MAC-then-encrypt?
+
+> The cryptographic methods can also use other techniques to obfcuscate virtual memory mapping for further security.
+
+This is sort of true? 
+
 
