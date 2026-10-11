@@ -497,7 +497,7 @@ ${THEME_TOGGLE_CSS}
   <h3>What I'm hacking on</h3>
     <p>
       I'm experimenting with a lightweight and isolated TCP/IP stack implementation for the <a href="https://sel4.systems">seL4</a> kernel on AArch64 (and later Apple Silicon hardware) to take advantage of my home's 10 Gbps fiber. 
-      I am currently learning <a href="https://github.com/au-ts/sddf">sDDF</a>; and working through the architecture and first prototype.
+      I am currently learning <a href="https://github.com/au-ts/sddf">sDDF</a>; and working through the architecture and first prototype. I'm also thinking of creating my own ASN LOL...
     </p>
   </section>
 
