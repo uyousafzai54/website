@@ -40,5 +40,5 @@ Agreed. Expect this microkernel that boots up the running "normal" kernel which 
 
 > These initial loaders shouldn't be assumed to be trusted by default (default ring security structure).
 
-Huge point. There is a huge gap in security for software and firmware that all computers depend on. This was recently discussed in the [BMC vulnerability](https://arstechnica.com/security/2026/08/thousands-of-servers-can-be-backdoored-by-exploiting-buggy-motherboard-controllers/) where thousands of server racks could be backdoored by always-on firmware. 
+Huge point. There is a huge gap in security for software and firmware that all computers depend on. This was recently discovered again in the [BMC vulnerability](https://arstechnica.com/security/2026/08/thousands-of-servers-can-be-backdoored-by-exploiting-buggy-motherboard-controllers/) where thousands of server racks could be backdoored by always-on firmware. 
 
