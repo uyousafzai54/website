@@ -48,7 +48,7 @@ Yep. Still makes sense to me.
 
 > These microkernels can use cryptographic methods to verify memory correctness and use ECC techniques such as parity bit checks to ensure that every singular bit in both the stack and heap is correct.
 
-Okay, there's a lot to unpack in this sentence, and some of it is incorrect. Using cryptographic methods to verify memory correctness is a valid idea. In fact, this is what Apple's Secure Enclave [does](https://support.apple.com/en-ca/guide/security/sec59b0b31ff/web#:~:text=Memory%20Protection%20Engine). The latter part of the sentence is incorrect and reveals my systems and cryptography knowledge shortcomings *at the time*. Error-correcting code (ECC) memory is used for correctness, not security. What you actually need to accomplish this is memory encryption alongside a *Cipher Method Authentication Code* tag, aka a hash.
+Okay, there's a lot to unpack in this sentence, and some of it is incorrect. Using cryptographic methods to verify memory correctness is a valid idea. In fact, this is what Apple's Secure Enclave [does](https://support.apple.com/en-ca/guide/security/sec59b0b31ff/web#:~:text=Memory%20Protection%20Engine). The latter part of the sentence is incorrect and reveals my systems and cryptography knowledge shortcomings *at the time*. Error-correcting code (ECC) memory is used for correctness, not security. What you actually need to accomplish this is memory encryption alongside a *Cipher Method Authentication Code* tag, aka a keyed cryptographic hash.
 
 An exercise for the reader above is the following: Is it better to encrypt-then-MAC or MAC-then-encrypt?
 
