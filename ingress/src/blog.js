@@ -275,6 +275,12 @@ const BLOG_CSS = `
       margin-top: 36px;
     }
 
+    article p {
+      text-align: justify;
+      -webkit-hyphens: auto;
+      hyphens: auto;
+    }
+
     .rfc-address {
       font-family: "Berkeley Mono", monospace;
       font-size: 14px;
