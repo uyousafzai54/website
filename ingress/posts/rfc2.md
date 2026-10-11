@@ -77,8 +77,7 @@ seL4 assures the security of the running microkernel, but importantly it assumes
 > So we could have a secure gRPC channel as a loader, a secure Open Telemetry (OTel) exporter loader and a third optional secure service args loaders.
 > None of these should be trusted by default including the provided bare gRPC channel, so we decided to try this experiment.
 
-Ok.
-
+Finally. What I actually wanted to create was a system for remote attestation when a group of these "secure" computers were working together in a mesh. But why mention gRPC and Open Telemetry (OTel)? Especially when getting a basic but performant networking stack working on seL4 is an incredible amount of work. 
 
 
 
