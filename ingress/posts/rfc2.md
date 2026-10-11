@@ -11,3 +11,9 @@ Two years ago, I had just left my winter internship at Apple in Seattle (s/o 333
 I can now. And funnily enough, unbeknownst to me, I caught a glimpse of the full machine; I just didn't realize.
 
 [Secure Boot \[further writing in progress...\].](https://github.com/uyousafzai54/sel4-service-mesh/blob/main/End-to-End-Service-Mesh-Secure-Boot.md)
+
+The RFC document above is a collection of ideas I wrote down one week after my internship where I was interested in the ideas of secure provisioning and remote hardware attestation. In this blog, let's go line by line and see how my ideas have help up to the test of time. 
+
+> End to End Service Mesh: Secure Boot (Need Cool Name)
+
+I still don't have a cool name. 
