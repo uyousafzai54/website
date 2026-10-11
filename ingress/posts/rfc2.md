@@ -57,7 +57,7 @@ An exercise for the reader above is the following: Is it better to encrypt-then-
 This is sort of true? While Address Space Layout Randomization is common these days, I think I was talking about Pointer Authentication Codes [PAC](https://developer.apple.com/documentation/security/preparing-your-app-to-work-with-pointer-authentication). Simply explained, a PAC adds integrity validation to the pointer itself by having the CPU sign the unused high order bits of the pointer. Per [Apple docs](https://developer.apple.com/documentation/security/preparing-your-app-to-work-with-pointer-authentication#:~:text=The%20CPU%20interprets,app%20to%20crash.):
 > The CPU interprets authentication failure as memory corruption and sets a high-order bit in the pointer, making the pointer invalid and causing the app to crash.
 
-This is further combined with [Memory Integrity Enforcement](https://security.apple.com/blog/memory-integrity-enforcement/). MIE 
+This is further combined with [Memory Integrity Enforcement](https://security.apple.com/blog/memory-integrity-enforcement/). MIE in summary, is a hardware and software system to ensure the integrity of memory accesses and prevent complex memory chain attacks. 
 
 
 
