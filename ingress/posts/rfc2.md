@@ -17,3 +17,16 @@ The RFC document above is a collection of ideas I wrote down one week after my i
 > End to End Service Mesh: Secure Boot (Need Cool Name)
 
 I still don't have a cool name. 
+
+> This means that we can statically determine if the kernel is ready to be able to bootstrap the inital loaders.
+
+I got the terminology mixed backwards. We want a bootloader to determine if it is ready to bootstrap the kernel and then the OS. 
+
+> We can create a cache of correct function traces that is allowed by the kernel.
+
+I'm not sure what this means.
+
+> And then a microkernel watches every singular call made by the main kernel that is supposed to spawn importan services.
+
+Ah. I believe I was talking about a Secure Enclave-esque similar mechanism here. And then a microkernel watches every singular call made by the main kernel that is supposed to spawn importan services.
+
