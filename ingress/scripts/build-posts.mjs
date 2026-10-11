@@ -4,7 +4,14 @@
 import { readdir, readFile, writeFile } from "node:fs/promises";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
-import { marked } from "marked";
+
+let marked;
+try {
+  ({ marked } = await import("marked"));
+} catch {
+  console.error("build-posts: the 'marked' package is not installed — run `npm install` in ingress/ and retry");
+  process.exit(1);
+}
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const postsDir = path.join(root, "posts");
@@ -23,6 +30,11 @@ function parseFrontMatter(src, file) {
   return { meta, body: m[2] };
 }
 
+function isCalendarDate(s) {
+  if (!/^\d{4}-\d{2}-\d{2}$/.test(s)) return false;
+  return new Date(`${s}T00:00:00Z`).toISOString().slice(0, 10) === s;
+}
+
 function toPost(meta, body, file) {
   for (const k of ["number", "title", "date"]) {
     if (!meta[k]) throw new Error(`${file}: front matter needs "${k}"`);
@@ -30,7 +42,10 @@ function toPost(meta, body, file) {
   const number = Number(meta.number);
   if (!Number.isInteger(number) || number < 1) throw new Error(`${file}: number must be a positive integer`);
   for (const k of ["date", "updated"]) {
-    if (meta[k] && !/^\d{4}-\d{2}-\d{2}$/.test(meta[k])) throw new Error(`${file}: ${k} must be YYYY-MM-DD`);
+    if (meta[k] && !isCalendarDate(meta[k])) throw new Error(`${file}: ${k} must be a real YYYY-MM-DD date`);
+  }
+  if (meta.draft !== undefined && meta.draft !== "true" && meta.draft !== "false") {
+    throw new Error(`${file}: draft must be true or false`);
   }
   if (meta.title !== meta.title.toLowerCase()) throw new Error(`${file}: titles are lowercase`);
   const post = { number, title: meta.title, date: meta.date };
@@ -51,10 +66,15 @@ for (const f of files) {
   const { meta, body } = parseFrontMatter(await readFile(path.join(postsDir, f), "utf8"), f);
   posts.push(toPost(meta, body, f));
 }
-const seen = new Set();
+const numbers = new Set();
+const slugs = new Map();
 for (const p of posts) {
-  if (seen.has(p.number)) throw new Error(`duplicate RFC number ${p.number}`);
-  seen.add(p.number);
+  if (numbers.has(p.number)) throw new Error(`duplicate RFC number ${p.number}`);
+  numbers.add(p.number);
+  for (const slug of [`rfc${p.number}`, ...(p.aliases || [])]) {
+    if (slugs.has(slug)) throw new Error(`slug "${slug}" is used by both RFC ${slugs.get(slug)} and RFC ${p.number}`);
+    slugs.set(slug, p.number);
+  }
 }
 posts.sort((a, b) => b.number - a.number);
 
