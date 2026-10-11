@@ -65,7 +65,11 @@ I think this is still _mostly_ true. As Apple has shown via its memory integrity
 
 > Why? We are trying to create a complete end to end service mesh archiecture from the ground up.
 
-Ok we finally get to the "thesis" of this RFC. At the time two years ago I still wasn't sure what the whole picture was. I mean if [seL4](https://sel4.systems) exists, then we have secure boot, right? __Wrong__. seL4 assures the security of the running microkernel, but importantly it assumes that this microkernel is brought up "correctly" and "securely" via firmware on the hardware itself. So then, quis custodiet ipsos custodes? 
+Ok we finally get to the "thesis" of this RFC. At the time two years ago I still wasn't sure what the whole picture was. I mean if [seL4](https://sel4.systems) exists, then we have secure boot, right? 
+
+__Wrong__. 
+
+seL4 assures the security of the running microkernel, but importantly it assumes that this microkernel is brought up "correctly" and "securely" via firmware on the hardware itself. So then, quis custodiet ipsos custodes? 
 
 
 
