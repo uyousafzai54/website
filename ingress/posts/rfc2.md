@@ -1,6 +1,6 @@
 ---
 number: 2
-title: on sandboxes, random access encrypted (AES-256) memories and predicting the future
+title: on sandboxes, random access encrypted memories and predicting the future
 date: 2026-10-09
 draft: true
 aliases: on-predicting-the-future
