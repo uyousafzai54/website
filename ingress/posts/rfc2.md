@@ -28,5 +28,17 @@ I'm not sure what this means.
 
 > And then a microkernel watches every singular call made by the main kernel that is supposed to spawn important services.
 
-Ah. I believe I was talking about a [Secure Enclave-esque](https://support.apple.com/en-ca/guide/security/sec59b0b31ff/web) similar mechanism here. Secure Enclave, running sepOS is a mechanism on Apple Silicon devices where a custom designed hardware (co-processor) which is either a BMC, a bootloader, or both. 
+Ah. I believe I was talking about a [Secure Enclave-esque](https://support.apple.com/en-ca/guide/security/sec59b0b31ff/web) similar mechanism here. Secure Enclave, running sepOS is a mechanism on Apple Silicon devices where a custom designed hardware (co-processor) which is either a BMC, a bootloader, or both, helps bring up the Apple kernel among other things.
+
+> And to ensure security of the microkernel demon, we can simply extend it to at least 2 or more replicas.
+
+I disagree with this complexity. And this idea may not even work or be efficient. We don't need microkernel replicas for this job.
+
+> The loaders in the main kernel are for important things we need before a "service" runs.
+
+Agreed. Expect this microkernel that boots up the running "normal" kernel which then brings up the OS. 
+
+> These initial loaders shouldn't be assumed to be trusted by default (default ring security structure).
+
+Huge point. There is a huge gap in security for software and firmware that all computers depend on. This was recently discussed in the [BMC vulnerability](https://arstechnica.com/security/2026/08/thousands-of-servers-can-be-backdoored-by-exploiting-buggy-motherboard-controllers/) where thousands of server racks could be backdoored by always-on firmware. 
 
