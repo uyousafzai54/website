@@ -42,3 +42,11 @@ Agreed. Expect this microkernel that boots up the running "normal" kernel which 
 
 Huge point. There is a huge gap in security for software and firmware that all computers depend on. This was recently discovered again in the [BMC vulnerability](https://arstechnica.com/security/2026/08/thousands-of-servers-can-be-backdoored-by-exploiting-buggy-motherboard-controllers/) where thousands of server racks could be backdoored by always-on firmware. 
 
+> Instead, we should employ Linux daemon like "services" that are very lightweight microkernels to check the security of these loaders. These microkernels are able to directly interact with the main kernel containing the loaders and check memory.
+
+Yep. Still makes sense to me. 
+
+> These microkernels can use cryptographic methods to verify memory correctness and use ECC techniques such as parity bit checks to ensure that every singular bit in both the stack and heap is correct.
+
+Ok there's a lot to unpack in this sentence, and some of it is incorrect. Using cryptographic methods to verify memory correctness is a valid idea. In fact, this is what Apple's Secure Enclave [does](https://developer.apple.com). The later part of the sentence is incorrect and reveals my systems and cryptography knowledge shortcomings, <i> at the time </i>. Error-correcting code (ECC) memory is used for correctness, not security. 
+
