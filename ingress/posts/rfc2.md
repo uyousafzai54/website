@@ -57,13 +57,15 @@ An exercise for the reader above is the following: Is it better to encrypt-then-
 This is sort of true? While Address Space Layout Randomization is common these days, I think I was talking about Pointer Authentication Codes [PAC](https://developer.apple.com/documentation/security/preparing-your-app-to-work-with-pointer-authentication). Simply explained, a PAC adds integrity validation to the pointer itself by having the CPU sign the unused high order bits of the pointer. Per [Apple docs](https://developer.apple.com/documentation/security/preparing-your-app-to-work-with-pointer-authentication#:~:text=The%20CPU%20interprets,app%20to%20crash.):
 > The CPU interprets authentication failure as memory corruption and sets a high-order bit in the pointer, making the pointer invalid and causing the app to crash.
 
-This is further combined with [Memory Integrity Enforcement](https://security.apple.com/blog/memory-integrity-enforcement/). MIE in summary, is a hardware and software system to ensure the integrity of memory accesses and prevent complex memory chain attacks. 
+This is further combined with [Memory Integrity Enforcement](https://security.apple.com/blog/memory-integrity-enforcement/), a hardware level security feature. MIE in summary, is a hardware and software system to ensure the integrity of *all* memory accesses and prevent complex memory chain attacks that are common in other UNIX systems. 
 
 > All of this results in us employing zero trust/no trust at the root level from which every process spawns while also ensuring that memory is fully clean/correct. I believe this is one method of achieving perfect kernel startup security guarantee when employing zero trust/no trust default rule.
 
-I think this is still _mostly_ true. 
+I think this is still _mostly_ true. As Apple has shown via its memory integrity features and deep hardware security features such as the Secure Enclave, all of these primitives help provision a new system from scratch that is *secure* and *authenticated*. 
 
+> Why? We are trying to create a complete end to end service mesh archiecture from the ground up.
 
+Ok we finally get to the "thesis" of this RFC. At the time two years ago I still wasn't sure what the whole picture was. I mean if seL4 exists, then we have secure boot, right? Wrong. seL4 assures the security of the running microkernel, but importantly it assumes that this microkernel is brought up "correctly" and "securely" via firmware on the hardware itself. So then, quis custodiet ipsos custodes? 
 
 
 
