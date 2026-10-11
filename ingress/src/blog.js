@@ -13,63 +13,13 @@ const BLOG_DESCRIPTION =
   "Umar Yousafzai's blog: numbered RFC-style notes on infrastructure, networking, " +
   "observability, and a TCP/IP stack for seL4.";
 
-// Posts are numbered like IETF RFCs: `number` gives the canonical URL
-// (/blog/rfc<number>) and the "RFC <number>: <title>" display title; `aliases`
-// are old slugs that 301 to it. `date` is YYYY-MM-DD. `category` is the RFC
-// category shown in the memo header (Informational, Experimental, ...); a post
-// with `draft: true` is rendered as a work in progress ("currently writing")
-// and left out of the feed and sitemap. `html` is the body and should use
-// numbered <h2>s ("1. Introduction"). Titles are all lowercase. It lives inside a
-// template literal, so avoid backticks and "${" in post content. Set `updated`
-// (YYYY-MM-DD) when editing a published post. Atom entry ids are derived from
-// `aliases[0]` when present so renaming a URL does not re-deliver the post.
-// Newest first.
-export const POSTS = [
-  {
-    number: 2,
-    aliases: ["on-predicting-the-future"],
-    title: "on sandboxes, encrypted memories and predicting the future",
-    date: "2026-10-09",
-    draft: true,
-    html: "<p>Two years ago, I had just left my winter internship at Apple in Seattle (s/o 333 Dexter Ave. N.). Apple was gracious enough to let my curious mind ask and look around, from iMessage to CoreOS to ASE. It felt as if I had seen the future; No, not quite; I had seen <i>pieces</i> of a future. Yet I couldn't immediately understand or put together what these pieces were. <br> <br> I can now. And funnily enough, unbeknownst to me, I caught a glimpse of the full machine; I just didn't realize. <br> <br> <a href=\"https://github.com/uyousafzai54/sel4-service-mesh/blob/main/End-to-End-Service-Mesh-Secure-Boot.md\">Secure Boot [further writing in progress...].</a></p>",
-  },
-  {
-    number: 1,
-    aliases: ["hello-world"],
-    title: "on saying hello",
-    date: "2026-10-09",
-    updated: "2026-10-10",
-    category: "Informational",
-    html: `
-<h2>1. Introduction</h2>
-
-<p>Hello, world. This is the first document in the series, mostly to check that everything renders.</p>
-
-<h2>2. Scope</h2>
-
-<p>
-  Documents in this blog cover infrastructure, networking, observability, and computer systems. An <a href="/blog/feed.xml">Atom feed</a> lists
-  published documents.
-</p>
-
-<h2>3. Reference Implementation</h2>
-
-<pre><code>#include &lt;stdio.h&gt;
-
-int main(void) {
-  printf("hello, world\\n");
-  return 0;
-}</code></pre>
-
-<h2>4. Acknowledgements</h2>
-
-<p>
-  The blog itself was built by <a href="https://devin.ai">Devin</a>. All words
-  and opinions are mine, however.
-</p>
-`,
-  },
-];
+// Posts live in ../posts/*.md (front matter + Markdown; format in posts/README.md)
+// and are rendered into posts.generated.js by scripts/build-posts.mjs, which
+// wrangler runs before every dev/deploy (`build.command`). Each post has
+// `number` (URL /blog/rfc<number>, title "RFC <number>: <title>"), `title`
+// (lowercase), `date`/`updated` (YYYY-MM-DD), `category`, `draft`, `aliases`
+// (old slugs that 301; aliases[0] is the stable Atom id) and rendered `html`.
+import { POSTS } from "./posts.generated.js";
 
 const BLOG_CSS = `
     html {

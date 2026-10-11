@@ -1,6 +1,10 @@
 {
   "name": "ingress",
   "main": "src/worker.js",
+  "build": {
+    "command": "node scripts/build-posts.mjs",
+    "watch_dir": "posts"
+  },
   "workers_dev": true,
   "preview_urls": false,
   "compatibility_date": "2026-10-02",
