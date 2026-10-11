@@ -185,7 +185,8 @@ const BLOG_CSS = `
     blockquote {
       margin: 0 0 30px;
       padding: 0 3em 0 2em;
-      font-style: italic;
+      font-family: "Berkeley Mono", "IBM Plex Mono", Menlo, monospace;
+      font-size: 85%;
       color: var(--text);
     }
 
@@ -279,6 +280,12 @@ const BLOG_CSS = `
       text-align: justify;
       -webkit-hyphens: auto;
       hyphens: auto;
+    }
+
+    article blockquote p {
+      text-align: left;
+      -webkit-hyphens: manual;
+      hyphens: manual;
     }
 
     .rfc-address {
