@@ -518,7 +518,7 @@ ${THEME_TOGGLE_CSS}
   <ul class="readings-list">
     <li>
       <a href="https://files.uyousafz.com/umar%20bob%20the%20builder%20pt.%202.pdf" target="_blank">
-        learnings of an sre; how to bob the builder?
+        how to become bob the builder (learnings of an sre)?
       </a>
     </li>
 
