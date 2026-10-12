@@ -5,7 +5,7 @@ import {
   THEME_TOGGLE_HTML,
   THEME_TOGGLE_JS,
 } from "./theme.js";
-import { handleBlog, renderSitemap } from "./blog.js";
+import { handleBlog, renderRecentPosts, renderSitemap } from "./blog.js";
 import { handleGpg } from "./gpg.js";
 import { SITE_ORIGIN, AUTHOR, TAGLINE, DESCRIPTION, TOPICS } from "./site.js";
 
@@ -99,6 +99,7 @@ ${THEME_BOOT_SCRIPT}
   <title>${AUTHOR} — ${TAGLINE}</title>
   <meta name="description" content="${DESCRIPTION}" />
   <link rel="canonical" href="${SITE_ORIGIN}/" />
+  <link rel="alternate" type="application/atom+xml" title="${AUTHOR} — blog" href="/blog/feed.xml" />
   <meta property="og:type" content="website" />
   <meta property="og:site_name" content="${AUTHOR}" />
   <meta property="og:title" content="${AUTHOR} — ${TAGLINE}" />
@@ -322,6 +323,82 @@ body {
   opacity: 0.55;
 }
 
+.writing {
+  margin: 2rem 0 2.5rem;
+}
+
+.writing h2 {
+  margin: 0 0 1rem;
+  padding: 0.45rem 0.7rem;
+  border-left: 4px solid var(--accent);
+  background: var(--bar-bg);
+  font-size: 1.05rem;
+  font-weight: 800;
+  letter-spacing: 0.02em;
+  font-family: "Berkeley Mono", monospace;
+}
+
+.writing h2 a {
+  color: inherit;
+  text-decoration: none;
+}
+
+.writing h2 a:hover {
+  text-decoration: underline;
+}
+
+.writing__list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.writing__list li {
+  margin-bottom: 0.9rem;
+  font-size: 1.1rem;
+  line-height: 1.5;
+}
+
+.writing__list a {
+  color: var(--link);
+}
+
+.writing__num,
+.writing__date {
+  font-family: "Berkeley Mono", monospace;
+  color: var(--muted);
+}
+
+.writing__num {
+  font-size: 0.9rem;
+  margin-right: 0.6em;
+}
+
+.writing__date {
+  display: block;
+  font-size: 0.9rem;
+}
+
+.writing__more {
+  margin: 1rem 0 0;
+  font-size: 0.95rem;
+  font-family: "Berkeley Mono", monospace;
+}
+
+.writing__more a {
+  color: var(--muted);
+  font-weight: 600;
+}
+
+.writing__more a:hover {
+  color: var(--link);
+}
+
+.writing__sep {
+  margin: 0 0.5em;
+  color: var(--muted);
+}
+
 .network {
   font-family: "Berkeley Mono", monospace;
   font-size: 12px;
@@ -437,6 +514,14 @@ ${THEME_TOGGLE_CSS}
     <p>
       I also write occasionally on my <a href="/blog">blog</a>.
     </p>
+
+    <section class="writing">
+      <h2><a href="/blog">blog</a></h2>
+      ${renderRecentPosts(3)}
+      <p class="writing__more">
+        <a href="/blog">all posts →</a><span class="writing__sep">·</span><a href="/blog/feed.xml">atom feed</a>
+      </p>
+    </section>
 
    <div class="network-terminal">
   <div class="terminal-bar">

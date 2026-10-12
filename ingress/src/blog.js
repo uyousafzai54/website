@@ -486,6 +486,20 @@ function renderIndex() {
   });
 }
 
+// Latest posts for the homepage, newest first (drafts included, labelled).
+export function renderRecentPosts(limit = 3) {
+  const items = POSTS.slice(0, limit).map(
+    (p) => `
+        <li>
+          <span class="writing__num">${escapeHtml(rfcLabel(p))}</span><a href="${postUrl(p)}">${escapeHtml(p.title)}</a>
+          <span class="writing__date">${escapeHtml(formatDate(p.date))}${p.draft ? " · currently writing" : ""}</span>
+        </li>`
+  ).join("");
+
+  return `<ul class="writing__list">${items}
+      </ul>`;
+}
+
 function renderPost(post) {
   const i = POSTS.indexOf(post);
   const newer = POSTS[i - 1];
