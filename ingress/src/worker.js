@@ -5,7 +5,7 @@ import {
   THEME_TOGGLE_HTML,
   THEME_TOGGLE_JS,
 } from "./theme.js";
-import { handleBlog, renderRecentPosts, renderSitemap } from "./blog.js";
+import { handleBlog, renderSitemap } from "./blog.js";
 import { handleGpg } from "./gpg.js";
 import { SITE_ORIGIN, AUTHOR, TAGLINE, DESCRIPTION, TOPICS } from "./site.js";
 
@@ -323,79 +323,40 @@ body {
   opacity: 0.55;
 }
 
-.writing {
-  margin: 2rem 0 2.5rem;
+.site-nav {
+  margin: -0.25rem 0 1.75rem;
+  font-family: "Berkeley Mono", monospace;
+  font-size: 1.05rem;
 }
 
-.writing h2 {
-  margin: 0 0 1rem;
-  padding: 0.45rem 0.7rem;
+.site-nav a {
+  color: var(--muted);
+  text-decoration: none;
+  border-bottom: 1px solid var(--rule);
+}
+
+.site-nav a:hover {
+  color: var(--link);
+  border-bottom-color: currentColor;
+}
+
+.site-nav__blog {
+  display: inline-block;
+  padding: 0.15rem 0.55rem;
   border-left: 4px solid var(--accent);
   background: var(--bar-bg);
-  font-size: 1.05rem;
+  color: var(--link) !important;
+  border-bottom: none !important;
   font-weight: 800;
-  letter-spacing: 0.02em;
-  font-family: "Berkeley Mono", monospace;
 }
 
-.writing h2 a {
-  color: inherit;
-  text-decoration: none;
+.site-nav__blog:hover {
+  background: var(--highlight-bg);
+  color: var(--highlight-fg) !important;
 }
 
-.writing h2 a:hover {
-  text-decoration: underline;
-}
-
-.writing__list {
-  margin: 0;
-  padding: 0;
-  list-style: none;
-}
-
-.writing__list li {
-  margin-bottom: 0.9rem;
-  font-size: 1.1rem;
-  line-height: 1.5;
-}
-
-.writing__list a {
-  color: var(--link);
-}
-
-.writing__num,
-.writing__date {
-  font-family: "Berkeley Mono", monospace;
-  color: var(--muted);
-}
-
-.writing__num {
-  font-size: 0.9rem;
-  margin-right: 0.6em;
-}
-
-.writing__date {
-  display: block;
-  font-size: 0.9rem;
-}
-
-.writing__more {
-  margin: 1rem 0 0;
-  font-size: 0.95rem;
-  font-family: "Berkeley Mono", monospace;
-}
-
-.writing__more a {
-  color: var(--muted);
-  font-weight: 600;
-}
-
-.writing__more a:hover {
-  color: var(--link);
-}
-
-.writing__sep {
-  margin: 0 0.5em;
+.site-nav__sep {
+  margin: 0 0.6em;
   color: var(--muted);
 }
 
@@ -499,6 +460,10 @@ ${THEME_TOGGLE_CSS}
   <main>
     <h1>Hi, I'm Umar 👋</h1>
 
+    <nav class="site-nav" aria-label="Site">
+      <a href="/blog" class="site-nav__blog">blog →</a><span class="site-nav__sep">·</span><a href="https://github.com/uyousafzai54">github</a><span class="site-nav__sep">·</span><a href="/gpg">gpg</a>
+    </nav>
+
     <p>
       This is my first personal website running on <s>an NVIDIA H100</s> Cloudflare Workers :)
     </p>
@@ -514,14 +479,6 @@ ${THEME_TOGGLE_CSS}
     <p>
       I also write occasionally on my <a href="/blog">blog</a>.
     </p>
-
-    <section class="writing">
-      <h2><a href="/blog">blog</a></h2>
-      ${renderRecentPosts(3)}
-      <p class="writing__more">
-        <a href="/blog">all posts →</a><span class="writing__sep">·</span><a href="/blog/feed.xml">atom feed</a>
-      </p>
-    </section>
 
    <div class="network-terminal">
   <div class="terminal-bar">
