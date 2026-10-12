@@ -99,6 +99,7 @@ ${THEME_BOOT_SCRIPT}
   <title>${AUTHOR} — ${TAGLINE}</title>
   <meta name="description" content="${DESCRIPTION}" />
   <link rel="canonical" href="${SITE_ORIGIN}/" />
+  <link rel="alternate" type="application/atom+xml" title="${AUTHOR} — blog" href="/blog/feed.xml" />
   <meta property="og:type" content="website" />
   <meta property="og:site_name" content="${AUTHOR}" />
   <meta property="og:title" content="${AUTHOR} — ${TAGLINE}" />
@@ -322,6 +323,43 @@ body {
   opacity: 0.55;
 }
 
+.site-nav {
+  margin: -0.25rem 0 1.75rem;
+  font-family: "Berkeley Mono", monospace;
+  font-size: 1.05rem;
+}
+
+.site-nav a {
+  color: var(--muted);
+  text-decoration: none;
+  border-bottom: 1px solid var(--rule);
+}
+
+.site-nav a:hover {
+  color: var(--link);
+  border-bottom-color: currentColor;
+}
+
+.site-nav__blog {
+  display: inline-block;
+  padding: 0.15rem 0.55rem;
+  border-left: 4px solid var(--accent);
+  background: var(--bar-bg);
+  color: var(--link) !important;
+  border-bottom: none !important;
+  font-weight: 800;
+}
+
+.site-nav__blog:hover {
+  background: var(--highlight-bg);
+  color: var(--highlight-fg) !important;
+}
+
+.site-nav__sep {
+  margin: 0 0.6em;
+  color: var(--muted);
+}
+
 .network {
   font-family: "Berkeley Mono", monospace;
   font-size: 12px;
@@ -421,6 +459,10 @@ ${THEME_TOGGLE_CSS}
   ${THEME_TOGGLE_HTML}
   <main>
     <h1>Hi, I'm Umar 👋</h1>
+
+    <nav class="site-nav" aria-label="Site">
+      <a href="/blog" class="site-nav__blog">blog →</a><span class="site-nav__sep">·</span><a href="https://github.com/uyousafzai54">github</a><span class="site-nav__sep">·</span><a href="/gpg">gpg</a>
+    </nav>
 
     <p>
       This is my first personal website running on <s>an NVIDIA H100</s> Cloudflare Workers :)
