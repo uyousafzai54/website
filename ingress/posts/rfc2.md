@@ -70,12 +70,12 @@ Ok, we finally get to the "thesis" of this RFC. At the time, two years ago, I st
 
 __Wrong__.
 
-seL4 assures the security of the running microkernel, but importantly it assumes that this microkernel is brought up "correctly" and "securely" via firmware on the hardware itself. So then, quis custodiet ipsos custodes? And what happens when we scale from one computer to many computers, acting as nodes in a larger mesh? When a new node is introduced, how does the existing mesh validate its boot up? What if that node is malicious?
+seL4 assures the security of the running microkernel, but importantly it assumes that this microkernel is brought up "correctly" and "securely" via firmware on the hardware itself. So then, <i>quis custodiet ipsos custodes</i>? And what happens when we scale from one computer to many computers, acting as nodes in a larger mesh? When a new node is introduced, how does the existing mesh validate its boot up? What if that node is malicious?
 
 > Why? We are trying to create a complete end to end service mesh archiecture from the ground up.
 > We knew that gRPC and monitoring were vital pieces required in each "node".
 > So we could have a secure gRPC channel as a loader, a secure Open Telemetry (OTel) exporter loader and a third optional secure service args loaders.
-> None of these should be truste d by default including the provided bare gRPC channel, so we decided to try this experiment.
+> None of these should be trusted by default including the provided bare gRPC channel, so we decided to try this experiment.
 
 Finally. What I actually wanted to create was a system for remote attestation when a group of these "secure" computers were working together in a mesh. But why mention gRPC and Open Telemetry (OTel)? Especially when getting a basic but performant networking stack working on seL4 is an [incredible amount of work](https://trustworthy.systems/publications/theses_public/23/Parker:bsc.abstract). And what even is [OTel](https://opentelemetry.io/)?
 
