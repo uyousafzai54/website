@@ -559,18 +559,6 @@ ${THEME_TOGGLE_CSS}
 
   <ul class="readings-list">
     <li>
-      <a href="https://files.uyousafz.com/umar%20bob%20the%20builder%20pt.%202.pdf" target="_blank">
-        how to become bob the builder (learnings of an sre)?
-      </a>
-    </li>
-
-    <li>
-      <a href="https://files.uyousafz.com/umar%20container%20cpu%20spike.pdf" target="_blank">
-        how to find an impossible cpu spike bug (aka where are my cpu cycles)?
-      </a>
-    </li>
-
-    <li>
       <a href="https://files.uyousafz.com/Carta_gRPC_error_handling.pdf" target="_blank">
         how to lower your ddog bill (woof woof)?
       </a>
