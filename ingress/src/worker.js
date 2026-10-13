@@ -7,13 +7,16 @@ import {
 } from "./theme.js";
 import { handleBlog, renderSitemap } from "./blog.js";
 import { handleGpg } from "./gpg.js";
-import { SITE_ORIGIN, AUTHOR, TAGLINE, DESCRIPTION, TOPICS } from "./site.js";
+import { SITE_ORIGIN, BLOG_HOST, BLOG_ORIGIN, AUTHOR, TAGLINE, DESCRIPTION, TOPICS } from "./site.js";
 
-const ROBOTS_TXT = `User-agent: *
+function robotsTxt(url) {
+  const origin = url.hostname === BLOG_HOST ? BLOG_ORIGIN : SITE_ORIGIN;
+  return `User-agent: *
 Allow: /
 
-Sitemap: ${SITE_ORIGIN}/sitemap.xml
+Sitemap: ${origin}/sitemap.xml
 `;
+}
 
 const PERSON_JSON_LD = JSON.stringify({
   "@context": "https://schema.org",
@@ -59,10 +62,11 @@ export default {
     const gpg = handleGpg(request);
     if (gpg) return gpg;
 
-    const { pathname } = new URL(request.url);
-    if (pathname === "/sitemap.xml") return renderSitemap();
+    const url = new URL(request.url);
+    const { pathname } = url;
+    if (pathname === "/sitemap.xml") return renderSitemap(url);
     if (pathname === "/robots.txt") {
-      return new Response(ROBOTS_TXT, {
+      return new Response(robotsTxt(url), {
         headers: { "Content-Type": "text/plain; charset=UTF-8", "cache-control": "public, max-age=3600" },
       });
     }
@@ -99,7 +103,7 @@ ${THEME_BOOT_SCRIPT}
   <title>${AUTHOR} — ${TAGLINE}</title>
   <meta name="description" content="${DESCRIPTION}" />
   <link rel="canonical" href="${SITE_ORIGIN}/" />
-  <link rel="alternate" type="application/atom+xml" title="${AUTHOR} — blog" href="/blog/feed.xml" />
+  <link rel="alternate" type="application/atom+xml" title="${AUTHOR} — blog" href="${BLOG_ORIGIN}/feed.xml" />
   <meta property="og:type" content="website" />
   <meta property="og:site_name" content="${AUTHOR}" />
   <meta property="og:title" content="${AUTHOR} — ${TAGLINE}" />
@@ -461,7 +465,7 @@ ${THEME_TOGGLE_CSS}
     <h1>Hi, I'm Umar 👋</h1>
 
     <nav class="site-nav" aria-label="Site">
-      <a href="/blog" class="site-nav__blog">blog →</a><span class="site-nav__sep">·</span><a href="https://github.com/uyousafzai54">github</a><span class="site-nav__sep">·</span><a href="/gpg">gpg</a>
+      <a href="${BLOG_ORIGIN}/" class="site-nav__blog">blog →</a><span class="site-nav__sep">·</span><a href="https://github.com/uyousafzai54">github</a><span class="site-nav__sep">·</span><a href="/gpg">gpg</a>
     </nav>
 
     <p>
@@ -477,7 +481,7 @@ ${THEME_TOGGLE_CSS}
     </p>
 
     <p>
-      I also write occasionally on my <a href="/blog">blog</a>.
+      I also write occasionally on my <a href="${BLOG_ORIGIN}/">blog</a>.
     </p>
 
    <div class="network-terminal">
@@ -701,7 +705,7 @@ ${THEME_TOGGLE_CSS}
     <footer class="site-footer">
       <span>${AUTHOR}</span> ·
       <a href="https://github.com/uyousafzai54">github</a> ·
-      <a href="/blog">blog</a> ·
+      <a href="${BLOG_ORIGIN}/">blog</a> ·
       <a href="/gpg">gpg</a>
     </footer>
   </main>

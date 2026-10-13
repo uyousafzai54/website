@@ -1,6 +1,9 @@
 // Canonical origin: the site is also served on uyousafz.com / uyousafz.dev / yousafz.ai / umar.yousafz.ai / yousafzai.ca / umar.yousafzai.ca, so
 // canonical links, the sitemap, and feed ids all point here.
 export const SITE_ORIGIN = "https://umaryousafzai.net";
+// The blog has its own host; /blog/* on every other host 301s there.
+export const BLOG_HOST = "blog.umaryousafzai.net";
+export const BLOG_ORIGIN = `https://${BLOG_HOST}`;
 export const AUTHOR = "Umar Yousafzai";
 export const TAGLINE = "Software Engineer at Ramp · Networking & Observability";
 export const DESCRIPTION =
