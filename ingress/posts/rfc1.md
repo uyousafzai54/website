@@ -13,7 +13,7 @@ Hello, world. This is the first document in the series, mostly to check that eve
 
 ## 2. Scope
 
-Documents in this blog cover infrastructure, networking, observability, and computer systems. An [Atom feed](/blog/feed.xml) lists published documents.
+Documents in this blog cover infrastructure, networking, observability, and computer systems. An [Atom feed](/feed.xml) lists published documents.
 
 ## 3. Reference Implementation
 

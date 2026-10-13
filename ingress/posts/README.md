@@ -2,13 +2,13 @@
 
 One Markdown file per blog post. Add a file here, commit, deploy — `wrangler dev` /
 `wrangler deploy` render them into `src/posts.generated.js` (gitignored) via
-`scripts/build-posts.mjs`, and `/blog` picks them up.
+`scripts/build-posts.mjs`, and blog.umaryousafzai.net picks them up.
 
 Front matter (between `---` lines), then the Markdown body:
 
 | key        | required | meaning                                                                 |
 | ---------- | -------- | ----------------------------------------------------------------------- |
-| `number`   | yes      | RFC number: URL is `/blog/rfc<number>`, title shows as "RFC n: title"   |
+| `number`   | yes      | RFC number: URL is `blog.umaryousafzai.net/rfc<number>`, title "RFC n: title" |
 | `title`    | yes      | all lowercase                                                           |
 | `date`     | yes      | `YYYY-MM-DD` publication date                                           |
 | `updated`  | no       | `YYYY-MM-DD`; set when editing a published post (feeds re-deliver it)   |

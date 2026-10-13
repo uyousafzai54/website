@@ -41,6 +41,7 @@ function renderGpgPage() {
 	const facts = KEY_FACTS.map(([k, v]) => `<tr><th>${k}</th><td>${escapeHtml(v)}</td></tr>`).join('\n        ');
 	return page({
 		title: 'gpg :: Umar Yousafzai',
+		origin: SITE_ORIGIN,
 		path: GPG_PATH,
 		bodyClass: 'homepage',
 		content: `${authorBlock()}
