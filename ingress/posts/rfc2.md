@@ -83,7 +83,9 @@ Finally. What I actually wanted to create was a system for remote attestation wh
 
 At this point, we need to take a small detour and talk about what I actually built at Apple for the Tips app. The goal of Instructional Products as a whole is to empower users to naturally learn all the amazing features of their new device. This is done via beautiful animations and small nudges from Tips as they swipe around and click around in iOS and macOS. Crucially, the logic behind these tips must be on device to preserve user privacy and work for all supported device and software permutations. And as part of the yearly software release after WWDC, validations were run on these collections of tips. My intern project was to instrument the backend services that supported this for telemetry so errors during publishing and validations could be surfaced. 
 
+<br>
 
+To be honest, I wasn't super stoked about this project initially as a year ago my internship at Carta also involved instrumentation and observability of gRPC services. However, this project at Apple required closed collaboration with Apple Services Engineering (ASE) and involved some of my favourite tools to work with including gRPC, kubernetes (k8s) and time-series databases. I somewhat reluctantly agreed to work on this and immediately started reading developer docs on Apple's internal observability platform.
 
 
 
