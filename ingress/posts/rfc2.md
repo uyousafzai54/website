@@ -40,7 +40,7 @@ Agreed. Except this microkernel that boots up the running "normal" kernel which 
 
 > These initial loaders shouldn't be assumed to be trusted by default (default ring security structure).
 
-Huge point. There is a huge gap in security for software and firmware that all computers depend on. This was recently discovered again in the [BMC vulnerability](https://arstechnica.com/security/2026/08/thousands-of-servers-can-be-backdoored-by-exploiting-buggy-motherboard-controllers/) where thousands of server racks could be backdoored by always-on firmware via the internet. 
+Huge point. There is a huge gap in security for software and firmware that all computers depend on. This was recently discovered again in the [BMC vulnerability](https://arstechnica.com/security/2026/08/thousands-of-servers-can-be-backdoored-by-exploiting-buggy-motherboard-controllers/) where thousands of server could be backdoored by always-on firmware via the internet. 
 
 > Instead, we should employ Linux daemon like "services" that are very lightweight microkernels to check the security of these loaders. These microkernels are able to directly interact with the main kernel containing the loaders and check memory.
 
@@ -54,7 +54,7 @@ An exercise for the reader above is the following: Is it better to encrypt-then-
 
 > The cryptographic methods can also use other techniques to obfcuscate virtual memory mapping for further security.
 
-This is sort of true? While Address Space Layout Randomization is common these days, I think I was talking about a mechanism similar to Pointer Authentication Codes ([PAC](https://developer.apple.com/documentation/security/preparing-your-app-to-work-with-pointer-authentication)). Simply explained, a PAC adds integrity validation to the pointer itself by having the CPU sign the unused high-order bits of the pointer. Per [Apple docs](https://developer.apple.com/documentation/security/preparing-your-app-to-work-with-pointer-authentication#:~:text=The%20CPU%20interprets,app%20to%20crash.):
+This is sort of true? While Address Space Layout Randomization is common these days, I think I was talking about a mechanism similar to Pointer Authentication Codes ([PAC](https://developer.apple.com/documentation/security/preparing-your-app-to-work-with-pointer-authentication)). Simply explained, a PAC adds integrity validation to the pointer itself by having the CPU sign the value of the pointer and store the signature in the unused high-order bits of the pointer. Per [Apple docs](https://developer.apple.com/documentation/security/preparing-your-app-to-work-with-pointer-authentication#:~:text=The%20CPU%20interprets,app%20to%20crash.):
 
 > The CPU interprets authentication failure as memory corruption and sets a high-order bit in the pointer, making the pointer invalid and causing the app to crash.
 
@@ -81,7 +81,7 @@ Finally. What I actually wanted to create was a system for remote attestation wh
 
 <br>
 
-At this point, we need to take a small detour and talk about what I actually built at Apple for the Tips app. The goal of Instructional Products as a whole is to empower users to naturally learn all the amazing features of their new device. This is done via beautiful animations and small nudges from Tips as they swipe around and click around in iOS and macOS. Crucially, the logic behind these tips must be on device and work for all supported device and software permutations. And as part of the yearly software release after WWDC, validations were run on these collections of tips. My intern project was to instrument the backend services that supported this for telemetry so errors during publishing and validations could be surfaced. 
+At this point, we need to take a small detour and talk about what I actually built at Apple for the Tips app. The goal of Instructional Products as a whole is to empower users to naturally learn all the amazing features of their new device. This is done via beautiful animations and small nudges from Tips as they swipe around and click around in iOS and macOS. Crucially, the logic behind these tips must be on device to preserve user privacy and work for all supported device and software permutations. And as part of the yearly software release after WWDC, validations were run on these collections of tips. My intern project was to instrument the backend services that supported this for telemetry so errors during publishing and validations could be surfaced. 
 
 
 
