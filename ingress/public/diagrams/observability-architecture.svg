@@ -1,6 +1,6 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="1100" height="1040" viewBox="0 72 1100 1040" role="img" aria-labelledby="title description">
   <title id="title">OpenTelemetry collection and querying</title>
-  <desc id="description">Two HTTPS/gRPC services in a Kubernetes service mesh communicate with each other over regular HTTPS. Each service contains an OpenTelemetry SDK and exports logs, metrics and traces over mutual TLS (mTLS) to an OpenTelemetry Collector, a gRPC service running in Kubernetes. The collector forwards telemetry over mTLS to the Apple Services Engineering observability backend. Prometheus stores metrics; log storage and trace storage are shown separately. A query frontend exchanges queries and results with the backend over mTLS. Arrows show logical data flow, not a specific backend ingestion protocol. The grouping boxes do not imply security isolation or separate Kubernetes clusters.</desc>
+  <desc id="description">Two HTTPS/gRPC services in a Kubernetes service mesh communicate with each other over regular HTTPS. Each service contains an OpenTelemetry SDK and exports logs, metrics and traces over mutual TLS (mTLS) to an OpenTelemetry Collector, a gRPC service running in Kubernetes. The collector forwards telemetry over mTLS to the Apple Services Engineering observability backend. Prometheus stores metrics in a time series database (TSDB); log storage and trace storage are shown separately. A query frontend exchanges queries and results with the backend over mTLS. Arrows show logical data flow, not a specific backend ingestion protocol. The grouping boxes do not imply security isolation or separate Kubernetes clusters.</desc>
   <defs>
     <marker id="arrow" viewBox="0 0 12 10" refX="11" refY="5" markerWidth="12" markerHeight="10" markerUnits="userSpaceOnUse" orient="auto-start-reverse">
       <path d="M 0 0 L 12 5 L 0 10 Z" fill="#000"/>
@@ -53,8 +53,9 @@
     <rect x="496" y="788" width="556" height="284" rx="13" fill="#d6d7d7"/>
     <text x="774" y="831" font-size="24">Apple Services Engineering (ASE)</text>
     <rect x="520" y="859" width="242" height="136" rx="13" fill="#d4e9d2" stroke="#fff" stroke-width="2.5"/>
-    <text x="641" y="914" font-size="25">Prometheus</text>
-    <text x="641" y="949" font-size="21">Metrics</text>
+    <text x="641" y="898" font-size="25">Prometheus</text>
+    <text x="641" y="934" font-size="19">Time series database</text>
+    <text x="641" y="966" font-size="19">(TSDB) · Metrics</text>
     <rect x="786" y="859" width="242" height="60" rx="13" fill="#d4e9d2" stroke="#fff" stroke-width="2.5"/>
     <text x="907" y="898" font-size="25">Log storage</text>
     <rect x="786" y="935" width="242" height="60" rx="13" fill="#d4e9d2" stroke="#fff" stroke-width="2.5"/>
