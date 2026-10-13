@@ -26,9 +26,9 @@
     <text x="874" y="377" font-size="25">Kubernetes</text>
 
     <path d="M 360 260 H 714" fill="none" stroke="#000" stroke-width="4" marker-end="url(#arrow)"/>
-    <rect x="428" y="190" width="244" height="52" rx="10" fill="#000"/>
-    <text x="550" y="223" font-size="23" fill="#fff">mutual TLS (mTLS)</text>
-    <text x="550" y="299" font-size="20">Logs, metrics and traces</text>
+    <rect x="418" y="204" width="264" height="112" rx="10" fill="#000"/>
+    <text x="550" y="245" font-size="23" fill="#fff">mutual TLS (mTLS)</text>
+    <text x="550" y="281" font-size="19" fill="#fff">Logs, traces and metrics</text>
 
     <!-- Encryption is known on this hop; its authentication mode is unspecified. -->
     <path d="M 874 403 V 530" fill="none" stroke="#000" stroke-width="4" marker-end="url(#arrow)"/>
