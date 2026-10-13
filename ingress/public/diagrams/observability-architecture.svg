@@ -1,6 +1,6 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="1100" height="1112" viewBox="0 0 1100 1112" role="img" aria-labelledby="title description">
   <title id="title">OpenTelemetry collection and querying</title>
-  <desc id="description">Two HTTPS/gRPC services in a Kubernetes service mesh communicate with each other over mutual TLS (mTLS). Each service contains an OpenTelemetry SDK and exports logs, metrics and traces over mTLS to an OpenTelemetry Collector, a gRPC service running in Kubernetes. The collector forwards telemetry over mTLS to the Apple Services Engineering observability backend. Prometheus stores metrics; log storage and trace storage are shown separately. A query frontend exchanges queries and results with the backend over mTLS. All application-layer traffic uses mTLS. Arrows show logical data flow, not a specific backend ingestion protocol. The grouping boxes do not imply security isolation or separate Kubernetes clusters.</desc>
+  <desc id="description">Two HTTPS/gRPC services in a Kubernetes service mesh communicate with each other over regular HTTPS. Each service contains an OpenTelemetry SDK and exports logs, metrics and traces over mutual TLS (mTLS) to an OpenTelemetry Collector, a gRPC service running in Kubernetes. The collector forwards telemetry over mTLS to the Apple Services Engineering observability backend. Prometheus stores metrics; log storage and trace storage are shown separately. A query frontend exchanges queries and results with the backend over mTLS. Arrows show logical data flow, not a specific backend ingestion protocol. The grouping boxes do not imply security isolation or separate Kubernetes clusters.</desc>
   <defs>
     <marker id="arrow" viewBox="0 0 12 10" refX="11" refY="5" markerWidth="12" markerHeight="10" markerUnits="userSpaceOnUse" orient="auto-start-reverse">
       <path d="M 0 0 L 12 5 L 0 10 Z" fill="#000"/>
@@ -9,7 +9,6 @@
   <rect width="1100" height="1112" fill="#fff"/>
   <g font-family="Helvetica, Arial, Liberation Sans, sans-serif" fill="#1d1d1f" font-weight="400" text-anchor="middle">
     <text x="550" y="56" font-size="28">OpenTelemetry collection and querying</text>
-    <text x="550" y="88" font-size="20">All application-layer traffic uses mutual TLS (mTLS)</text>
 
     <!-- Instrumentation is embedded in each service, not a separate agent. -->
     <rect x="48" y="112" width="356" height="606" rx="13" fill="#d6d7d7"/>
@@ -29,7 +28,7 @@
     <path d="M 226 330 V 450" fill="none" stroke="#000" stroke-width="4" marker-start="url(#arrow)" marker-end="url(#arrow)"/>
     <rect x="106" y="346" width="240" height="88" rx="10" fill="#000"/>
     <text x="226" y="382" font-size="21" fill="#fff">Application traffic</text>
-    <text x="226" y="414" font-size="23" fill="#fff">mTLS</text>
+    <text x="226" y="414" font-size="23" fill="#fff">HTTPS</text>
 
     <rect x="696" y="280" width="356" height="288" rx="13" fill="#d6d7d7"/>
     <rect x="720" y="312" width="308" height="196" rx="13" fill="#b7e3f7" stroke="#fff" stroke-width="2.5"/>
