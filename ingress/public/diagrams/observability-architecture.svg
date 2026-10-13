@@ -9,7 +9,7 @@
   <rect x="0" y="72" width="1100" height="1040" fill="#fff"/>
   <g font-family="Helvetica, Arial, Liberation Sans, sans-serif" fill="#1d1d1f" font-weight="400" text-anchor="middle">
     <!-- Instrumentation is embedded in each service, not a separate agent. -->
-    <rect x="48" y="112" width="356" height="606" rx="13" fill="#d6d7d7"/>
+    <rect x="48" y="112" width="356" height="606" rx="13" fill="#f7c995"/>
     <rect x="72" y="136" width="308" height="188" rx="13" fill="#d4e9d2"/>
     <text x="226" y="180" font-size="23">HTTPS/gRPC service A</text>
     <rect x="96" y="202" width="260" height="98" rx="13" fill="#b7e3f7" stroke="#fff" stroke-width="2.5"/>
@@ -28,7 +28,7 @@
     <text x="226" y="382" font-size="21" fill="#fff">Application traffic</text>
     <text x="226" y="414" font-size="23" fill="#fff">HTTPS</text>
 
-    <rect x="696" y="280" width="356" height="288" rx="13" fill="#d6d7d7"/>
+    <rect x="696" y="280" width="356" height="288" rx="13" fill="#f7c995"/>
     <rect x="720" y="312" width="308" height="196" rx="13" fill="#b7e3f7" stroke="#fff" stroke-width="2.5"/>
     <text x="874" y="366" font-size="25">OpenTelemetry</text>
     <text x="874" y="398" font-size="25">Collector</text>
