@@ -44,6 +44,7 @@ const BLOG_CSS = `
     }
 
     h1, h2, h3, h4,
+    summary,
     .author__site-title,
     .postlist__date,
     .author__post-date,
@@ -315,6 +316,10 @@ const BLOG_CSS = `
       font-family: "Berkeley Mono", monospace;
       font-size: 14px;
       word-break: break-word;
+    }
+
+    article summary {
+      cursor: pointer;
     }
 `;
 
