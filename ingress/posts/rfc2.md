@@ -85,8 +85,7 @@ At this point, we need to take a small detour and talk about what I actually bui
 
 To be honest, I wasn't super stoked about this project initially as a year ago my internship at Carta also involved instrumentation and observability of gRPC services. However, this project at Apple required closed collaboration with Apple Services Engineering (ASE) and involved some of my favourite tools to work with including gRPC, kubernetes (k8s) and time-series databases. I somewhat reluctantly agreed to work on this and immediately started reading developer docs on Apple's internal observability platform and OpenTelemetry.
 
-A few weeks later, I had one service in our service mesh instrumented with an OpenTelemetry SDK sending encrypted telemetry (logs and metrics) to an OTel collector running in k8s that forwarded the encrypted traffic to ASE's backend Prometheus engine where I could then query them on the frontend. I was mainly surpised at h
-ow the simplicy of this architecture allowed me to query thousands of logs and metrics within milliseconds 
+A few weeks later, I had one service in our service mesh instrumented with an OpenTelemetry SDK sending encrypted telemetry (logs and metrics) to an OTel collector running in k8s that forwarded the encrypted traffic to ASE's backend Prometheus engine where I could then query them on the frontend. I was mainly surpised at how the simplicy of this architecture allowed me to query thousands of logs and metrics within milliseconds of exporting them. 
 
 
 
