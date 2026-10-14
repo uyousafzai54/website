@@ -20,14 +20,14 @@
     <rect x="90" y="200" width="130" height="122" fill="#466689"/>
     <text x="102" y="268" fill="#fff">Application</text>
 
-    <rect x="250" y="200" width="160" height="122" fill="#cae4aa"/>
+    <rect x="250" y="200" width="190" height="122" fill="#cae4aa"/>
     <text x="262" y="258">OpenTelemetry</text>
     <text x="262" y="286">Logging</text>
 
-    <rect x="440" y="200" width="180" height="122" fill="#cae4aa"/>
-    <text x="452" y="244">Remote</text>
-    <text x="452" y="272">Attestation</text>
-    <text x="452" y="300">Client</text>
+    <rect x="470" y="200" width="160" height="122" fill="#cae4aa"/>
+    <text x="482" y="244">Remote</text>
+    <text x="482" y="272">Attestation</text>
+    <text x="482" y="300">Client</text>
 
     <rect x="650" y="30" width="200" height="292" fill="#ffedc6"/>
     <rect x="666" y="46" width="168" height="100" fill="#ffd170"/>
@@ -43,8 +43,8 @@
 
     <!-- Channels, routed through the kernel bar as in whitepaper Figure 2.3. Deeper runs enter the NW stack further right so none cross. -->
     <path d="M 200 324 V 352 H 280 V 324" fill="none" stroke="#000" stroke-width="5" marker-start="url(#head)" marker-end="url(#head)"/>
-    <path d="M 530 324 V 352 H 770 V 324" fill="none" stroke="#000" stroke-width="5" marker-start="url(#head)" marker-end="url(#head)"/>
-    <path d="M 330 324 V 374 H 800 V 324" fill="none" stroke="#000" stroke-width="5" marker-start="url(#head)" marker-end="url(#head)"/>
+    <path d="M 550 324 V 352 H 770 V 324" fill="none" stroke="#000" stroke-width="5" marker-start="url(#head)" marker-end="url(#head)"/>
+    <path d="M 345 324 V 374 H 800 V 324" fill="none" stroke="#000" stroke-width="5" marker-start="url(#head)" marker-end="url(#head)"/>
     <path d="M 150 324 V 396 H 830 V 324" fill="none" stroke="#000" stroke-width="5" marker-start="url(#head)" marker-end="url(#head)"/>
 
     <path d="M 836 96 H 890" fill="none" stroke="#000" stroke-width="5" marker-start="url(#head)" marker-end="url(#head)"/>

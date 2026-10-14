@@ -290,7 +290,12 @@ const BLOG_CSS = `
       text-indent: 0;
     }
 
-    article blockquote p {
+    /* Long URLs (e.g. in References) would otherwise stretch a justified line. */
+article p a {
+  overflow-wrap: anywhere;
+}
+
+article blockquote p {
       text-align: left;
       text-indent: 0;
       -webkit-hyphens: manual;
