@@ -95,7 +95,7 @@ On the plane ride back to Canada from Seattle, after enjoying the high of doing 
 
 The diagram above was my vision for bare minimum required of a node to execute the application. We have a hardware root of trust that securely brings up an L4 micro-kernel. Above seL4, we utilize seL4's Microkit to have <i>protected domains</i>; these are isolated sandboxes that communicate with each other using protected procedure calls (PPCs). We only need three egress data channels: one gRPC channel for telemetry collection, another gRPC/HTTPS channel for applicaton traffic and finally a channel/port for the remote attestation client. 
 
-Speaking of which, what is the remote attestation client for? Let's assume the worst case scenario where a malicious actor is able to bypass the hardware root of trust and bring up an untrusted kernel & OS. In this case we need some mechanism for an external party to prove that the node is secure and running approved software before allowing it to handle user data.
+Speaking of which, what is the <it>remote attestation</i> client for? Let's assume the worst case scenario where a malicious actor is able to bypass the hardware root of trust and bring up an untrusted kernel & OS. In this case we need some mechanism for an external party to prove that the node is secure and running approved software before allowing it to handle user data.
 
 ## References
 
