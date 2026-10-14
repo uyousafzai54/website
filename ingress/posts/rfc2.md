@@ -91,3 +91,10 @@ A few weeks later, I had one service in our service mesh instrumented with an Op
 
 On the plane ride back to Canada from Seattle, after enjoying the high of doing a presentation to my VP of SWEOps Cheryl Thomas at Apple Park in Cupertino (a sentence that is still hard for me to believe while writing this), I kept wondering what more could be done with my simple little observability architecture? What if we abstract away what the service does entirely? What if we treat the microservice as an arbitrary node in a service mesh of computers, running an arbitrary program as simple as a Python or Swift Hello, World? What's left then? What more does it need other than a gRPC channel to network and a gRPC channel for structured observability emission? And how does one provision such a node and bring it up correctly, and <i>securely</i>?
 
+[![Drawn in the style of the seL4 whitepaper figures. A hardware root of trust bar at the bottom contains secure boot, with the seL4 microkernel bar directly on top of it. Above the kernel are four separate protection domains: the application, OpenTelemetry logging, a remote attestation client, and a networking protocol stack with exactly two gRPC channels layered on top of it, one speaking OTLP for observability and one for internet application traffic. The application has a channel to OpenTelemetry logging, and the application, logging and attestation domains each have a channel to the networking stack, routed through seL4. Both gRPC channels leave the node over mTLS.](/diagrams/sel4-node.svg)](/diagrams/sel4-node.svg)
+
+## References
+
+[1] Apple Inc., "The Secure Enclave", Apple Platform Security. <https://support.apple.com/en-ca/guide/security/sec59b0b31ff/web>
+
+[2] G. Heiser, "The seL4 Microkernel: An Introduction", The seL4 Foundation, white paper, revision 1.4.1, July 2026. <https://sel4.systems/About/seL4-whitepaper.pdf>

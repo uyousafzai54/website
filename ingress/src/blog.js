@@ -290,7 +290,17 @@ const BLOG_CSS = `
       text-indent: 0;
     }
 
-    article blockquote p {
+    /* Reference entries: hanging indent, left aligned so a long URL does not stretch the line. */
+article p.ref {
+  text-align: left;
+  text-indent: -2.5em;
+  padding-left: 2.5em;
+  overflow-wrap: anywhere;
+  -webkit-hyphens: manual;
+  hyphens: manual;
+}
+
+article blockquote p {
       text-align: left;
       text-indent: 0;
       -webkit-hyphens: manual;

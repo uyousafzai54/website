@@ -41,6 +41,8 @@ function toPost(meta, body, file) {
   post.html = marked
     .parse(body, { gfm: true, async: false })
     .replace(/\n<\/code><\/pre>/g, "</code></pre>")
+    // "[1] ..." paragraphs are reference entries (RFC-style References section).
+    .replace(/<p>(\[\d+\] )/g, '<p class="ref">$1')
     .trim();
   return post;
 }
