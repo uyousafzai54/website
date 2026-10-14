@@ -290,9 +290,14 @@ const BLOG_CSS = `
       text-indent: 0;
     }
 
-    /* Long URLs (e.g. in References) would otherwise stretch a justified line. */
-article p a {
+    /* Reference entries: hanging indent, left aligned so a long URL does not stretch the line. */
+article p.ref {
+  text-align: left;
+  text-indent: -2.5em;
+  padding-left: 2.5em;
   overflow-wrap: anywhere;
+  -webkit-hyphens: manual;
+  hyphens: manual;
 }
 
 article blockquote p {
