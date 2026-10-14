@@ -93,6 +93,8 @@ On the plane ride back to Canada from Seattle, after enjoying the high of doing 
 
 [![Drawn in the style of the seL4 whitepaper figures. A hardware root of trust bar at the bottom contains secure boot, with the seL4 microkernel bar directly on top of it. Above the kernel are four separate protection domains: the application, OpenTelemetry logging, a remote attestation client, and a networking protocol stack with exactly two gRPC channels layered on top of it, one speaking OTLP for observability and one for internet application traffic. The application has a channel to OpenTelemetry logging, and the application, logging and attestation domains each have a channel to the networking stack, routed through seL4. Both gRPC channels leave the node over mTLS.](/diagrams/sel4-node.svg)](/diagrams/sel4-node.svg)
 
+The diagram above was my vision for bare minimum required of a node to execute the application. We have a hardware root of trust that securely brings up an L4 micro-kernel. Above seL4, we utilize seL4's Microkit to have <i>protected domains</i>; these are isolated sandboxes that communicate with each other using protected procedure calls (PPCs). We only need three egress data channels: one gRPC channel for telemetry collection, another gRPC/HTTPS channel for applicaton traffic and finally a channel/port of the remote attestation client. 
+
 ## References
 
 [1] Apple Inc., "The Secure Enclave", Apple Platform Security. <https://support.apple.com/en-ca/guide/security/sec59b0b31ff/web>
