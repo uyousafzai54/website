@@ -280,12 +280,19 @@ const BLOG_CSS = `
 
     article p {
       text-align: justify;
+      text-indent: 1.5em;
       -webkit-hyphens: auto;
       hyphens: auto;
     }
 
+    /* Figures are a lone <a><img></a> inside a <p>; don't nudge them off the left edge. */
+    article p:has(> a:only-child > img:only-child) {
+      text-indent: 0;
+    }
+
     article blockquote p {
       text-align: left;
+      text-indent: 0;
       -webkit-hyphens: manual;
       hyphens: manual;
     }
