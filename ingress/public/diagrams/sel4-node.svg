@@ -1,6 +1,6 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="1000" height="540" viewBox="0 0 1000 540" role="img" aria-labelledby="title description">
   <title id="title">A node in the mesh, built on seL4</title>
-  <desc id="description">Drawn in the style of the seL4 whitepaper figures. A hardware root of trust bar at the bottom contains secure boot. The seL4 microkernel bar sits directly on it. Above the kernel, in user mode, are three separate protection domains: OpenTelemetry logging, a networking protocol stack with gRPC channels (mTLS) layered on top of it, and a remote attestation client. The logging and attestation domains each have a channel to the networking stack, drawn as black connectors routed through the seL4 bar, and the gRPC channels connect over mTLS to other nodes in the mesh.</desc>
+  <desc id="description">Drawn in the style of the seL4 whitepaper figures. A hardware root of trust bar at the bottom contains secure boot. The seL4 microkernel bar sits directly on it. Above the kernel, in user mode, are three separate protection domains: OpenTelemetry logging, a networking protocol stack with exactly two gRPC channels layered on top of it, one for observability and one for internet application traffic, and a remote attestation client. The logging and attestation domains each have a channel to the networking stack, drawn as black connectors routed through the seL4 bar, and both gRPC channels connect over mTLS to other nodes in the mesh.</desc>
   <defs>
     <!-- Whitepaper palette: seL4 bar #a5cf62, hardware #9aa8bc, trusted component #466689, native service #cae4aa, container #ffedc6 / #ffd170. -->
     <marker id="head" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="12" markerHeight="12" markerUnits="userSpaceOnUse" orient="auto-start-reverse">
@@ -21,13 +21,16 @@
     <text x="132" y="258">OpenTelemetry</text>
     <text x="132" y="286">Logging</text>
 
-    <rect x="400" y="60" width="200" height="262" fill="#ffedc6"/>
-    <rect x="416" y="76" width="168" height="112" fill="#ffd170"/>
-    <text x="428" y="112">gRPC</text>
-    <text x="428" y="140">Channels</text>
-    <text x="428" y="168">mTLS</text>
-    <text x="416" y="262">NW Protocol</text>
-    <text x="416" y="290">Stack</text>
+    <rect x="400" y="40" width="200" height="282" fill="#ffedc6"/>
+    <rect x="416" y="56" width="168" height="76" fill="#ffd170"/>
+    <text x="428" y="86">gRPC Channel</text>
+    <text x="428" y="114">Observability</text>
+    <rect x="416" y="144" width="168" height="100" fill="#ffd170"/>
+    <text x="428" y="174">gRPC Channel</text>
+    <text x="428" y="202">Internet App</text>
+    <text x="428" y="230">Traffic</text>
+    <text x="416" y="278">NW Protocol</text>
+    <text x="416" y="306">Stack</text>
 
     <rect x="700" y="200" width="180" height="122" fill="#cae4aa"/>
     <text x="712" y="244">Remote</text>
@@ -38,8 +41,9 @@
     <path d="M 205 324 V 360 H 440 V 324" fill="none" stroke="#000" stroke-width="5" marker-start="url(#head)" marker-end="url(#head)"/>
     <path d="M 790 324 V 380 H 560 V 324" fill="none" stroke="#000" stroke-width="5" marker-start="url(#head)" marker-end="url(#head)"/>
 
-    <path d="M 586 132 H 680" fill="none" stroke="#000" stroke-width="5" marker-start="url(#head)" marker-end="url(#head)"/>
-    <text x="694" y="124">gRPC over mTLS</text>
-    <text x="694" y="152">to other nodes</text>
+    <path d="M 586 94 H 680" fill="none" stroke="#000" stroke-width="5" marker-start="url(#head)" marker-end="url(#head)"/>
+    <path d="M 586 194 H 680" fill="none" stroke="#000" stroke-width="5" marker-start="url(#head)" marker-end="url(#head)"/>
+    <text x="694" y="130">gRPC over mTLS</text>
+    <text x="694" y="158">to other nodes</text>
   </g>
 </svg>
