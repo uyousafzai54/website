@@ -95,4 +95,6 @@ On the plane ride back to Canada from Seattle, after enjoying the high of doing 
 
 ## References
 
-[1] G. Heiser, "The seL4 Microkernel: An Introduction", The seL4 Foundation, white paper, revision 1.4.1, July 2026. <https://sel4.systems/About/seL4-whitepaper.pdf>
+[1] Apple Inc., "The Secure Enclave", Apple Platform Security. <https://support.apple.com/en-ca/guide/security/sec59b0b31ff/web>
+
+[2] G. Heiser, "The seL4 Microkernel: An Introduction", The seL4 Foundation, white paper, revision 1.4.1, July 2026. <https://sel4.systems/About/seL4-whitepaper.pdf>
