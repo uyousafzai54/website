@@ -1,0 +1,58 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1050" height="1100" viewBox="0 0 1050 1100" role="img" aria-labelledby="title description">
+  <title id="title">A node in the mesh, built on seL4</title>
+  <desc id="description">A single node drawn bottom up. At the bottom, a hardware root of trust contains secure boot, which boots and measures the seL4 microkernel above it. On top of the microkernel sit three separate protected domains: a networking stack with gRPC channels (mTLS) layered above it, an OpenTelemetry logging domain, and a remote attestation client domain. The logging and attestation domains talk to the networking domain over seL4 channels, and the gRPC channels connect to other nodes in the mesh over mTLS.</desc>
+  <defs>
+    <marker id="arrow" viewBox="0 0 12 10" refX="11" refY="5" markerWidth="12" markerHeight="10" markerUnits="userSpaceOnUse" orient="auto-start-reverse">
+      <path d="M 0 0 L 12 5 L 0 10 Z" fill="#000"/>
+    </marker>
+  </defs>
+  <rect x="0" y="0" width="1050" height="1100" fill="#fff"/>
+  <g font-family="Helvetica, Arial, Liberation Sans, sans-serif" fill="#1d1d1f" font-weight="400" text-anchor="middle">
+    <rect x="48" y="130" width="954" height="940" rx="13" fill="#fff" stroke="#1d1d1f" stroke-width="2.5"/>
+    <text x="525" y="1050" font-size="25">Node</text>
+
+    <!-- Protected domains: separate address spaces on seL4; the only sharing is via channels. -->
+    <rect x="72" y="180" width="262" height="380" rx="13" fill="#f7c995"/>
+    <rect x="96" y="204" width="214" height="284" rx="13" fill="#d4e9d2" stroke="#fff" stroke-width="2.5"/>
+    <text x="203" y="330" font-size="23">OpenTelemetry</text>
+    <text x="203" y="362" font-size="23">logging</text>
+    <text x="203" y="534" font-size="21">Protected domain</text>
+
+    <rect x="394" y="180" width="262" height="380" rx="13" fill="#f7c995"/>
+    <rect x="418" y="204" width="214" height="100" rx="13" fill="#b7e3f7" stroke="#fff" stroke-width="2.5"/>
+    <text x="525" y="246" font-size="23">gRPC channels</text>
+    <text x="525" y="280" font-size="19">mTLS</text>
+    <rect x="418" y="328" width="214" height="160" rx="13" fill="#d4e9d2" stroke="#fff" stroke-width="2.5"/>
+    <text x="525" y="392" font-size="23">Networking stack</text>
+    <text x="525" y="426" font-size="19">TCP/IP</text>
+    <text x="525" y="534" font-size="21">Protected domain</text>
+
+    <rect x="716" y="180" width="262" height="380" rx="13" fill="#f7c995"/>
+    <rect x="740" y="204" width="214" height="284" rx="13" fill="#d4e9d2" stroke="#fff" stroke-width="2.5"/>
+    <text x="847" y="314" font-size="23">Remote</text>
+    <text x="847" y="346" font-size="23">attestation</text>
+    <text x="847" y="378" font-size="23">client</text>
+    <text x="847" y="534" font-size="21">Protected domain</text>
+
+    <path d="M 334 440 H 394" fill="none" stroke="#000" stroke-width="4" marker-end="url(#arrow)"/>
+    <text x="364" y="428" font-size="16">channel</text>
+    <path d="M 656 440 H 716" fill="none" stroke="#000" stroke-width="4" marker-start="url(#arrow)" marker-end="url(#arrow)"/>
+    <text x="686" y="428" font-size="16">channel</text>
+
+    <path d="M 525 204 V 28" fill="none" stroke="#000" stroke-width="4" marker-end="url(#arrow)"/>
+    <rect x="405" y="66" width="240" height="88" rx="10" fill="#000"/>
+    <text x="525" y="102" font-size="23" fill="#fff">gRPC over mTLS</text>
+    <text x="525" y="134" font-size="19" fill="#fff">Other nodes in the mesh</text>
+
+    <rect x="72" y="600" width="906" height="90" rx="13" fill="#f7d2f9"/>
+    <text x="525" y="654" font-size="25">seL4 microkernel</text>
+
+    <path d="M 525 740 V 696" fill="none" stroke="#000" stroke-width="4" marker-end="url(#arrow)"/>
+
+    <rect x="72" y="740" width="906" height="270" rx="13" fill="#d6d7d7"/>
+    <rect x="96" y="770" width="858" height="160" rx="13" fill="#d4e9d2" stroke="#fff" stroke-width="2.5"/>
+    <text x="525" y="845" font-size="25">Secure boot</text>
+    <text x="525" y="880" font-size="19">Verified boot chain</text>
+    <text x="525" y="982" font-size="25">Hardware root of trust</text>
+  </g>
+</svg>
