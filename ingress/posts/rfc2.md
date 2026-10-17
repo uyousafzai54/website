@@ -12,6 +12,16 @@ I can now. And funnily enough, unbeknownst to me, I had caught a glimpse of the 
 
 [Secure Boot \[further writing in progress...\].](https://github.com/uyousafzai54/sel4-service-mesh/blob/main/End-to-End-Service-Mesh-Secure-Boot.md)
 
+<div class="terminal">
+  <div class="terminal__bar">
+    <div class="terminal__dots"><span></span><span></span><span></span></div>
+    <div class="terminal__title">gpg --verify</div>
+  </div>
+  <pre><span class="terminal__prompt">$</span> curl -sL https://umaryousafzai.net/gpg.asc | gpg --import
+<span class="terminal__prompt">$</span> gpg --verify End-to-End-Service-Mesh-Secure-Boot.md.asc End-to-End-Service-Mesh-Secure-Boot.md
+<span class="terminal__prompt">$</span> </pre>
+</div>
+
 The RFC document above is a collection of ideas I wrote down one week after my internship ended where I was interested in the ideas of secure provisioning and remote hardware attestation. In this blog, let's go line by line and see how my ideas have held up to the test of time.
 
 > End to End Service Mesh: Secure Boot (Need Cool Name)
