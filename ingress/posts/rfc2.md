@@ -103,6 +103,8 @@ Cryptograhy, of course! We require that the remote attestation client provide a 
 
 This is also true. Once the hardware and OS is brought up correctly and securely, all we need is something to run. This could be as simple as a Hello, World! function in Python to an AI workload. As mentioned before, only three egress channels exist: a gRPC channel for telemetry, a gRPC/HTTPS channel for internet traffic and a gRPC channel for the remote attestation client. Turns out this architecture makes for a pretty neat AI sandbox environment :)
 
+In the next blog post I'll be doing a deep dive into Apple's [Private Cloud Compute](https://security.apple.com/blog/private-cloud-compute/) platform and trying out their Virtual Research Environment (VRE)! 
+
 ## References
 
 [1] Apple Inc., "The Secure Enclave", Apple Platform Security. <https://support.apple.com/en-ca/guide/security/sec59b0b31ff/web>
