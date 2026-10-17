@@ -50,7 +50,7 @@ const BLOG_CSS = `
     .postlist__date,
     .author__post-date,
     .adjacent-posts__relative,
-    pre, code {
+    pre, code, .terminal__title {
       font-family: "Berkeley Mono", "IBM Plex Mono", Menlo, monospace;
     }
 
@@ -182,6 +182,64 @@ const BLOG_CSS = `
       overflow-x: auto;
       background: var(--bar-bg);
       border-left: 4px solid var(--accent);
+    }
+
+    /* Terminal panel (same look as the homepage probe): --term-* inverts in dark mode. */
+    .terminal {
+      margin: 0 0 30px;
+      background: var(--term-bg);
+      border: 1px solid var(--term-border);
+      border-radius: 10px;
+      overflow: hidden;
+      box-shadow: var(--term-shadow);
+    }
+
+    .terminal__bar {
+      height: 34px;
+      display: flex;
+      align-items: center;
+      position: relative;
+      padding: 0 12px;
+      background: var(--term-bar);
+      border-bottom: 1px solid var(--term-bar-border);
+    }
+
+    .terminal__dots {
+      display: flex;
+      gap: 6px;
+    }
+
+    .terminal__dots span {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--term-dot);
+    }
+
+    .terminal__title {
+      position: absolute;
+      left: 50%;
+      transform: translateX(-50%);
+      font-size: 10px;
+      letter-spacing: 0.04em;
+      color: var(--term-title);
+    }
+
+    .terminal pre {
+      margin: 0;
+      padding: 18px 20px 20px;
+      font-size: 60%;
+      line-height: 1.65;
+      color: var(--term-fg);
+      background: none;
+      border: 0;
+      white-space: pre-wrap;
+      overflow-wrap: anywhere;
+    }
+
+    .terminal__prompt {
+      color: var(--term-hint);
+      user-select: none;
     }
 
     blockquote {

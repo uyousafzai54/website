@@ -12,6 +12,26 @@ I can now. And funnily enough, unbeknownst to me, I had caught a glimpse of the 
 
 [Secure Boot \[further writing in progress...\].](https://github.com/uyousafzai54/sel4-service-mesh/blob/main/End-to-End-Service-Mesh-Secure-Boot.md)
 
+<div class="terminal">
+  <div class="terminal__bar">
+    <div class="terminal__dots"><span></span><span></span><span></span></div>
+    <div class="terminal__title">gpg --verify</div>
+  </div>
+  <pre><span class="terminal__prompt">$</span> curl -sLO https://raw.githubusercontent.com/uyousafzai54/sel4-service-mesh/main/e2e-signing-key.asc
+<span class="terminal__prompt">$</span> curl -sLO https://raw.githubusercontent.com/uyousafzai54/sel4-service-mesh/main/End-to-End-Service-Mesh-Secure-Boot.md.gpg
+<span class="terminal__prompt">$</span> gpg --import e2e-signing-key.asc
+gpg: key 7E8045D708D10D6C: public key "Umar Yousafzai (Signing Key for E2E full stack service mesh) &lt;uyousafz@uwaterloo.ca&gt;" imported
+gpg: Total number processed: 1
+gpg:               imported: 1
+<span class="terminal__prompt">$</span> gpg --verify End-to-End-Service-Mesh-Secure-Boot.md.gpg
+gpg: Signature made Thu Apr 25 22:38:09 2024 EDT
+gpg:                using RSA key 63280461884A3FE38A7ABE327E8045D708D10D6C
+gpg: Good signature from "Umar Yousafzai (Signing Key for E2E full stack service mesh) &lt;uyousafz@uwaterloo.ca&gt;" [expired]
+gpg: Note: This key has expired!
+Primary key fingerprint: 6328 0461 884A 3FE3 8A7A  BE32 7E80 45D7 08D1 0D6C
+<span class="terminal__prompt">$</span> </pre>
+</div>
+
 The RFC document above is a collection of ideas I wrote down one week after my internship ended where I was interested in the ideas of secure provisioning and remote hardware attestation. In this blog, let's go line by line and see how my ideas have held up to the test of time.
 
 > End to End Service Mesh: Secure Boot (Need Cool Name)
