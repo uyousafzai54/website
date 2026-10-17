@@ -233,13 +233,40 @@ const BLOG_CSS = `
       color: var(--term-fg);
       background: none;
       border: 0;
+      white-space: normal;
+    }
+
+    /* One line per span (the newlines between them collapse); wrapped
+       continuations hang under the "gpg: " column. */
+    .terminal__line {
+      display: block;
+      padding-left: 5ch;
+      text-indent: -5ch;
       white-space: pre-wrap;
-      overflow-wrap: anywhere;
+      overflow-wrap: break-word;
+    }
+
+    /* Commands are mostly URLs/paths: wrap them at the column edge like a real tty. */
+    .terminal__line--cmd {
+      word-break: break-all;
     }
 
     .terminal__prompt {
       color: var(--term-hint);
       user-select: none;
+    }
+
+    .terminal__cursor {
+      display: inline-block;
+      width: 0.6ch;
+      height: 1.1em;
+      vertical-align: text-bottom;
+      background: var(--term-fg);
+      animation: terminal-blink 1s steps(1) infinite;
+    }
+
+    @keyframes terminal-blink {
+      50% { opacity: 0; }
     }
 
     blockquote {
@@ -489,6 +516,73 @@ export function authorBlock({ date } = {}) {
     </header>`;
 }
 
+// Replays each .terminal once it scrolls into view: command lines are typed
+// out, output lines appear after each command. The full transcript is in the
+// HTML, so no-JS readers, feeds and crawlers still get it; reduced-motion
+// users keep the static version.
+const TERMINAL_REPLAY_JS = `    (function () {
+      if (!("IntersectionObserver" in window)) return;
+      if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+      var TYPE_MS = 28, LINE_MS = 60, RUN_MS = 350;
+      function replay(pre) {
+        var lines = Array.prototype.map.call(pre.querySelectorAll(".terminal__line"), function (el) {
+          var prompt = el.querySelector(".terminal__prompt");
+          return { prompt: !!prompt, text: prompt ? el.textContent.slice(prompt.textContent.length) : el.textContent };
+        });
+        if (!lines.length) return;
+        pre.style.minHeight = pre.getBoundingClientRect().height + "px";
+        pre.textContent = "";
+        var cursor = document.createElement("span");
+        cursor.className = "terminal__cursor";
+        var i = 0;
+        function next() {
+          if (i >= lines.length) { pre.style.minHeight = ""; return; }
+          var line = lines[i++];
+          var el = document.createElement("span");
+          el.className = line.prompt ? "terminal__line terminal__line--cmd" : "terminal__line";
+          if (line.prompt) {
+            var p = document.createElement("span");
+            p.className = "terminal__prompt";
+            p.textContent = "$";
+            el.appendChild(p);
+            var txt = document.createTextNode("");
+            el.appendChild(txt);
+            el.appendChild(cursor);
+            pre.appendChild(el);
+            pre.appendChild(document.createTextNode("\\n"));
+            var j = 0;
+            (function type() {
+              if (j < line.text.length) {
+                txt.data = line.text.slice(0, ++j);
+                setTimeout(type, TYPE_MS);
+              } else if (i < lines.length) {
+                cursor.remove();
+                setTimeout(next, RUN_MS);
+              } else {
+                pre.style.minHeight = "";
+              }
+            })();
+          } else {
+            el.textContent = line.text;
+            pre.appendChild(el);
+            pre.appendChild(document.createTextNode("\\n"));
+            setTimeout(next, LINE_MS);
+          }
+        }
+        next();
+      }
+      var seen = new WeakSet();
+      var io = new IntersectionObserver(function (entries) {
+        entries.forEach(function (e) {
+          if (!e.isIntersecting || seen.has(e.target)) return;
+          seen.add(e.target);
+          io.unobserve(e.target);
+          replay(e.target);
+        });
+      }, { threshold: 0.25 });
+      document.querySelectorAll(".terminal pre").forEach(function (pre) { io.observe(pre); });
+    })();`;
+
 // `origin` is the host the page is served on (canonical/og:url); blog pages
 // default to BLOG_ORIGIN, pages on the main site pass SITE_ORIGIN.
 export function page({ title, path, bodyClass, content, origin = BLOG_ORIGIN }) {
@@ -527,6 +621,7 @@ ${content}
 
   <script>
 ${THEME_TOGGLE_JS}
+${TERMINAL_REPLAY_JS}
   </script>
 </body>
 </html>
