@@ -10,7 +10,7 @@ Two <i>and a half</i> years ago, I had just left my winter internship at Apple i
 
 I can now. And funnily enough, unbeknownst to me, I had caught a glimpse of the full machine; I just didn't realize it at the time.
 
-[Secure Boot \[further writing in progress...\].](https://github.com/uyousafzai54/sel4-service-mesh/blob/main/End-to-End-Service-Mesh-Secure-Boot.md)
+[Secure Boot.](https://github.com/uyousafzai54/sel4-service-mesh/blob/main/End-to-End-Service-Mesh-Secure-Boot.md)
 
 <div class="terminal">
   <div class="terminal__bar">
