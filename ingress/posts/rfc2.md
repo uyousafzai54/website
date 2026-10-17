@@ -17,8 +17,12 @@ I can now. And funnily enough, unbeknownst to me, I had caught a glimpse of the 
     <div class="terminal__dots"><span></span><span></span><span></span></div>
     <div class="terminal__title">gpg --verify</div>
   </div>
-  <pre><span class="terminal__prompt">$</span> curl -sL https://umaryousafzai.net/gpg.asc | gpg --import
-<span class="terminal__prompt">$</span> gpg --verify End-to-End-Service-Mesh-Secure-Boot.md.asc End-to-End-Service-Mesh-Secure-Boot.md
+  <pre><span class="terminal__prompt">$</span> gpg --verify End-to-End-Service-Mesh-Secure-Boot.md.gpg
+gpg: Signature made Thu 25 Apr 22:38:09 2024 EDT
+gpg:                using RSA key 63280461884A3FE38A7ABE327E8045D708D10D6C
+gpg: Good signature from "Umar Yousafzai (Signing Key for E2E full stack service mesh) &lt;uyousafz@uwaterloo.ca&gt;" [expired]
+gpg: Note: This key has expired!
+Primary key fingerprint: 6328 0461 884A 3FE3 8A7A  BE32 7E80 45D7 08D1 0D6C
 <span class="terminal__prompt">$</span> </pre>
 </div>
 
