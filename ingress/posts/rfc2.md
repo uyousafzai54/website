@@ -97,7 +97,11 @@ The diagram above was my vision for bare minimum required of a node to execute t
 
 Speaking of which, what is the <it>remote attestation</i> client for? Let's assume the worst case scenario where a malicious actor is able to bypass the hardware root of trust and bring up an untrusted kernel & OS. In this case we need some mechanism for the node to prove to an external party that it is secure and running approved software before allowing it to handle user data. How do we do this?
 
-Cryptograhy, of course! We require that the remote attestation client provide a digital signature of the software running in the node when requested. This signature is computed using the hardware root of trust. If either the hardware root of trust is compromised or a different piece of software is running, the signature provided will be invalid and the node can be marked as untrusted. 
+Cryptograhy, of course! We require that the remote attestation client provide a digital signature of the software running (software state) in the node when requested. This signature is computed using the hardware root of trust. If either the hardware root of trust is compromised or a different piece of software is running, the signature provided will be invalid and the node can be marked as untrusted. 
+
+> The Layer 1 is simply a stub service that is ready to execute a main function and has a gRPC channel ready for transport.
+
+This is also true. Once the hardware and OS is brought up correctly and securely, all we need is something to run. This could be as simple as a Hello, World! function in Python to an AI workload. As mentioned before, only three egress channels exist: a gRPC channel for telemetry, a gRPC/HTTPS channel for internet traffic and a gRPC channel for the remote attestation client. Turns out this architecture makes for a pretty neat AI sandbox environment :)
 
 ## References
 
