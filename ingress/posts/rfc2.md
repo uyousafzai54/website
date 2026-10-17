@@ -17,8 +17,14 @@ I can now. And funnily enough, unbeknownst to me, I had caught a glimpse of the 
     <div class="terminal__dots"><span></span><span></span><span></span></div>
     <div class="terminal__title">gpg --verify</div>
   </div>
-  <pre><span class="terminal__prompt">$</span> gpg --verify End-to-End-Service-Mesh-Secure-Boot.md.gpg
-gpg: Signature made Thu 25 Apr 22:38:09 2024 EDT
+  <pre><span class="terminal__prompt">$</span> curl -sLO https://raw.githubusercontent.com/uyousafzai54/sel4-service-mesh/main/e2e-signing-key.asc
+<span class="terminal__prompt">$</span> curl -sLO https://raw.githubusercontent.com/uyousafzai54/sel4-service-mesh/main/End-to-End-Service-Mesh-Secure-Boot.md.gpg
+<span class="terminal__prompt">$</span> gpg --import e2e-signing-key.asc
+gpg: key 7E8045D708D10D6C: public key "Umar Yousafzai (Signing Key for E2E full stack service mesh) &lt;uyousafz@uwaterloo.ca&gt;" imported
+gpg: Total number processed: 1
+gpg:               imported: 1
+<span class="terminal__prompt">$</span> gpg --verify End-to-End-Service-Mesh-Secure-Boot.md.gpg
+gpg: Signature made Thu Apr 25 22:38:09 2024 EDT
 gpg:                using RSA key 63280461884A3FE38A7ABE327E8045D708D10D6C
 gpg: Good signature from "Umar Yousafzai (Signing Key for E2E full stack service mesh) &lt;uyousafz@uwaterloo.ca&gt;" [expired]
 gpg: Note: This key has expired!
