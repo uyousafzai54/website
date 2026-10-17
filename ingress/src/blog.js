@@ -226,6 +226,7 @@ const BLOG_CSS = `
     }
 
     .terminal pre {
+      box-sizing: border-box;
       margin: 0;
       padding: 18px 20px 20px;
       font-size: 60%;
