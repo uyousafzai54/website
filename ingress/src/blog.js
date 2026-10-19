@@ -400,6 +400,67 @@ article blockquote p {
       margin: 0 0 30px 1.5em;
     }
 
+    /* Contents sidebar (Oxide RFD style): sticky in the right gutter on wide
+       screens, the heading in view is marked with the accent. */
+    .toc {
+      display: none;
+    }
+
+    h2[id], h3[id] {
+      scroll-margin-top: 24px;
+    }
+
+    @media (min-width: 1260px) {
+      .post article {
+        position: relative;
+      }
+
+      .toc {
+        display: block;
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        left: 100%;
+        width: 200px;
+        margin: 0 0 0 40px;
+      }
+
+      .toc__list {
+        position: sticky;
+        top: 56px;
+        margin: 0;
+        padding: 0;
+        list-style: none;
+        font-size: 13px;
+        line-height: 1.4;
+      }
+
+      .toc__list li + li {
+        margin-top: 0;
+      }
+
+      .toc a {
+        display: block;
+        padding: 4px 12px 4px 16px;
+        border-left: 1px solid var(--rule-soft);
+        color: var(--muted);
+      }
+
+      .toc__item--l3 a {
+        padding-left: 28px;
+      }
+
+      .toc a:hover {
+        border-bottom: 0;
+        color: var(--text-strong);
+      }
+
+      .toc__item--active a {
+        color: var(--accent);
+        border-left-color: var(--accent);
+      }
+    }
+
     table.keyfacts {
       border-collapse: collapse;
       margin: 0 0 24px;
@@ -478,7 +539,7 @@ function memoHeader(post) {
 
 function authorAddress() {
   return `
-      <h2>Author's Address</h2>
+      <h2 id="authors-address">Author's Address</h2>
       <address class="rfc-address">
         Umar Yousafzai<br />
         University of Waterloo<br />
@@ -584,6 +645,61 @@ const TERMINAL_REPLAY_JS = `    (function () {
       document.querySelectorAll(".terminal pre").forEach(function (pre) { io.observe(pre); });
     })();`;
 
+// Marks the sidebar entry for the section being read: the last heading that
+// has reached the top of the viewport (just under where anchor jumps land).
+// A heading jumped to via the sidebar or the URL hash stays marked while it
+// is on screen, since near the end of a page it cannot reach the top.
+const TOC_ACTIVE_JS = `    (function () {
+      var toc = document.querySelector(".toc");
+      if (!toc) return;
+      var items = Array.prototype.map.call(toc.querySelectorAll("a[href^='#']"), function (a) {
+        return { a: a, li: a.parentNode, heading: document.getElementById(a.getAttribute("href").slice(1)) };
+      }).filter(function (it) { return it.heading; });
+      if (!items.length) return;
+      var LINE = 100, current = null, pinned = null, pinSeen = false, queued = false;
+      function byHash(hash) {
+        for (var i = 0; i < items.length; i++) if (items[i].a.getAttribute("href") === hash) return items[i];
+        return null;
+      }
+      function update() {
+        queued = false;
+        var active = null;
+        for (var i = 0; i < items.length; i++) {
+          if (items[i].heading.getBoundingClientRect().top <= LINE) active = items[i];
+        }
+        if (pinned) {
+          var r = pinned.heading.getBoundingClientRect();
+          var visible = r.top >= 0 && r.bottom <= window.innerHeight;
+          if (visible) pinSeen = true;
+          if (items.indexOf(active) >= items.indexOf(pinned) || (pinSeen && !visible)) pinned = null;
+          else active = pinned;
+        }
+        if (active === current) return;
+        if (current) current.li.classList.remove("toc__item--active");
+        if (active) active.li.classList.add("toc__item--active");
+        current = active;
+      }
+      function schedule() {
+        if (queued) return;
+        queued = true;
+        requestAnimationFrame(update);
+      }
+      function pin(hash) {
+        pinned = byHash(hash);
+        pinSeen = false;
+        schedule();
+      }
+      toc.addEventListener("click", function (e) {
+        var a = e.target.closest("a[href^='#']");
+        if (a) pin(a.getAttribute("href"));
+      });
+      window.addEventListener("hashchange", function () { pin(location.hash); });
+      window.addEventListener("scroll", schedule, { passive: true });
+      window.addEventListener("resize", schedule);
+      window.addEventListener("load", schedule);
+      pin(location.hash);
+    })();`;
+
 // `origin` is the host the page is served on (canonical/og:url); blog pages
 // default to BLOG_ORIGIN, pages on the main site pass SITE_ORIGIN.
 export function page({ title, path, bodyClass, content, origin = BLOG_ORIGIN }) {
@@ -623,6 +739,7 @@ ${content}
   <script>
 ${THEME_TOGGLE_JS}
 ${TERMINAL_REPLAY_JS}
+${TOC_ACTIVE_JS}
   </script>
 </body>
 </html>
@@ -661,6 +778,22 @@ function renderIndex() {
   });
 }
 
+// Section list for the sidebar: the post's ##/### headings (ids assigned by
+// build-posts.mjs) plus the Author's Address that every post ends with. Posts
+// with no headings of their own get no sidebar.
+function contentsNav(post) {
+  if (!post.headings || !post.headings.length) return "";
+  const items = [...post.headings, { level: 2, id: "authors-address", text: "Author's Address" }]
+    .map((h) => `
+        <li class="toc__item toc__item--l${h.level}"><a href="#${h.id}">${escapeHtml(h.text)}</a></li>`)
+    .join("");
+  return `
+      <nav class="toc" aria-label="Contents">
+        <ol class="toc__list">${items}
+        </ol>
+      </nav>`;
+}
+
 function renderPost(post) {
   const i = POSTS.indexOf(post);
   const newer = POSTS[i - 1];
@@ -680,7 +813,7 @@ function renderPost(post) {
     bodyClass: "post",
     content: `${authorBlock({ date: post.date })}
 
-    <article>${memoHeader(post)}
+    <article>${contentsNav(post)}${memoHeader(post)}
       <h1 class="title">${escapeHtml(post.title)}</h1>
 ${post.html}${authorAddress()}
     </article>

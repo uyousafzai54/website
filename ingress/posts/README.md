@@ -17,4 +17,6 @@ Front matter (between `---` lines), then the Markdown body:
 | `aliases`  | no       | comma-separated old slugs that 301 to the post; the first one is the stable Atom id, so never reorder it |
 
 Body conventions: numbered `##` sections ("## 1. Introduction"); fenced code blocks;
-raw HTML passes through if Markdown can't express something.
+raw HTML passes through if Markdown can't express something. `##` and `###` headings
+get an id from their text minus the number ("## 2. Scope" → `#scope`) and are listed
+in the contents sidebar shown beside the post on wide screens.

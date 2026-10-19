@@ -4,7 +4,7 @@
 import { readdir, readFile, writeFile } from "node:fs/promises";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
-import { marked } from "marked";
+import { Marked } from "marked";
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const postsDir = path.join(root, "posts");
@@ -23,6 +23,44 @@ function parseFrontMatter(src, file) {
   return { meta, body: m[2] };
 }
 
+// Heading text without Markdown markup, for ids and the contents sidebar.
+function plainText(tokens) {
+  return tokens.map((t) => (t.tokens ? plainText(t.tokens) : t.text ?? t.raw)).join("");
+}
+
+// "2. Scope" -> "scope", "Author's Address" -> "authors-address".
+function slugify(text) {
+  return text
+    .toLowerCase()
+    .replace(/^\d+(\.\d+)*\.?\s+/, "")
+    .replace(/['\u2019]/g, "")
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-+|-+$/g, "");
+}
+
+// ## and ### headings get an id and are listed in the post's contents sidebar
+// (blog.js renders `headings` next to the article).
+function renderMarkdown(body) {
+  const headings = [];
+  const ids = new Set(["authors-address"]);
+  const md = new Marked({
+    gfm: true,
+    renderer: {
+      heading({ tokens, depth }) {
+        const html = this.parser.parseInline(tokens);
+        if (depth < 2 || depth > 3) return `<h${depth}>${html}</h${depth}>\n`;
+        const text = plainText(tokens);
+        let id = slugify(text) || "section";
+        for (let n = 2; ids.has(id); n++) id = `${slugify(text) || "section"}-${n}`;
+        ids.add(id);
+        headings.push({ level: depth, id, text });
+        return `<h${depth} id="${id}">${html}</h${depth}>\n`;
+      },
+    },
+  });
+  return { html: md.parse(body, { async: false }), headings };
+}
+
 function toPost(meta, body, file) {
   for (const k of ["number", "title", "date"]) {
     if (!meta[k]) throw new Error(`${file}: front matter needs "${k}"`);
@@ -38,8 +76,9 @@ function toPost(meta, body, file) {
   if (meta.category) post.category = meta.category;
   if (meta.draft === "true") post.draft = true;
   if (meta.aliases) post.aliases = meta.aliases.split(",").map((s) => s.trim()).filter(Boolean);
-  post.html = marked
-    .parse(body, { gfm: true, async: false })
+  const { html, headings } = renderMarkdown(body);
+  post.headings = headings;
+  post.html = html
     .replace(/\n<\/code><\/pre>/g, "</code></pre>")
     // "[1] ..." paragraphs are reference entries (RFC-style References section).
     .replace(/<p>(\[\d+\] )/g, '<p class="ref">$1')
