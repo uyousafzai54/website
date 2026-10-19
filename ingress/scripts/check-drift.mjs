@@ -2,13 +2,26 @@
 // Usage: node scripts/check-drift.mjs [--attempts N] [--delay SECONDS]
 // Expects `wrangler dev` to be serving the checkout at LOCAL (default :8787).
 import { spawnSync } from 'node:child_process';
+import { createHash } from 'node:crypto';
 import { mkdtempSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 
 const LIVE = process.env.LIVE_ORIGIN || 'https://umaryousafzai.net';
 const LOCAL = process.env.LOCAL_ORIGIN || 'http://127.0.0.1:8787';
-const PATHS = ['/', '/blog', '/blog/rfc1', '/blog/rfc2', '/blog/feed.xml', '/gpg', '/gpg.asc', '/sitemap.xml', '/robots.txt'];
+const PATHS = [
+	'/',
+	'/ip',
+	'/fonts/BerkeleyMono-Regular.woff2',
+	'/blog',
+	'/blog/rfc1',
+	'/blog/rfc2',
+	'/blog/feed.xml',
+	'/gpg',
+	'/gpg.asc',
+	'/sitemap.xml',
+	'/robots.txt',
+];
 
 const args = process.argv.slice(2);
 const opt = (name, dflt) => {
@@ -18,24 +31,41 @@ const opt = (name, dflt) => {
 const attempts = opt('attempts', 1);
 const delay = opt('delay', 60);
 
-// The homepage terminal prints request.cf telemetry (ip, colo, rtt, ...),
-// which legitimately differs per request; compare everything else.
-function normalize(body) {
-	return body.replace(/<pre class="network-output">[\s\S]*?<\/pre>/, '<pre class="network-output">[telemetry]</pre>');
+// The homepage terminal and /ip print request.cf telemetry (ip, colo, rtt,
+// ...), which legitimately differs per request. Blank only those values so
+// edits to the terminal's markup, labels or static lines still count as drift.
+const TERMINAL = /<pre class="network-output">[\s\S]*?<\/pre>/;
+const TERMINAL_VALUE = /^([ \t]+(?:ip|location|timezone|network|asn|edge|protocol|tls|rtt)[ \t]+).*$/gm;
+const IP_VALUE = /"(ip|family)":"[^"]*"/g;
+
+function normalize(path, body) {
+	if (path === '/ip') return body.replace(IP_VALUE, '"$1":"[telemetry]"');
+	return body.replace(TERMINAL, (block) => block.replace(TERMINAL_VALUE, '$1[telemetry]'));
 }
 
-async function fetchText(url) {
-	const res = await fetch(url, { headers: { 'user-agent': 'drift-check' }, redirect: 'manual' });
-	return `HTTP ${res.status}\n${normalize(await res.text())}`;
+// Binary responses (the font) are compared by digest so a diff stays readable.
+function isBinary(res) {
+	const type = res.headers.get('content-type') || '';
+	return !/^(text\/|application\/(json|xml|atom|pgp-keys|javascript))/.test(type);
+}
+
+async function fetchText(path, origin) {
+	const res = await fetch(origin + path, { headers: { 'user-agent': 'drift-check' }, redirect: 'manual' });
+	if (isBinary(res)) {
+		const bytes = Buffer.from(await res.arrayBuffer());
+		const sha256 = createHash('sha256').update(bytes).digest('hex');
+		return `HTTP ${res.status}\n${bytes.length} bytes, sha256 ${sha256}\n`;
+	}
+	return `HTTP ${res.status}\n${normalize(path, await res.text())}`;
 }
 
 async function compare() {
 	const dir = mkdtempSync(join(tmpdir(), 'drift-'));
 	const drift = [];
 	for (const p of PATHS) {
-		const [live, local] = await Promise.all([fetchText(LIVE + p), fetchText(LOCAL + p)]);
+		const [live, local] = await Promise.all([fetchText(p, LIVE), fetchText(p, LOCAL)]);
 		if (live === local) continue;
-		const name = p === '/' ? 'index' : p.slice(1).replace(/\//g, '_');
+		const name = p === '/' ? 'index' : p.slice(1).replace(/[^\w.-]/g, '_');
 		const a = join(dir, `${name}.live`);
 		const b = join(dir, `${name}.local`);
 		writeFileSync(a, live);

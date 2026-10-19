@@ -18,6 +18,10 @@ jobs:
         working-directory: ingress
     steps:
       - uses: actions/checkout@v4
+        with:
+          # Always compare the main deployment with main, whichever branch a
+          # manual run is started from.
+          ref: main
       - uses: actions/setup-node@v4
         with:
           node-version: 20
