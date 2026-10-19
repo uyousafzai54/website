@@ -36,10 +36,24 @@ const delay = opt('delay', 60);
 // edits to the terminal's markup, labels or static lines still count as drift.
 const TERMINAL = /<pre class="network-output">[\s\S]*?<\/pre>/;
 const TERMINAL_VALUE = /^([ \t]+(?:ip|location|timezone|network|asn|edge|protocol|tls|rtt)[ \t]+).*$/gm;
-const IP_VALUE = /"(ip|family)":"[^"]*"/g;
+
+// /ip is {ip, family}: the ip is the caller's (and wrangler dev sees none), so
+// blank it, but check that `family` is what the Worker should derive from it;
+// a wrong derivation on either side keeps its literal value and shows as drift.
+function normalizeIp(body) {
+	let json;
+	try {
+		json = JSON.parse(body);
+	} catch {
+		return body;
+	}
+	const { ip, family } = json;
+	const expected = typeof ip !== 'string' ? undefined : ip.includes(':') ? 'ipv6' : ip ? 'ipv4' : 'unknown';
+	return JSON.stringify({ ...json, ip: '[telemetry]', family: family === expected ? '[derived from ip]' : family });
+}
 
 function normalize(path, body) {
-	if (path === '/ip') return body.replace(IP_VALUE, '"$1":"[telemetry]"');
+	if (path === '/ip') return normalizeIp(body);
 	return body.replace(TERMINAL, (block) => block.replace(TERMINAL_VALUE, '$1[telemetry]'));
 }
 
