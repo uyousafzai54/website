@@ -7,13 +7,16 @@ import {
 } from "./theme.js";
 import { handleBlog, renderSitemap } from "./blog.js";
 import { handleGpg } from "./gpg.js";
-import { SITE_ORIGIN, AUTHOR, TAGLINE, DESCRIPTION, TOPICS } from "./site.js";
+import { SITE_ORIGIN, BLOG_HOST, BLOG_ORIGIN, AUTHOR, TAGLINE, DESCRIPTION, TOPICS } from "./site.js";
 
-const ROBOTS_TXT = `User-agent: *
+function robotsTxt(url) {
+  const origin = url.hostname === BLOG_HOST ? BLOG_ORIGIN : SITE_ORIGIN;
+  return `User-agent: *
 Allow: /
 
-Sitemap: ${SITE_ORIGIN}/sitemap.xml
+Sitemap: ${origin}/sitemap.xml
 `;
+}
 
 const PERSON_JSON_LD = JSON.stringify({
   "@context": "https://schema.org",
@@ -59,10 +62,11 @@ export default {
     const gpg = handleGpg(request);
     if (gpg) return gpg;
 
-    const { pathname } = new URL(request.url);
-    if (pathname === "/sitemap.xml") return renderSitemap();
+    const url = new URL(request.url);
+    const { pathname } = url;
+    if (pathname === "/sitemap.xml") return renderSitemap(url);
     if (pathname === "/robots.txt") {
-      return new Response(ROBOTS_TXT, {
+      return new Response(robotsTxt(url), {
         headers: { "Content-Type": "text/plain; charset=UTF-8", "cache-control": "public, max-age=3600" },
       });
     }
@@ -99,6 +103,7 @@ ${THEME_BOOT_SCRIPT}
   <title>${AUTHOR} — ${TAGLINE}</title>
   <meta name="description" content="${DESCRIPTION}" />
   <link rel="canonical" href="${SITE_ORIGIN}/" />
+  <link rel="alternate" type="application/atom+xml" title="${AUTHOR} — blog" href="${BLOG_ORIGIN}/feed.xml" />
   <meta property="og:type" content="website" />
   <meta property="og:site_name" content="${AUTHOR}" />
   <meta property="og:title" content="${AUTHOR} — ${TAGLINE}" />
@@ -273,11 +278,17 @@ body {
   font-size: 1.3rem;
 }
 
-.side-project p {
+.side-project p,
+.side-project ul {
   margin: 0;
   font-size: 1rem;
   line-height: 1.65;
   color: var(--text-body);
+}
+
+.side-project ul {
+  margin-top: 0.5rem;
+  padding-left: 1.5rem;
 }
 
 .readings-section {
@@ -314,6 +325,43 @@ body {
   margin-left: 0.45rem;
   font-size: 0.85rem;
   opacity: 0.55;
+}
+
+.site-nav {
+  margin: -0.25rem 0 1.75rem;
+  font-family: "Berkeley Mono", monospace;
+  font-size: 1.05rem;
+}
+
+.site-nav a {
+  color: var(--muted);
+  text-decoration: none;
+  border-bottom: 1px solid var(--rule);
+}
+
+.site-nav a:hover {
+  color: var(--link);
+  border-bottom-color: currentColor;
+}
+
+.site-nav__blog {
+  display: inline-block;
+  padding: 0.15rem 0.55rem;
+  border-left: 4px solid var(--accent);
+  background: var(--bar-bg);
+  color: var(--link) !important;
+  border-bottom: none !important;
+  font-weight: 800;
+}
+
+.site-nav__blog:hover {
+  background: var(--highlight-bg);
+  color: var(--highlight-fg) !important;
+}
+
+.site-nav__sep {
+  margin: 0 0.6em;
+  color: var(--muted);
 }
 
 .network {
@@ -416,6 +464,10 @@ ${THEME_TOGGLE_CSS}
   <main>
     <h1>Hi, I'm Umar 👋</h1>
 
+    <nav class="site-nav" aria-label="Site">
+      <a href="${BLOG_ORIGIN}/" class="site-nav__blog">blog →</a><span class="site-nav__sep">·</span><a href="https://github.com/uyousafzai54">github</a><span class="site-nav__sep">·</span><a href="/gpg">gpg</a>
+    </nav>
+
     <p>
       This is my first personal website running on <s>an NVIDIA H100</s> Cloudflare Workers :)
     </p>
@@ -429,7 +481,7 @@ ${THEME_TOGGLE_CSS}
     </p>
 
     <p>
-      I also write occasionally on my <a href="/blog">blog</a>.
+      I also write occasionally on my <a href="${BLOG_ORIGIN}/">blog</a>.
     </p>
 
    <div class="network-terminal">
@@ -497,26 +549,19 @@ ${THEME_TOGGLE_CSS}
   <h3>What I'm hacking on</h3>
     <p>
       I'm experimenting with a lightweight and isolated TCP/IP stack implementation for the <a href="https://sel4.systems">seL4</a> kernel on AArch64 (and later Apple Silicon hardware) to take advantage of my home's 10 Gbps fiber. 
-      I am currently learning <a href="https://github.com/au-ts/sddf">sDDF</a>; and working through the architecture and first prototype.
+      I am currently learning <a href="https://github.com/au-ts/sddf">sDDF</a>; and working through the architecture and first prototype. Other ideas include:
     </p>
+    <ul>
+      <li>creating and running my own ASN</li>
+      <li>creating a personal US - Canada VPN for Youtube</li>
+      <li>building the fastest running at home server rack in my coat closet</li>
+    </ul>
   </section>
 
   <section class="readings-section">
   <h2>tech talks</h2>
 
   <ul class="readings-list">
-    <li>
-      <a href="https://files.uyousafz.com/umar%20bob%20the%20builder%20pt.%202.pdf" target="_blank">
-        learnings of an sre; how to bob the builder?
-      </a>
-    </li>
-
-    <li>
-      <a href="https://files.uyousafz.com/umar%20container%20cpu%20spike.pdf" target="_blank">
-        how to find an impossible cpu spike bug (aka where are my cpu cycles)?
-      </a>
-    </li>
-
     <li>
       <a href="https://files.uyousafz.com/Carta_gRPC_error_handling.pdf" target="_blank">
         how to lower your ddog bill (woof woof)?
@@ -660,7 +705,7 @@ ${THEME_TOGGLE_CSS}
     <footer class="site-footer">
       <span>${AUTHOR}</span> ·
       <a href="https://github.com/uyousafzai54">github</a> ·
-      <a href="/blog">blog</a> ·
+      <a href="${BLOG_ORIGIN}/">blog</a> ·
       <a href="/gpg">gpg</a>
     </footer>
   </main>

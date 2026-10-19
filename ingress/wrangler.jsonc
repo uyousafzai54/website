@@ -1,6 +1,10 @@
 {
   "name": "ingress",
   "main": "src/worker.js",
+  "build": {
+    "command": "node scripts/build-posts.mjs",
+    "watch_dir": "posts"
+  },
   "workers_dev": true,
   "preview_urls": false,
   "compatibility_date": "2026-10-02",
@@ -23,6 +27,41 @@
     {
       "pattern": "umaryousafzai.net",
       "zone_name": "umaryousafzai.net",
+      "custom_domain": true,
+      "enabled": true,
+      "previews_enabled": false
+    },
+    {
+      "pattern": "blog.umaryousafzai.net",
+      "zone_name": "umaryousafzai.net",
+      "custom_domain": true,
+      "enabled": true,
+      "previews_enabled": false
+    },
+    {
+      "pattern": "yousafz.ai",
+      "zone_name": "yousafz.ai",
+      "custom_domain": true,
+      "enabled": true,
+      "previews_enabled": false
+    },
+    {
+      "pattern": "umar.yousafz.ai",
+      "zone_name": "yousafz.ai",
+      "custom_domain": true,
+      "enabled": true,
+      "previews_enabled": false
+    },
+    {
+      "pattern": "yousafzai.ca",
+      "zone_name": "yousafzai.ca",
+      "custom_domain": true,
+      "enabled": true,
+      "previews_enabled": false
+    },
+    {
+      "pattern": "umar.yousafzai.ca",
+      "zone_name": "yousafzai.ca",
       "custom_domain": true,
       "enabled": true,
       "previews_enabled": false

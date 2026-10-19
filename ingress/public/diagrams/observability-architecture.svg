@@ -1,0 +1,73 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1100" height="1040" viewBox="0 72 1100 1040" role="img" aria-labelledby="title description">
+  <title id="title">OpenTelemetry collection and querying</title>
+  <desc id="description">Two HTTPS/gRPC services in a Kubernetes service mesh communicate with each other over regular HTTPS. Each service contains an OpenTelemetry SDK and exports logs, metrics and traces using gRPC over mutual TLS (mTLS) to an OpenTelemetry Collector, a gRPC service running in Kubernetes. The collector forwards telemetry using gRPC over mTLS to the Apple Services Engineering observability backend. Prometheus stores metrics in a time series database (TSDB); log storage and trace storage are shown separately. A query frontend exchanges queries and results with the backend over mTLS. Arrows show logical data flow. The grouping boxes do not imply security isolation or separate Kubernetes clusters.</desc>
+  <defs>
+    <marker id="arrow" viewBox="0 0 12 10" refX="11" refY="5" markerWidth="12" markerHeight="10" markerUnits="userSpaceOnUse" orient="auto-start-reverse">
+      <path d="M 0 0 L 12 5 L 0 10 Z" fill="#000"/>
+    </marker>
+  </defs>
+  <rect x="0" y="72" width="1100" height="1040" fill="#fff"/>
+  <g font-family="Helvetica, Arial, Liberation Sans, sans-serif" fill="#1d1d1f" font-weight="400" text-anchor="middle">
+    <!-- Instrumentation is embedded in each service, not a separate agent. -->
+    <rect x="48" y="112" width="356" height="606" rx="13" fill="#f7c995"/>
+    <rect x="72" y="136" width="308" height="188" rx="13" fill="#d4e9d2"/>
+    <text x="226" y="180" font-size="23">HTTPS/gRPC service A</text>
+    <rect x="96" y="202" width="260" height="98" rx="13" fill="#b7e3f7" stroke="#fff" stroke-width="2.5"/>
+    <text x="226" y="242" font-size="23">OpenTelemetry</text>
+    <text x="226" y="274" font-size="23">SDK</text>
+
+    <rect x="72" y="456" width="308" height="196" rx="13" fill="#d4e9d2"/>
+    <text x="226" y="500" font-size="23">HTTPS/gRPC service B</text>
+    <rect x="96" y="530" width="260" height="98" rx="13" fill="#b7e3f7" stroke="#fff" stroke-width="2.5"/>
+    <text x="226" y="570" font-size="23">OpenTelemetry</text>
+    <text x="226" y="602" font-size="23">SDK</text>
+    <text x="226" y="694" font-size="23">Service mesh (Kubernetes)</text>
+
+    <path d="M 226 330 V 450" fill="none" stroke="#000" stroke-width="4" marker-start="url(#arrow)" marker-end="url(#arrow)"/>
+    <rect x="106" y="346" width="240" height="88" rx="10" fill="#000"/>
+    <text x="226" y="382" font-size="21" fill="#fff">Application traffic</text>
+    <text x="226" y="414" font-size="23" fill="#fff">HTTPS</text>
+
+    <rect x="696" y="280" width="356" height="288" rx="13" fill="#f7c995"/>
+    <rect x="720" y="312" width="308" height="196" rx="13" fill="#b7e3f7" stroke="#fff" stroke-width="2.5"/>
+    <text x="874" y="366" font-size="25">OpenTelemetry</text>
+    <text x="874" y="398" font-size="25">Collector</text>
+    <text x="874" y="458" font-size="23">gRPC service</text>
+    <text x="874" y="546" font-size="25">Kubernetes</text>
+
+    <path d="M 360 251 H 664 V 382 H 714" fill="none" stroke="#000" stroke-width="4" marker-end="url(#arrow)"/>
+    <rect x="418" y="207" width="236" height="88" rx="10" fill="#000"/>
+    <text x="536" y="243" font-size="23" fill="#fff">gRPC over mTLS</text>
+    <text x="536" y="275" font-size="19" fill="#fff">Logs, traces and metrics</text>
+
+    <path d="M 360 579 H 664 V 454 H 714" fill="none" stroke="#000" stroke-width="4" marker-end="url(#arrow)"/>
+    <rect x="418" y="535" width="236" height="88" rx="10" fill="#000"/>
+    <text x="536" y="571" font-size="23" fill="#fff">gRPC over mTLS</text>
+    <text x="536" y="603" font-size="19" fill="#fff">Logs, traces and metrics</text>
+
+    <path d="M 874 574 V 782" fill="none" stroke="#000" stroke-width="4" marker-end="url(#arrow)"/>
+    <rect x="754" y="634" width="240" height="88" rx="10" fill="#000"/>
+    <text x="874" y="670" font-size="23" fill="#fff">gRPC over mTLS</text>
+    <text x="874" y="702" font-size="21" fill="#fff">Telemetry</text>
+
+    <rect x="496" y="788" width="556" height="284" rx="13" fill="#d6d7d7"/>
+    <text x="774" y="831" font-size="24">Apple Services Engineering (ASE)</text>
+    <rect x="520" y="859" width="242" height="136" rx="13" fill="#d4e9d2" stroke="#fff" stroke-width="2.5"/>
+    <text x="641" y="898" font-size="25">Prometheus</text>
+    <text x="641" y="934" font-size="19">Time series database</text>
+    <text x="641" y="966" font-size="19">(TSDB) · Metrics</text>
+    <rect x="786" y="859" width="242" height="60" rx="13" fill="#d4e9d2" stroke="#fff" stroke-width="2.5"/>
+    <text x="907" y="898" font-size="25">Log storage</text>
+    <rect x="786" y="935" width="242" height="60" rx="13" fill="#d4e9d2" stroke="#fff" stroke-width="2.5"/>
+    <text x="907" y="974" font-size="25">Trace storage</text>
+    <text x="774" y="1046" font-size="25">Observability backend</text>
+
+    <rect x="48" y="859" width="254" height="136" rx="13" fill="#f7d2f9"/>
+    <text x="175" y="920" font-size="25">Query</text>
+    <text x="175" y="952" font-size="25">frontend</text>
+    <path d="M 307 903 H 490" fill="none" stroke="#000" stroke-width="4" marker-end="url(#arrow)"/>
+    <text x="398" y="883" font-size="20">Queries · mTLS</text>
+    <path d="M 490 951 H 307" fill="none" stroke="#000" stroke-width="4" marker-end="url(#arrow)"/>
+    <text x="398" y="985" font-size="20">Results · mTLS</text>
+  </g>
+</svg>
