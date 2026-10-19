@@ -40,16 +40,18 @@ const TERMINAL_VALUE = /^([ \t]+(?:ip|location|timezone|network|asn|edge|protoco
 // /ip is {ip, family}: the ip is the caller's (and wrangler dev sees none), so
 // blank it, but check that `family` is what the Worker should derive from it;
 // a wrong derivation on either side keeps its literal value and shows as drift.
+// Substitute in the raw text so formatting changes still show.
 function normalizeIp(body) {
-	let json;
+	let ip;
 	try {
-		json = JSON.parse(body);
+		({ ip } = JSON.parse(body));
 	} catch {
 		return body;
 	}
-	const { ip, family } = json;
 	const expected = typeof ip !== 'string' ? undefined : ip.includes(':') ? 'ipv6' : ip ? 'ipv4' : 'unknown';
-	return JSON.stringify({ ...json, ip: '[telemetry]', family: family === expected ? '[derived from ip]' : family });
+	return body
+		.replace(/("ip":\s*)"[^"]*"/, '$1"[telemetry]"')
+		.replace(/("family":\s*)"([^"]*)"/, (m, pre, family) => (family === expected ? `${pre}"[derived from ip]"` : m));
 }
 
 function normalize(path, body) {
