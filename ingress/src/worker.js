@@ -513,27 +513,6 @@ ${THEME_TOGGLE_CSS}
     
 
   
-  <p>Highlights include:</p>
-
-    <ul>
-      <li>
-        Managing <strong>all</strong> monorepo "service" deploys to production
-        in 8 minutes or less via AWS ECS Fargate. Increased the daily number of prd releases by one (1) order of magnitude.
-      </li>
-
-      <li>
-        Keeping track of Ramp's MoM service reliability across 400+ services
-        for SLIs → SLOs → contract SLAs (four & half 9s and < 2 sec p99 latency).
-      </li>
-
-      <li>
-        Managing isolated, pre-deployment production infrastructure in
-        Buildkite with cryptographically signed builds, enforcing artifact
-        provenance across database migrations, agent registration,
-        and other deployment-critical steps.
-      </li>
-    </ul>
-
     <section class="research-card">
     <h2>Research Interests</h2>
       <p>
