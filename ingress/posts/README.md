@@ -18,3 +18,5 @@ Front matter (between `---` lines), then the Markdown body:
 
 Body conventions: numbered `##` sections ("## 1. Introduction"); fenced code blocks;
 raw HTML passes through if Markdown can't express something.
+
+`## N. Title` headings become the numbered sections: each gets an `id` from its text (`## 2. Secure Boot` → `#secure-boot`) and, when a post has two or more, they are listed in the sticky "Contents" sidebar shown beside the post on wide screens.

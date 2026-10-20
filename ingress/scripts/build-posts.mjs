@@ -44,7 +44,35 @@ function toPost(meta, body, file) {
     // "[1] ..." paragraphs are reference entries (RFC-style References section).
     .replace(/<p>(\[\d+\] )/g, '<p class="ref">$1')
     .trim();
+  post.sections = [];
+  post.html = post.html.replace(/<h2>(.*?)<\/h2>/g, (m, inner) => {
+    const text = decodeEntities(inner.replace(/<[^>]+>/g, ""));
+    const id = uniqueId(headingId(text), post.sections);
+    post.sections.push({ id, text });
+    return `<h2 id="${id}">${inner}</h2>`;
+  });
   return post;
+}
+
+function decodeEntities(s) {
+  return s.replace(/&amp;/g, "&").replace(/&lt;/g, "<").replace(/&gt;/g, ">").replace(/&quot;/g, '"').replace(/&#39;/g, "'");
+}
+
+// "3. Internship @ Instructional Products" -> "internship-instructional-products"
+function headingId(text) {
+  return (
+    text
+      .replace(/^\d+(\.\d+)*\.?\s+/, "")
+      .toLowerCase()
+      .replace(/[^a-z0-9]+/g, "-")
+      .replace(/^-+|-+$/g, "") || "section"
+  );
+}
+
+function uniqueId(base, sections) {
+  let id = base;
+  for (let n = 2; sections.some((s) => s.id === id); n++) id = `${base}-${n}`;
+  return id;
 }
 
 const files = (await readdir(postsDir)).filter((f) => f.endsWith(".md") && f !== "README.md").sort();
