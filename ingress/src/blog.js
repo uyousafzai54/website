@@ -362,6 +362,77 @@ const BLOG_CSS = `
     article h2 {
       font-size: 22px;
       margin-top: 36px;
+      scroll-margin-top: 24px;
+    }
+
+    /* Section list beside the post (Oxide RFD style). Only when there is room
+       to the right of the 750px column; the absolute wrapper spans the
+       article's height so the sticky list stops at the Author's Address. */
+    .toc {
+      display: none;
+    }
+
+    @media (min-width: 1240px) {
+      .post article {
+        position: relative;
+      }
+
+      .toc {
+        display: block;
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        left: 100%;
+        width: 220px;
+        margin-left: 48px;
+      }
+
+      .toc__inner {
+        position: sticky;
+        top: 56px;
+        font-family: "Berkeley Mono", "IBM Plex Mono", Menlo, monospace;
+        font-size: 13px;
+        line-height: 1.5;
+      }
+
+      .toc__label {
+        margin: 0 0 10px;
+        font-size: 11px;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        color: var(--muted);
+      }
+
+      .toc ol {
+        margin: 0;
+        padding: 0;
+        list-style: none;
+        border-left: 1px solid var(--rule);
+      }
+
+      .toc li + li {
+        margin-top: 0;
+      }
+
+      /* Hanging indent so wrapped titles line up after the "N. " number. */
+      .toc a {
+        display: block;
+        margin-left: -1px;
+        padding: 4px 0 4px calc(12px + 3ch);
+        text-indent: -3ch;
+        border-left: 1px solid transparent;
+        color: var(--muted);
+      }
+
+      .toc a:hover {
+        border-bottom: none;
+        color: var(--text);
+      }
+
+      .toc a.is-active {
+        color: var(--text);
+        border-left-color: var(--accent);
+      }
     }
 
     article p {
@@ -584,6 +655,41 @@ const TERMINAL_REPLAY_JS = `    (function () {
       document.querySelectorAll(".terminal pre").forEach(function (pre) { io.observe(pre); });
     })();`;
 
+// Marks the section whose heading was most recently scrolled past the top
+// quarter of the viewport as current in the side list.
+const TOC_JS = `
+    (function () {
+      var toc = document.querySelector(".toc");
+      if (!toc) return;
+      var links = Array.prototype.slice.call(toc.querySelectorAll("a[href^='#']"));
+      var heads = links
+        .map(function (a) { return document.getElementById(a.getAttribute("href").slice(1)); })
+        .filter(Boolean);
+      if (!heads.length) return;
+      var ticking = false;
+      function update() {
+        ticking = false;
+        var line = window.innerHeight / 4;
+        var current = heads[0];
+        for (var i = 0; i < heads.length; i++) {
+          if (heads[i].getBoundingClientRect().top <= line) current = heads[i];
+        }
+        var atBottom = window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 2;
+        if (atBottom) current = heads[heads.length - 1];
+        links.forEach(function (a) {
+          a.classList.toggle("is-active", a.getAttribute("href") === "#" + current.id);
+        });
+      }
+      function onScroll() {
+        if (ticking) return;
+        ticking = true;
+        window.requestAnimationFrame(update);
+      }
+      window.addEventListener("scroll", onScroll, { passive: true });
+      window.addEventListener("resize", onScroll);
+      update();
+    })();`;
+
 // `origin` is the host the page is served on (canonical/og:url); blog pages
 // default to BLOG_ORIGIN, pages on the main site pass SITE_ORIGIN.
 export function page({ title, path, bodyClass, content, origin = BLOG_ORIGIN }) {
@@ -623,6 +729,7 @@ ${content}
   <script>
 ${THEME_TOGGLE_JS}
 ${TERMINAL_REPLAY_JS}
+${TOC_JS}
   </script>
 </body>
 </html>
@@ -661,6 +768,14 @@ function renderIndex() {
   });
 }
 
+function tocNav(post) {
+  const sections = post.sections || [];
+  if (sections.length < 2) return "";
+  const items = sections.map((s) => `<li><a href="#${s.id}">${escapeHtml(s.text)}</a></li>`).join("");
+  return `
+      <nav class="toc" aria-label="Contents"><div class="toc__inner"><p class="toc__label">Contents</p><ol>${items}</ol></div></nav>`;
+}
+
 function renderPost(post) {
   const i = POSTS.indexOf(post);
   const newer = POSTS[i - 1];
@@ -680,7 +795,7 @@ function renderPost(post) {
     bodyClass: "post",
     content: `${authorBlock({ date: post.date })}
 
-    <article>${memoHeader(post)}
+    <article>${tocNav(post)}${memoHeader(post)}
       <h1 class="title">${escapeHtml(post.title)}</h1>
 ${post.html}${authorAddress()}
     </article>
