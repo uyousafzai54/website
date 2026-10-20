@@ -6,9 +6,13 @@ draft: true
 aliases: on-predicting-the-future
 ---
  
+## 1. Preamble
+
 Two <i>and a half</i> years ago, I had just left my winter internship at Apple in Seattle (s/o 333 Dexter Ave. N.). Apple was gracious enough to let my curious mind ask and look around, from iMessage to CoreOS to ASE. It felt as if I had seen the future; no, not quite; I had seen *fragments* of a future. Yet I couldn't immediately understand or put together what these fragments were. 
 
 I can now. And funnily enough, unbeknownst to me, I had caught a glimpse of the full machine; I just didn't realize it at the time.
+
+## 2. Secure Boot
 
 [Secure Boot.](https://github.com/uyousafzai54/sel4-service-mesh/blob/main/End-to-End-Service-Mesh-Secure-Boot.md)
 
@@ -101,6 +105,8 @@ seL4 assures the security of the running microkernel, but importantly it assumes
 Finally. What I actually wanted to create was a system for remote attestation when a group of these "secure" computers were working together in a mesh. But why mention gRPC and OpenTelemetry (OTel)? Especially when getting a basic but performant networking stack working on seL4 is an [incredible amount of work](https://trustworthy.systems/publications/theses_public/23/Parker:bsc.abstract). And what even is [OTel](https://opentelemetry.io/)?
 
 
+## 3. Internship @ Instructional Products
+
 At this point, we need to take a small detour and talk about what I actually built at Apple for the Tips app. The goal of Instructional Products as a whole is to empower users to naturally learn all the amazing features of their new device. This is done via beautiful animations and small nudges from Tips as they swipe around and click around in iOS and macOS. Crucially, the logic behind these tips must be on device to preserve user privacy and work for all supported device and software permutations. And as part of the yearly software release after WWDC, validations were run on these collections of tips. My intern project was to instrument the backend services that supported this for telemetry so errors during publishing and validations could be surfaced. 
 
 
@@ -116,6 +122,8 @@ On the plane ride back to Canada from Seattle, after enjoying the high of doing 
 
 The diagram above was my vision for bare minimum required of a node to execute the application. We have a hardware root of trust that securely brings up an L4 micro-kernel. Above seL4, we utilize seL4's Microkit to have <i>protected domains</i>; these are isolated sandboxes that communicate with each other using protected procedure calls (PPCs). We only need three egress data channels: one gRPC channel for telemetry collection, another gRPC/HTTPS channel for applicaton traffic and finally a channel/port for the remote attestation client. 
 
+## 4. Sandboxes & Remote Attestation
+
 Speaking of which, what is the <it>remote attestation</i> client for? Let's assume the worst case scenario where a malicious actor is able to bypass the hardware root of trust and bring up an untrusted kernel & OS. In this case we need some mechanism for the node to prove to an external party that it is secure and running approved software before allowing it to handle user data. How do we do this?
 
 Cryptograhy, of course! We require that the remote attestation client provide a digital signature of the software running (software state) in the node when requested. This signature is computed using the hardware root of trust. If either the hardware root of trust is compromised or a different piece of software is running, the signature provided will be invalid and the node can be marked as untrusted. 
@@ -126,7 +134,7 @@ This is also true. Once the hardware and OS is brought up correctly and securely
 
 In the next blog post I'll be doing a deep dive into Apple's [Private Cloud Compute](https://security.apple.com/blog/private-cloud-compute/) platform and trying out their Virtual Research Environment (VRE)! 
 
-## References
+## 5. References
 
 [1] Apple Inc., "The Secure Enclave", Apple Platform Security. <https://support.apple.com/en-ca/guide/security/sec59b0b31ff/web>
 
