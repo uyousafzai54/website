@@ -366,13 +366,14 @@ const BLOG_CSS = `
     }
 
     /* Section list beside the post (Oxide RFD style). Only when there is room
-       to the right of the 750px column; the absolute wrapper spans the
-       article's height so the sticky list stops at the Author's Address. */
+       to the right of the 750px column (750 + 2 * (48 + 220) = 1286px, so the
+       page never scrolls sideways); the absolute wrapper spans the article's
+       height so the sticky list stops at the Author's Address. */
     .toc {
       display: none;
     }
 
-    @media (min-width: 1240px) {
+    @media (min-width: 1300px) {
       .post article {
         position: relative;
       }
@@ -674,8 +675,11 @@ const TOC_JS = `
         for (var i = 0; i < heads.length; i++) {
           if (heads[i].getBoundingClientRect().top <= line) current = heads[i];
         }
-        var atBottom = window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 2;
-        if (atBottom) current = heads[heads.length - 1];
+        if (window.scrollY <= 0) {
+          current = heads[0];
+        } else if (window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 2) {
+          current = heads[heads.length - 1];
+        }
         links.forEach(function (a) {
           a.classList.toggle("is-active", a.getAttribute("href") === "#" + current.id);
         });
