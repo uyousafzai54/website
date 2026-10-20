@@ -116,13 +116,13 @@ A few weeks later, I had one service in our service mesh instrumented with an Op
 
 [![Two HTTPS/gRPC services in a Kubernetes service mesh communicate over regular HTTPS. Each service's OpenTelemetry SDK sends logs, metrics and traces using gRPC over mutual TLS (mTLS) to an OpenTelemetry Collector, a gRPC service in Kubernetes. The collector forwards telemetry using gRPC over mTLS to ASE's observability backend. Prometheus stores metrics in a time series database (TSDB), with separate log and trace storage. The query frontend exchanges queries and results over mTLS.](/diagrams/observability-architecture.svg)](/diagrams/observability-architecture.svg)
 
-## 4. Sandboxes
-
 On the plane ride back to Canada from Seattle, after enjoying the high of doing a presentation to my VP of SWEOps Cheryl Thomas at Apple Park in Cupertino (a sentence that is still hard for me to believe while writing this), I kept wondering what more could be done with my simple little observability architecture? What if we abstract away what the service does entirely? What if we treat the microservice as an arbitrary node in a service mesh of computers, running an arbitrary program as simple as a Python or Swift Hello, World? What's left then? What more does it need other than a gRPC channel to network and a gRPC channel for structured observability emission? And how does one provision such a node and bring it up correctly, and <i>securely</i>?
 
 [![Drawn in the style of the seL4 whitepaper figures. A hardware root of trust bar at the bottom contains secure boot, with the seL4 microkernel bar directly on top of it. Above the kernel are four separate protection domains: the application, OpenTelemetry logging, a remote attestation client, and a networking protocol stack with exactly two gRPC channels layered on top of it, one speaking OTLP for observability and one for internet application traffic. The application has a channel to OpenTelemetry logging, and the application, logging and attestation domains each have a channel to the networking stack, routed through seL4. Both gRPC channels leave the node over mTLS.](/diagrams/sel4-node.svg)](/diagrams/sel4-node.svg)
 
 The diagram above was my vision for bare minimum required of a node to execute the application. We have a hardware root of trust that securely brings up an L4 micro-kernel. Above seL4, we utilize seL4's Microkit to have <i>protected domains</i>; these are isolated sandboxes that communicate with each other using protected procedure calls (PPCs). We only need three egress data channels: one gRPC channel for telemetry collection, another gRPC/HTTPS channel for applicaton traffic and finally a channel/port for the remote attestation client. 
+
+## 4. Sandboxes & Remote Attestation
 
 Speaking of which, what is the <it>remote attestation</i> client for? Let's assume the worst case scenario where a malicious actor is able to bypass the hardware root of trust and bring up an untrusted kernel & OS. In this case we need some mechanism for the node to prove to an external party that it is secure and running approved software before allowing it to handle user data. How do we do this?
 
