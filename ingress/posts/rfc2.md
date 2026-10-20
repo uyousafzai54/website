@@ -6,9 +6,13 @@ draft: true
 aliases: on-predicting-the-future
 ---
  
+## 1. Preamble
+
 Two <i>and a half</i> years ago, I had just left my winter internship at Apple in Seattle (s/o 333 Dexter Ave. N.). Apple was gracious enough to let my curious mind ask and look around, from iMessage to CoreOS to ASE. It felt as if I had seen the future; no, not quite; I had seen *fragments* of a future. Yet I couldn't immediately understand or put together what these fragments were. 
 
 I can now. And funnily enough, unbeknownst to me, I had caught a glimpse of the full machine; I just didn't realize it at the time.
+
+## 2. Secure Boot
 
 [Secure Boot.](https://github.com/uyousafzai54/sel4-service-mesh/blob/main/End-to-End-Service-Mesh-Secure-Boot.md)
 
@@ -101,6 +105,8 @@ seL4 assures the security of the running microkernel, but importantly it assumes
 Finally. What I actually wanted to create was a system for remote attestation when a group of these "secure" computers were working together in a mesh. But why mention gRPC and OpenTelemetry (OTel)? Especially when getting a basic but performant networking stack working on seL4 is an [incredible amount of work](https://trustworthy.systems/publications/theses_public/23/Parker:bsc.abstract). And what even is [OTel](https://opentelemetry.io/)?
 
 
+## 3. Internship @ Instructional Products
+
 At this point, we need to take a small detour and talk about what I actually built at Apple for the Tips app. The goal of Instructional Products as a whole is to empower users to naturally learn all the amazing features of their new device. This is done via beautiful animations and small nudges from Tips as they swipe around and click around in iOS and macOS. Crucially, the logic behind these tips must be on device to preserve user privacy and work for all supported device and software permutations. And as part of the yearly software release after WWDC, validations were run on these collections of tips. My intern project was to instrument the backend services that supported this for telemetry so errors during publishing and validations could be surfaced. 
 
 
@@ -109,6 +115,8 @@ To be honest, I wasn't super stoked about this project initially as a year ago m
 A few weeks later, I had one service in our service mesh instrumented with an OpenTelemetry SDK sending encrypted telemetry (logs and metrics) via mutual TLS (mTLS) to an OTel collector running in k8s that forwarded the encrypted traffic to ASE's backend Prometheus engine where I could then query them on the frontend. I was mainly surprised at how the simplicity of this architecture allowed me to query thousands of logs and metrics within milliseconds of exporting them. 
 
 [![Two HTTPS/gRPC services in a Kubernetes service mesh communicate over regular HTTPS. Each service's OpenTelemetry SDK sends logs, metrics and traces using gRPC over mutual TLS (mTLS) to an OpenTelemetry Collector, a gRPC service in Kubernetes. The collector forwards telemetry using gRPC over mTLS to ASE's observability backend. Prometheus stores metrics in a time series database (TSDB), with separate log and trace storage. The query frontend exchanges queries and results over mTLS.](/diagrams/observability-architecture.svg)](/diagrams/observability-architecture.svg)
+
+## 4. Sandboxes
 
 On the plane ride back to Canada from Seattle, after enjoying the high of doing a presentation to my VP of SWEOps Cheryl Thomas at Apple Park in Cupertino (a sentence that is still hard for me to believe while writing this), I kept wondering what more could be done with my simple little observability architecture? What if we abstract away what the service does entirely? What if we treat the microservice as an arbitrary node in a service mesh of computers, running an arbitrary program as simple as a Python or Swift Hello, World? What's left then? What more does it need other than a gRPC channel to network and a gRPC channel for structured observability emission? And how does one provision such a node and bring it up correctly, and <i>securely</i>?
 
@@ -126,7 +134,7 @@ This is also true. Once the hardware and OS is brought up correctly and securely
 
 In the next blog post I'll be doing a deep dive into Apple's [Private Cloud Compute](https://security.apple.com/blog/private-cloud-compute/) platform and trying out their Virtual Research Environment (VRE)! 
 
-## References
+## 5. References
 
 [1] Apple Inc., "The Secure Enclave", Apple Platform Security. <https://support.apple.com/en-ca/guide/security/sec59b0b31ff/web>
 
